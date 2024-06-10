@@ -1,136 +1,50 @@
-// import { createContext, useState, ReactNode, useEffect } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import React, { createContext, useContext, useState, ReactNode } from "react";
 
-// import { login } from '@/modules/auth/application/login/login';
-// import { logout } from '@/modules/auth/application/logout/logout';
-// import { softLogin } from '@/modules/auth/application/soft-login/soft-login';
-// import { createAuthRepository } from '@/modules/auth/infrastructure/AuthRepository';
+interface UserProfileData {
+  id: string;
+  profilePictureUrl: string;
+}
 
-// import useToast from '@/ui/hooks/toast/useToast';
+interface AuthContextType {
+  isLoggedIn: boolean;
+  userProfileData: UserProfileData | null;
+  login: (data: UserProfileData) => void;
+  logout: () => void;
+}
 
-// interface AuthContextType {
-//   isLoggedIn: boolean;
-//   login: (
-//     googleResponse: google.accounts.id.CredentialResponse,
-//   ) => Promise<void>;
-//   isLoading: boolean;
-//   logout: () => Promise<void>;
-//   userProfileData?: userProfileData;
-// }
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// interface userProfileData {
-//   id: string;
-//   profilePictureUrl?: string;
-// }
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userProfileData, setUserProfileData] =
+    useState<UserProfileData | null>(null);
 
-// export const AuthContext = createContext<AuthContextType>({
-//   isLoggedIn: false,
-//   userProfileData: undefined,
-//   login: async () => {},
-//   isLoading: true,
-//   logout: async () => {},
-// });
+  const login = (data: UserProfileData) => {
+    console.log("Logging in user:", data);
+    setIsLoggedIn(true);
+    setUserProfileData(data);
+  };
 
-// interface AuthProviderProps {
-//   children: ReactNode;
-// }
+  const logout = () => {
+    setIsLoggedIn(false);
+    setUserProfileData(null);
+  };
 
-// export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
-//   const authRepository = createAuthRepository();
-//   const [isLoggedIn, setIsLoggedIn] = useState(false);
-//   const [isLoading, setIsLoading] = useState(true);
-//   const [userProfileData, setUserProfileData] = useState<userProfileData>({
-//     id: '',
-//     profilePictureUrl: '',
-//   });
+  return (
+    <AuthContext.Provider
+      value={{ isLoggedIn, userProfileData, login, logout }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
-//   useEffect(() => {
-//     actionSoftLogin();
-//   }, []);
-
-//   const navigate = useNavigate();
-
-//   const { showToastError, showToastSuccess } = useToast();
-
-//   const actionLogin = async (
-//     googleResponse: google.accounts.id.CredentialResponse,
-//   ) => {
-//     try {
-//       setIsLoading(true);
-
-//       const user = await login(authRepository, googleResponse.credential);
-
-//       setIsLoading(false);
-
-//       if (user) {
-//         setIsLoggedIn(true);
-
-//         setUserProfileData(user);
-//         navigate('/');
-//       } else {
-//         showToastError('Login failed');
-//       }
-//     } catch (error) {
-//       setIsLoading(false);
-//       showToastError('Login failed');
-//     }
-//   };
-
-//   const actionSoftLogin = async () => {
-//     try {
-//       setIsLoading(true);
-
-//       const user = await softLogin(authRepository);
-
-//       setIsLoading(false);
-
-//       if (user) {
-//         setIsLoggedIn(true);
-//         setUserProfileData(user);
-//       }
-//     } catch (error: any) {
-//       setIsLoading(false);
-
-//       if (error?.message !== 'Login expired') {
-//         showToastError('Login failed');
-//       }
-//     }
-//   };
-
-//   const actionLogout = async () => {
-//     try {
-//       setIsLoading(true);
-
-//       const isSuccess = await logout(authRepository);
-
-//       setIsLoading(false);
-
-//       if (isSuccess) {
-//         setIsLoggedIn(false);
-//         setUserProfileData({
-//           id: '',
-//           profilePictureUrl: '',
-//         });
-//         navigate('/login');
-//         showToastSuccess('Logout successful');
-//       } else {
-//         showToastError('Logout unsuccessful');
-//       }
-//     } catch (error) {
-//       setIsLoading(false);
-//       showToastError('Logout unsuccessful');
-//     }
-//   };
-
-//   const contextValue: AuthContextType = {
-//     userProfileData,
-//     isLoggedIn,
-//     login: actionLogin,
-//     isLoading,
-//     logout: actionLogout,
-//   };
-
-//   return (
-//     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
-//   );
-// }
+export const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};

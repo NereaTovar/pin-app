@@ -1,13 +1,34 @@
 import BackButton from "../buttons/back-button/BackButton";
-//import LogoutButton from "../buttons/logout-button/LogoutButton";
+import LogoutButton from "../buttons/logout-button/LogoutButton";
 import RindusLogo from "../buttons/rindus-logo/RindusLogo";
 import SearchButton from "../buttons/search-button/SearchButton";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "@/ui/context/auth/Auth";
 
 import "./Header.scss";
 
+const defaultProfilePicture = "/path/to/default/profile/picture.jpg";
+
 export default function Header() {
+  const navigate = useNavigate();
+  const { isLoggedIn, userProfileData } = useAuth();
+  const location = useLocation();
+
+  console.log("Header userProfileData:", userProfileData);
+
   const isHomePage = location.pathname === "/";
-  // const isProfilePage = location.pathname === `/profile/${userProfileData?.id}`;
+  const isProfilePage = location.pathname === `/profile/${userProfileData?.id}`;
+
+  const handleProfileNavigate = () => {
+    navigate(`/profile/${userProfileData?.id}`);
+  };
+
+  if (!isLoggedIn)
+    return (
+      <header className="header__container--login">
+        <RindusLogo />
+      </header>
+    );
 
   return (
     <header className="header__container--logged">
@@ -24,24 +45,21 @@ export default function Header() {
       <div className="rindusLogo">
         <RindusLogo />
       </div>
-      {/* 
+
       {isProfilePage ? (
         <div className="logout">
-          <LogoutButton /> 
+          <LogoutButton />
         </div>
-      ) : 
-      (
+      ) : (
         <div className="profile">
-          <button
-            onClick={handleProfileNavigate}
-            className="profile__button"
-          >
+          <button onClick={handleProfileNavigate} className="profile__button">
             <img
-              src={userProfileData && `${userProfileData.profilePictureUrl}`}
+              src={userProfileData?.profilePictureUrl ?? defaultProfilePicture}
+              alt="Profile"
             />
           </button>
         </div>
-      )} */}
+      )}
     </header>
   );
 }
