@@ -1,13 +1,19 @@
 import rindusLogo from "@/assets/icons/Anchor_40.svg";
 import "@/ui/components/buttons/rindus-logo/RindusLogo.scss";
+import { useNavigate } from "react-router-dom";
 
-interface Props {
-  onClick?: () => void;
-}
+export default function RindusLogo() {
+  const navigate = useNavigate();
 
-export default function RindusLogo({ onClick }: Props) {
+  const handleLogoClick = () => {
+    navigate("/");
+  };
   return (
-    <button className="rindusLogo__button" onClick={onClick}>
+    <button
+      className="rindusLogo__button"
+      onClick={handleLogoClick}
+      style={{ cursor: "pointer" }}
+    >
       <img alt="SVG rindus logo" src={rindusLogo} />
     </button>
   );

@@ -7,7 +7,11 @@ interface Props {
 
 export default function SearchButton({ onClick }: Props) {
   return (
-    <button className="search__button" onClick={onClick}>
+    <button
+      className="search__button"
+      onClick={onClick}
+      style={{ cursor: "pointer" }}
+    >
       <img alt="SVG search button" src={searchIcon} />
     </button>
   );

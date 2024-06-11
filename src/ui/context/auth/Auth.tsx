@@ -1,6 +1,12 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 
-interface UserProfileData {
+export interface UserProfileData {
   id: string;
   profilePictureUrl: string;
 }
@@ -21,15 +27,25 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [userProfileData, setUserProfileData] =
     useState<UserProfileData | null>(null);
 
+  useEffect(() => {
+    const storedUserProfileData = localStorage.getItem("userProfileData");
+    if (storedUserProfileData) {
+      setUserProfileData(JSON.parse(storedUserProfileData));
+      setIsLoggedIn(true);
+    }
+  }, []);
+
   const login = (data: UserProfileData) => {
     console.log("Logging in user:", data);
     setIsLoggedIn(true);
     setUserProfileData(data);
+    localStorage.setItem("userProfileData", JSON.stringify(data));
   };
 
   const logout = () => {
     setIsLoggedIn(false);
     setUserProfileData(null);
+    localStorage.removeItem("userProfileData");
   };
 
   return (

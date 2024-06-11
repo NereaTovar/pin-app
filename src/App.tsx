@@ -13,18 +13,18 @@ const clientId =
 export default function App() {
   return (
     <AuthProvider>
-    <HelmetProvider>
-      <GoogleOAuthProvider clientId={clientId}>
-        <BrowserRouter>
-          <Header />
-          <Routes>
-            <Route path="/login" element={<Login />} />
+      <HelmetProvider>
+        <GoogleOAuthProvider clientId={clientId}>
+          <BrowserRouter>
+            <Header />
+            <Routes>
+              <Route path="/login" element={<Login />} />
 
-            <Route path="/" element={<Home />} />
-          </Routes>
-        </BrowserRouter>
-      </GoogleOAuthProvider>
-    </HelmetProvider>
+              <Route path="/" element={<Home />} />
+            </Routes>
+          </BrowserRouter>
+        </GoogleOAuthProvider>
+      </HelmetProvider>
     </AuthProvider>
   );
 }

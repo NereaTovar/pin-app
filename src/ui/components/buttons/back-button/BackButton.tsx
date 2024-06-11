@@ -12,7 +12,11 @@ export default function BackButton() {
   };
 
   return (
-    <button className="back__button" onClick={handleBack} type="button">
+    <button
+      className="back__button"
+      onClick={handleBack}
+      style={{ cursor: "pointer" }}
+    >
       <img alt="SVG back button" src={arrowBack} />
     </button>
   );

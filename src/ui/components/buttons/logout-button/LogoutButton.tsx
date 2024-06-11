@@ -1,33 +1,24 @@
-// import { useContext } from "react";
-
-// import logoutIcon from "@/assets/icons/Logout_24.svg";
-// import "@/ui/components/atoms/buttons/logout/Logout.scss";
-// import { AuthContext } from "@/ui/context/auth/Auth";
-
-// export default function Logout() {
-//   const { logout } = useContext(AuthContext);
-
-//   return (
-//     <button className="logout__button" data-testid="logout" onClick={logout}>
-//       <img alt="SVG logout" src={logoutIcon} />
-//     </button>
-//   );
-// }
-
 import logoutIcon from "@/assets/icons/Logout_24.svg";
-// import "@/ui/components/buttons/logout/LogoutButton.scss";
+import "@/ui/components/buttons/logout-button/LogoutButton.scss";
 import { useAuth } from "@/ui/context/auth/Auth";
+import { useNavigate } from "react-router-dom";
 
 export default function LogoutButton() {
   const { logout } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-    console.log("Logout Successful");
+    navigate("/login");
+    alert("Logout Successful");
   };
 
   return (
-    <button className="logout__button" onClick={handleLogout}>
+    <button
+      className="logout__button"
+      onClick={handleLogout}
+      style={{ cursor: "pointer" }}
+    >
       <img alt="SVG logout" src={logoutIcon} />
     </button>
   );

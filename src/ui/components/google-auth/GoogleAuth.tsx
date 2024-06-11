@@ -1,12 +1,12 @@
 import React from "react";
 import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/ui/context/auth/Auth";
+import { UserProfileData } from "@/ui/context/auth/Auth";
 
-const GoogleAuth: React.FC = () => {
-  const navigate = useNavigate();
-  const { login, logout } = useAuth();
+interface GoogleAuthProps {
+  onLoginSuccess: (userData: UserProfileData) => void;
+}
 
+const GoogleAuth: React.FC<GoogleAuthProps> = ({ onLoginSuccess }) => {
   const handleLoginSuccess = async (response: CredentialResponse) => {
     try {
       const token = response.credential;
@@ -22,9 +22,7 @@ const GoogleAuth: React.FC = () => {
         profilePictureUrl: userProfileData.picture,
       };
 
-      login(userData);
-
-      navigate("/");
+      onLoginSuccess(userData);
     } catch (error) {
       console.log("Failed to fetch user profile data:", error);
     }
@@ -34,15 +32,9 @@ const GoogleAuth: React.FC = () => {
     console.log("Login Failed");
   };
 
-  const handleLogout = () => {
-    logout();
-    console.log("Logout Successful");
-  };
-
   return (
     <div>
       <GoogleLogin onSuccess={handleLoginSuccess} onError={handleLoginError} />
-      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 };
