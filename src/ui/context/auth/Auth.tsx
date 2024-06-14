@@ -9,6 +9,8 @@ import React, {
 export interface UserProfileData {
   id: string;
   profilePictureUrl: string;
+  email: string;
+  name: string;
 }
 
 interface AuthContextType {
@@ -36,7 +38,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   }, []);
 
   const login = (data: UserProfileData) => {
-    console.log("Logging in user:", data);
     setIsLoggedIn(true);
     setUserProfileData(data);
     localStorage.setItem("userProfileData", JSON.stringify(data));

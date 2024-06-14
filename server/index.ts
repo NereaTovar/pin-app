@@ -11,7 +11,7 @@ const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
 const oAuth2Client = new OAuth2Client({
   clientId,
   clientSecret,
-  redirectUri: "http://localhost:5173/auth/google/callback", // La URL de redireccionamiento que has configurado en tu aplicación OAuth en Google Console
+  redirectUri: "http://localhost:5173/auth/google/callback",
 });
 
 app.get("/auth/google", (req, res) => {
@@ -21,8 +21,6 @@ app.get("/auth/google", (req, res) => {
   });
   res.redirect(authUrl);
 });
-
-// Resto de la lógica del servidor aquí
 
 const port = process.env.PORT || 5173;
 app.listen(port, () => {

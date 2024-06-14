@@ -15,11 +15,13 @@ const GoogleAuth: React.FC<GoogleAuthProps> = ({ onLoginSuccess }) => {
         `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${token}`
       );
       const userProfileData = await userProfileResponse.json();
-      console.log("User Profile Data:", userProfileData);
+      console.log("User Profile Data Auth:", userProfileData);
 
       const userData = {
         id: userProfileData.sub,
         profilePictureUrl: userProfileData.picture,
+        email: userProfileData.email,
+        name: userProfileData.name,
       };
 
       onLoginSuccess(userData);

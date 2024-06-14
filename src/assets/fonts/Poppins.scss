@@ -1,21 +1,35 @@
 /* Poppins Regular */
 @font-face {
-    font-family: 'Poppins';
-    src: url('@assets/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
-    font-weight: 400;
-  }
-  
-  /* Poppins SemiBold */
-  @font-face {
-    font-family: 'Poppins';
-    src: url('@assets/fonts/Poppins/Poppins-SemiBold.ttf') format('truetype');
-    font-weight: 600;
-  }
-  
-  /* Poppins Bold */
-  @font-face {
-    font-family: 'Poppins';
-    src: url('@assets/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
-    font-weight: 700;
-  }
-  
+  font-family: 'Poppins';
+  src: url('@assets/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+
+/* Poppins SemiBold */
+@font-face {
+  font-family: 'Poppins';
+  src: url('@assets/fonts/Poppins/Poppins-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+}
+
+/* Poppins Bold */
+@font-face {
+  font-family: 'Poppins';
+  src: url('@assets/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+
+@mixin font-poppins-regular {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+}
+
+@mixin font-poppins-semibold {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+}
+
+@mixin font-poppins-bold {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+}

@@ -6,6 +6,7 @@ import Login from "./ui/section/login/Login";
 import Header from "./ui/components/header/Header";
 import Home from "./ui/section/home/Home";
 import { AuthProvider } from "./ui/context/auth/Auth";
+import Profile from "./ui/section/profile/Profile";
 
 const clientId =
   "207077287386-0doinh13rp98vrmijqkp87so8domp7ro.apps.googleusercontent.com";
@@ -18,9 +19,9 @@ export default function App() {
           <BrowserRouter>
             <Header />
             <Routes>
-              <Route path="/login" element={<Login />} />
-
               <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/profile/:userId" element={<Profile />} />
             </Routes>
           </BrowserRouter>
         </GoogleOAuthProvider>

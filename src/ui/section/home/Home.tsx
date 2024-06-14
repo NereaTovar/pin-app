@@ -1,10 +1,11 @@
+import PinCard from "@/ui/components/pin-card/PinCard";
 import React from "react";
 
 const Home: React.FC = () => {
   return (
     <div>
-      <h2>Home Page</h2>
-      {/* Rest of your home page content */}
+    
+      <PinCard title="SummerEvent" isButtonVisible />
     </div>
   );
 };
