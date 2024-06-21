@@ -5,7 +5,7 @@ import "@/ui/components/pin-card/PinCard.scss";
 interface PinCardProps {
   title: string;
   isButtonVisible?: boolean;
-  //pinLogo: React.ReactNode;
+  
   handleClick?: () => void;
 }
 

@@ -4,7 +4,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import Login from "./ui/section/login/Login";
 import Header from "./ui/components/header/Header";
-import Home from "./ui/section/home/Home";
+import Home from "@/ui/section/home/Home";
 import { AuthProvider } from "./ui/context/auth/Auth";
 import Profile from "./ui/section/profile/Profile";
 

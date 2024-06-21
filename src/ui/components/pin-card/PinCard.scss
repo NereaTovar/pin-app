@@ -7,21 +7,34 @@
   background-color: $rindus-off-white;
   border-radius: 8px;
   display: flex;
-  height: 80px;
+  height: 100px;
   justify-content: space-evenly;
 
   &__logo {
     display: flex;
+    align-items: center;
     gap: 12px;
-    height: 56px;
+    height: 70px;
     padding-left: 12px;
-    width: 100%;
+    width: 20%;
+
+    &-button {
+      border: none;
+      background: none;
+      padding: 0;
+
+      img {
+        height: 100%;
+        width: auto;
+      }
+    }
   }
   &__title {
-    
     display: flex;
     justify-content: space-between;
-    width: 65%;
+    width: 95%;
+
+    font-size: 20px;
   }
 
   &__button {
@@ -32,6 +45,7 @@
     button {
       height: 24px;
       width: 24px;
+
       g {
         height: 100%;
         width: 100%;

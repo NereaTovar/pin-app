@@ -1,13 +1,9 @@
-import PinCard from "@/ui/components/pin-card/PinCard";
-import React from "react";
+import PinTab from "@/ui/section/home/pin-tab/PinTab";
 
-const Home: React.FC = () => {
+export default function Home() {
   return (
-    <div>
-    
-      <PinCard title="SummerEvent" isButtonVisible />
+    <div className="home">
+      <PinTab />
     </div>
   );
-};
-
-export default Home;
+}

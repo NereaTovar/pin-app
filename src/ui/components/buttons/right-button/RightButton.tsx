@@ -1,4 +1,5 @@
-import arrowRight from '@/assets/icons/Arrow_right_24.svg';
+import arrowRight from "@/assets/icons/Arrow_right_24.svg";
+import "./RightButton.scss";
 
 export default function RightButton() {
   return (
