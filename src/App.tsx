@@ -10,8 +10,12 @@ import Profile from "./ui/section/profile/Profile";
 import PinDetail from "./ui/section/pin-detail/PinDetail";
 import NotFound from "./ui/components/not-found/NotFound";
 
-const clientId =
-  "207077287386-0doinh13rp98vrmijqkp87so8domp7ro.apps.googleusercontent.com";
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+if (!clientId) {
+  throw new Error("Missing Google Client ID");
+}
+
 
 export default function App() {
   return (
