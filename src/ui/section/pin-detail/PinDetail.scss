@@ -1,0 +1,18 @@
+@import "@/assets/scss/_colors.scss";
+@import "@/assets/fonts/Poppins.scss";
+
+.pinDetail {
+  margin-top: 20px;
+
+  &__description {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding: 20px 16px;
+    color: $rindus-medium-gray;
+    @include font-poppins-regular;
+    font-size: 16px;
+    width: 100%;
+    line-height: 22px;
+  }
+}

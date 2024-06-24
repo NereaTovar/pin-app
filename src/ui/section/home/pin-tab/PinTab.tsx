@@ -1,8 +1,11 @@
-import PinCard from "@/ui/components/pin-card/PinCard";
+
+import PinList from "@/ui/components/pin-list/PinList";
 import "@/ui/section/home/pin-tab/PinTab.scss";
 
 export default function PinTab() {
-  return (<div className="pin-tab">
-      <PinCard title="Summer Event" isButtonVisible />
-  </div>);
+  return (
+    <div className="pinTab">
+      <PinList />
+    </div>
+  );
 }
