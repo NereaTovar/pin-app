@@ -1,12 +1,17 @@
+import React from "react";
+import { useParams } from "react-router-dom";
 import PinCard from "@/ui/components/pin-card/PinCard";
-import { DetailedPin} from "@/mocks/pin";
+import { pinMock } from "@/mocks/pin";
 import "@/ui/section/pin-detail/PinDetail.scss";
 
-interface PinDetailProps{
-  pin: DetailedPin;
-}
+export default function PinDetail() {
+  const { pinId } = useParams<{ pinId: string }>();
+  const pin = pinMock.find((p) => p.id === pinId);
 
-export function PinDetail({ pin }: PinDetailProps) {
+  if (!pin) {
+    return <div>Pin not found</div>;
+  }
+
   return (
     <div className="pinDetail">
       <PinCard pin={pin} isButtonVisible={false} />
