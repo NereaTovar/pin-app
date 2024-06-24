@@ -1,21 +1,15 @@
 import RightButton from "../buttons/right-button/RightButton";
 import PinLogo from "../pin-logo/PinLogo";
 import "@/ui/components/pin-card/PinCard.scss";
-import { DetailedPin} from "@/mocks/pin";
+import { DetailedPin } from "@/mocks/pin";
 
 interface PinCardProps {
-  //title: string;
   pin: DetailedPin;
   isButtonVisible?: boolean;
   handleClick?: () => void;
 }
 
-function PinCard({
-  pin,
-
-  isButtonVisible = false,
-  handleClick,
-}: PinCardProps) {
+function PinCard({ pin, isButtonVisible = false, handleClick }: PinCardProps) {
   return (
     <div className="pinCard" onClick={handleClick}>
       <div className="pinCard__logo">
