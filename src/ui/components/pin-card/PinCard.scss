@@ -17,23 +17,12 @@
     height: 70px;
     padding-left: 12px;
     width: 20%;
-
-    &-button {
-      border: none;
-      background: none;
-      padding: 0;
-
-      img {
-        height: 100%;
-        width: auto;
-      }
-    }
   }
   &__title {
     display: flex;
     justify-content: space-between;
     width: 95%;
-
+    margin-left: 15px;
     font-size: 20px;
   }
 
@@ -41,6 +30,9 @@
     padding-right: 20px;
     height: 24px;
     width: 24px;
+    border: none;
+    background: none;
+    padding: 0;
 
     button {
       height: 24px;

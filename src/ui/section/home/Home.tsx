@@ -1,9 +1,9 @@
-import PinTab from "@/ui/section/home/pin-tab/PinTab";
+import PinList from "@/ui/components/pin-list/PinList";
 
 export default function Home() {
   return (
     <div className="home">
-      <PinTab />
+      <PinList />
     </div>
   );
 }

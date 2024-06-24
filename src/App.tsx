@@ -7,6 +7,7 @@ import Header from "./ui/components/header/Header";
 import Home from "@/ui/section/home/Home";
 import { AuthProvider } from "./ui/context/auth/Auth";
 import Profile from "./ui/section/profile/Profile";
+import { PinDetail } from "./ui/section/pin-detail/PinDetail";
 
 const clientId =
   "207077287386-0doinh13rp98vrmijqkp87so8domp7ro.apps.googleusercontent.com";
@@ -22,6 +23,7 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/profile/:userId" element={<Profile />} />
+              <Route path="/pin" element={<PinDetail />} />
             </Routes>
           </BrowserRouter>
         </GoogleOAuthProvider>
