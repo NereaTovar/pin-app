@@ -1,5 +1,4 @@
-
-import PinList from "@/ui/components/pin-list/PinList";
+import PinList from "@/ui/section/home/pin-list/PinList";
 import "@/ui/section/home/pin-tab/PinTab.scss";
 
 export default function PinTab() {

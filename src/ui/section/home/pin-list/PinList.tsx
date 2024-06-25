@@ -1,11 +1,9 @@
 import PinCard from "@/ui/components/pin-card/PinCard";
 import { pinMock } from "@/mocks/pin";
-import "@/ui/components/pin-list/PinList.scss";
-// import { useState } from "react";
+import "@/ui/section/home/pin-list/PinList.scss";
 import { useNavigate } from "react-router-dom";
 
 export default function PinList() {
-  //   const [selectedPin, setSelectedPin] = useState<DetailedPin | null>(null);
   const navigate = useNavigate();
 
   const handlePinClick = (pinId: string) => {

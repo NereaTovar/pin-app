@@ -1,4 +1,4 @@
-import PinList from "@/ui/components/pin-list/PinList";
+import PinList from "@/ui/section/home/pin-list/PinList";
 
 export default function Home() {
   return (
