@@ -1,6 +1,6 @@
 import PinCard from "@/ui/components/pin-card/PinCard";
 import { pinMock } from "@/mocks/pin";
-import "@/ui/components/pin-list/PinList.scss";
+import "@/ui/section/home/pin-list/PinList.scss";
 import { useNavigate } from "react-router-dom";
 
 export default function PinList() {

@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import PinCard from "@/ui/components/pin-card/PinCard";
 import { pinMock } from "@/mocks/pin";
 import "@/ui/section/pin-detail/PinDetail.scss";
-import NotFound from "@/ui/components/not-found/NotFound";
+import NotFound from "@/ui/section/not-found/NotFound";
 
 export default function PinDetail() {
   const { pinId } = useParams<{ pinId: string }>();

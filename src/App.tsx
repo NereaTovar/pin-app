@@ -8,7 +8,7 @@ import Home from "@/ui/section/home/Home";
 import { AuthProvider } from "./ui/context/auth/Auth";
 import Profile from "./ui/section/profile/Profile";
 import PinDetail from "./ui/section/pin-detail/PinDetail";
-import NotFound from "./ui/components/not-found/NotFound";
+import NotFound from "./ui/section/not-found/NotFound";
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
