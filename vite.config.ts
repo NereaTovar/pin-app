@@ -21,6 +21,7 @@ import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig({
   plugins: [
     react(),
+
     tsconfigPaths(),
 
     VitePWA({
@@ -45,6 +46,7 @@ export default defineConfig({
       },
     }),
   ],
+
   resolve: {
     alias: {
       "@": "/src",
