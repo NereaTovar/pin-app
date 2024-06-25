@@ -15,16 +15,29 @@ const useEmployees = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await fetch("/src/resources/employees.json");
-        const data = await response.json();
+        const employeesResponse = await fetch('/src/resources/employees.json');
+        const employeesData = await employeesResponse.json();
+        const slackResponse = await fetch('/src/resources/slack.json');
+        const slackData = await slackResponse.json();
 
-        const mappedData = data.map((employee: any) => ({
-          id: employee.id.toString(),
-          name: `${employee.data.first_name} ${employee.data.last_name}`,
-          email: employee.data.email,
-          department: employee.data.department_id,
-          picture: employee.data.profile_picture_url,
-        }));
+        console.log('Fetched employees data:', employeesData); 
+        console.log('Fetched slack data:', slackData); 
+
+        const employees = employeesData.data.items;
+        const slackMembers = slackData.members;
+
+        const mappedData = employees.map((emp: any) => {
+          const slackMember = slackMembers.find((member: any) => member.profile.email === emp.data.email);
+          return {
+            id: emp.id.toString(),
+            name: `${emp.data.first_name} ${emp.data.last_name}`,
+            email: emp.data.email,
+            department: emp.data.department_id,
+            picture: slackMember ? slackMember.profile.image_512 : '', 
+          };
+        });
+
+        console.log('Mapped data:', mappedData);
         setEmployees(mappedData);
       } catch (error) {
         console.error("Error fetching employees:", error);
