@@ -4,8 +4,21 @@
   padding: 20px;
   max-width: 600px;
   max-height: 80vh;
-  overflow-y: auto; 
+  overflow-y: auto;
   margin: 40px auto;
+
+  h2 {
+    text-align: center;
+  }
+
+  &__search {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+  }
 
   &__list {
     list-style: none;
@@ -44,7 +57,8 @@
   }
 
   &__assignButton {
-    background-color: white;
+    margin-top: 5px;
+    background-color: #4dd699;
     color: white;
     border: none;
     border-radius: 4px;

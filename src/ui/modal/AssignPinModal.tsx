@@ -1,3 +1,4 @@
+import { useState } from "react";
 import useEmployees from "@/ui/hooks/useEmployees";
 import Modal from "react-modal";
 import "@/ui/modal/AssignPinModal.scss";
@@ -14,6 +15,7 @@ const AssignPinModal = ({
   onAssign,
 }: AssignPinModalProps) => {
   const { employees, loading } = useEmployees();
+  const [searchTerm, setSearchTerm] = useState("");
 
   if (loading) {
     return <div>Loading...</div>;
@@ -23,6 +25,10 @@ const AssignPinModal = ({
     return <div>No employees found.</div>;
   }
 
+  const filteredEmployees = employees.filter((employee) =>
+    employee.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <Modal
       isOpen={isOpen}
@@ -30,8 +36,15 @@ const AssignPinModal = ({
       className="assignPinModal"
     >
       <h2>Assign Pin to Employee</h2>
+      <input
+        type="text"
+        placeholder="Search employee"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="assignPinModal__search"
+      />
       <ul className="assignPinModal__list">
-        {employees.map((employee) => (
+        {filteredEmployees.map((employee) => (
           <li key={employee.id} className="assignPinModal__item">
             <img
               src={employee.picture}
