@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "./BackButton.scss";
-
-//import '@/ui/components/atoms/buttons/back/Back.scss';
+import "@/ui/components/buttons/back-button/BackButton.scss";
 import arrowBack from "@/assets/icons/Arrow_back_24.svg";
 
 export default function BackButton() {

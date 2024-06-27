@@ -7,32 +7,48 @@
   background-color: $rindus-off-white;
   border-radius: 8px;
   display: flex;
-  height: 100px;
-  justify-content: space-evenly;
+  flex-direction: column;
+  height: auto;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
 
   &__logo {
     display: flex;
     align-items: center;
-    gap: 12px;
-    height: 70px;
-    padding-left: 12px;
-    width: 20%;
+    justify-content: center;
+    height: 100px;
+    width: 100px;
   }
+
   &__title {
     display: flex;
-    justify-content: space-between;
-    width: 95%;
-    margin-left: 15px;
-    font-size: 20px;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    margin: 10px 0;
+    font-size: 16px;
+    color: $rindus-dark-gray;
   }
 
   &__button {
-    padding-right: 20px;
-    height: 24px;
-    width: 24px;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    background-color: $rindus-green;
+    color: #fff;
     border: none;
-    background: none;
-    padding: 0;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+
+    &:hover {
+      background-color: darken($rindus-green, 10%);
+    }
 
     button {
       height: 24px;
@@ -42,6 +58,27 @@
         height: 100%;
         width: 100%;
       }
+    }
+  }
+
+  // Media query para pantallas móviles
+  @media (max-width: 600px) {
+    padding: 10px;
+
+    &__logo {
+      height: 60px;
+      width: 60px;
+    }
+
+    &__title {
+      font-size: 14px;
+      margin: 5px 0;
+      text-align: center;
+    }
+
+    &__button {
+      padding: 5px;
+      font-size: 14px;
     }
   }
 }

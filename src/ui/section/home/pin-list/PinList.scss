@@ -1,7 +1,33 @@
-.pinList {
+@import "@/assets/scss/_colors.scss";
+@import "@/assets/fonts/Poppins.scss";
+
+.pinListContainer {
   margin-top: 20px;
+  padding: 20px;
+
+  &__header {
+    background-color: lighten($rindus-green, 13%);
+    padding: 1px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px $rindus-off-white;
+
+    h1 {
+      font-size: 1.5em;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    &__description {
+      font-size: 1em;
+      color: #666;
+    }
+  }
 }
 
-.pinCard {
-  margin: 10px;
+.pinList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
 }
