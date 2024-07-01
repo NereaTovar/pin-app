@@ -1,9 +1,9 @@
-import React from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "@/ui/context/auth/Auth";
 import "./Profile.scss";
+import emailIcon from "@/assets/icons/Contact_gmail_40.svg";
 
-const Profile: React.FC = () => {
+function Profile() {
   const { userId } = useParams<{ userId: string }>();
   const { userProfileData } = useAuth();
 
@@ -14,6 +14,7 @@ const Profile: React.FC = () => {
   }
 
   console.log("Rendering profile data...");
+  console.log("Profile Picture URL:", userProfileData.profilePictureUrl);
 
   return (
     <div className="profileContainer">
@@ -22,16 +23,23 @@ const Profile: React.FC = () => {
           className="profileContainer__image"
           src={userProfileData.profilePictureUrl}
           alt="Profile"
+          onError={(e) => {
+            e.currentTarget.src = "https://via.placeholder.com/150";
+            e.currentTarget.alt = "Default Profile";
+          }}
         />
-        <h1 className="profileContainer__name">User {userProfileData.name}</h1>
-      </div>
-      <div className="profileContainer__details">
-        <p>
-          <strong>Email:</strong> {userProfileData.email}
-        </p>
+        <span className="profileContainer__name">{userProfileData.name}</span>
+        <div className="profileDetail">
+          <img src={emailIcon} className="profileDetail__logo" />
+          <span className="profileContainer__email">
+            <a href={`mailto:${userProfileData.email}`}>
+              {userProfileData.email}
+            </a>
+          </span>
+        </div>
       </div>
     </div>
   );
-};
+}
 
 export default Profile;

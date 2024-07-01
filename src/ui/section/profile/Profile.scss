@@ -1,10 +1,9 @@
+@import "@/assets/scss/_colors.scss";
+
 .profileContainer {
   max-width: 600px;
   margin: 50px auto;
   padding: 20px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -28,22 +27,47 @@
   &__name {
     margin-top: 10px;
     font-size: 24px;
-    color: #333;
+    color: $rindus-dark-gray;
   }
+}
+.profileDetail {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  gap: 16px;
+  color: $rindus-medium-gray;
+  margin-top: 15px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: $rindus-off-white;
 
-  &__details {
-    margin-top: 20px;
-    text-align: left;
+  &__logo {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  &__email {
+    margin-right: 5px;
 
-    .p {
-      font-size: 18px;
-      color: #666;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    a {
+      text-decoration: none;
+      color: $rindus-medium-gray;
     }
-    .p strong {
-    }
-
-    .profile__details p {
-      color: #333;
-    }
+  }
+  &__link {
+    text-decoration: none;
+    color: $rindus-medium-gray;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
   }
 }

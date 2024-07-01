@@ -9,13 +9,13 @@ import { AuthProvider } from "./ui/context/auth/Auth";
 import Profile from "./ui/section/profile/Profile";
 import PinDetail from "./ui/section/pin-detail/PinDetail";
 import NotFound from "./ui/section/not-found/NotFound";
+import EmployeeList from "./ui/components/employee-list/EmployeeList";
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 if (!clientId) {
   throw new Error("Missing Google Client ID");
 }
-
 
 export default function App() {
   return (
@@ -28,7 +28,9 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/profile/:userId" element={<Profile />} />
-              <Route path="pin/:pinId" element={<PinDetail />} />
+              <Route path="/pin/:pinId" element={<PinDetail />} />
+              <Route path="/employees" element={<EmployeeList />} />{" "}
+              {/* Nueva ruta */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
