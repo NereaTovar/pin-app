@@ -1,4 +1,3 @@
-import React from "react";
 import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
 import { UserProfileData } from "@/ui/context/auth/Auth";
 
@@ -6,7 +5,7 @@ interface GoogleAuthProps {
   onLoginSuccess: (userData: UserProfileData) => void;
 }
 
-const GoogleAuth: React.FC<GoogleAuthProps> = ({ onLoginSuccess }) => {
+function GoogleAuth({ onLoginSuccess }: GoogleAuthProps) {
   const handleLoginSuccess = async (response: CredentialResponse) => {
     try {
       const token = response.credential;
@@ -17,7 +16,7 @@ const GoogleAuth: React.FC<GoogleAuthProps> = ({ onLoginSuccess }) => {
       const userProfileData = await userProfileResponse.json();
       console.log("User Profile Data Auth:", userProfileData);
 
-      const userData = {
+      const userData: UserProfileData = {
         id: userProfileData.sub,
         profilePictureUrl: userProfileData.picture,
         email: userProfileData.email,
@@ -39,6 +38,6 @@ const GoogleAuth: React.FC<GoogleAuthProps> = ({ onLoginSuccess }) => {
       <GoogleLogin onSuccess={handleLoginSuccess} onError={handleLoginError} />
     </div>
   );
-};
+}
 
 export default GoogleAuth;

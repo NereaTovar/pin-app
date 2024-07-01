@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useEffect,
-} from "react";
+import{ createContext, useContext, useState, ReactNode, useEffect } from "react";
 
 export interface UserProfileData {
   id: string;
@@ -22,12 +16,9 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
+function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userProfileData, setUserProfileData] =
-    useState<UserProfileData | null>(null);
+  const [userProfileData, setUserProfileData] = useState<UserProfileData | null>(null);
 
   useEffect(() => {
     const storedUserProfileData = localStorage.getItem("userProfileData");
@@ -50,13 +41,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   return (
-    <AuthContext.Provider
-      value={{ isLoggedIn, userProfileData, login, logout }}
-    >
+    <AuthContext.Provider value={{ isLoggedIn, userProfileData, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
@@ -65,3 +54,5 @@ export const useAuth = (): AuthContextType => {
   }
   return context;
 };
+
+export { AuthProvider };
