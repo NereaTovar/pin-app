@@ -1,7 +1,7 @@
 import React from "react";
 import GoogleAuth from "../../components/google-auth/GoogleAuth";
 import "./Login.scss";
-import { useAuth, UserProfileData } from '@/ui/context/auth/Auth';
+import { useAuth, UserProfileData } from "@/ui/context/auth/Auth";
 import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
