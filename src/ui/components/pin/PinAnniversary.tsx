@@ -1,5 +1,3 @@
-import React from "react";
-
 interface PinAnniversaryProps {
   number: number;
   color: string;
@@ -7,8 +5,8 @@ interface PinAnniversaryProps {
 
 const PinAnniversary = ({ number, color }: PinAnniversaryProps) => (
   <svg
-    width="100"
-    height="100"
+    width="50" 
+    height="50" 
     viewBox="0 0 100 100"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -25,7 +23,7 @@ const PinAnniversary = ({ number, color }: PinAnniversaryProps) => (
       y="50%"
       dominantBaseline="middle"
       textAnchor="middle"
-      fontSize="36"
+      fontSize="18" 
       fill="#ffffff"
       fontFamily="Arial"
       fontWeight="bold"
