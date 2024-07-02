@@ -90,7 +90,7 @@ const EmployeeList = () => {
 
   return (
     <div className="employeeList">
-      <h1>Employee List</h1>
+     
       <div className="employeeList__container">
         {employees.map((employee) => (
           <div key={employee.id} className="employeeList__item">
