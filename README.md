@@ -1,30 +1,63 @@
-# React + TypeScript + Vite
+# Employee Pin Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description
 
-Currently, two official plugins are available:
+The Employee Pin Management System is a web application designed to manage and assign recognition pins to employees based on their achievements and tenure within the company. The application allows authenticated users to view a list of available pins, view a list of employees, and assign pins to employees.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- **Google Authentication**: Secure login using Google OAuth.
+- **Employee Management**: View a list of employees with their details and tenure.
+- **Pin Management**: View a list of available pins and their descriptions.
+- **Pin Assignment**: Assign recognition pins to employees based on their achievements and tenure.
+- **Firebase Integration**: Store and retrieve employee and pin data from Firebase.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Technologies Used
 
-- Configure the top-level `parserOptions` property like this:
+- **React**: Frontend framework for building user interfaces.
+- **TypeScript**: Superset of JavaScript for type safety.
+- **Firebase**: Backend-as-a-Service for authentication and Firestore database.
+- **Google OAuth**: Authentication via Google accounts.
+- **Framer Motion**: Animation library for React.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+## Getting Started
+
+### Prerequisites
+
+- Node.js and npm installed on your machine.
+- Firebase project with Firestore and Authentication enabled.
+
+### Installation
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/your-username/employee-pin-management.git
+   cd employee-pin-management
+   ```
+
+2. **Install dependencies**:
+
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**:
+   - Create a `.env` file in the root of the project with the following variables:
+   ```plaintext
+   VITE_FIREBASE_API_KEY=your-firebase-api-key
+   VITE_FIREBASE_AUTH_DOMAIN=your-firebase-auth-domain
+   VITE_FIREBASE_PROJECT_ID=your-firebase-project-id
+   VITE_FIREBASE_STORAGE_BUCKET=your-firebase-storage-bucket
+   VITE_FIREBASE_MESSAGING_SENDER_ID=your-firebase-messaging-sender-id
+   VITE_FIREBASE_APP_ID=your-firebase-app-id
+   VITE_GOOGLE_CLIENT_ID=your-google-client-id
+   ```
+
+### Running the Application
+
+To start the development server, run:
+
+```bash
+npm run dev
 ```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
