@@ -1,29 +1,13 @@
-// import { defineConfig } from "vite";
-// import react from "@vitejs/plugin-react-swc";
-// import tsconfigPaths from "vite-tsconfig-paths";
-
-// // https://vitejs.dev/config/
-// export default defineConfig({
-//   plugins: [react(), tsconfigPaths()],
-//   resolve: {
-//     alias: {
-//       "@": "/src", // Define el alias '@' para resolver '/src'
-//     },
-//   },
-// });
-
-// vite.config.ts
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { VitePWA } from "vite-plugin-pwa";
+import { viteStaticCopy } from "vite-plugin-static-copy";
 
 export default defineConfig({
   plugins: [
     react(),
-
     tsconfigPaths(),
-
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
@@ -45,8 +29,19 @@ export default defineConfig({
         ],
       },
     }),
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'src/resources/employees.json',
+          dest: 'resources'
+        },
+        {
+          src: 'src/resources/slack.json',
+          dest: 'resources'
+        }
+      ]
+    })
   ],
-
   resolve: {
     alias: {
       "@": "/src",
