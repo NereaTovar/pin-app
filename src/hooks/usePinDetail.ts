@@ -2,7 +2,7 @@ import { useMemo } from "react";
 
 // Función para convertir fechas en formato dd.MM.yyyy a yyyy-MM-dd
 const convertDateFormat = (dateString: string): string => {
-  const [day, month, year] = dateString.split('.');
+  const [day, month, year] = dateString.split(".");
   return `${year}-${month}-${day}`;
 };
 
@@ -11,7 +11,15 @@ const usePinDetails = (startDate: string) => {
     const formattedDate = convertDateFormat(startDate);
     const start = new Date(formattedDate);
     const now = new Date();
-    return now.getFullYear() - start.getFullYear();
+
+    const yearDiff = now.getFullYear() - start.getFullYear();
+    const monthDiff = now.getMonth() - start.getMonth();
+    const dayDiff = now.getDate() - start.getDate();
+
+    // Ajustar el año si el mes y día actuales están antes de la fecha de inicio
+    return monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)
+      ? yearDiff - 1
+      : yearDiff;
   };
 
   const determineColor = (years: number): string => {
