@@ -1,6 +1,8 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { StoreContext } from "src/ui/components/store-context/StoreContext.tsx";
+import EmployeesPanel from "src/ui/components/employee-list/EmployeeList.tsx";
+import AssignPinModal from "src/ui/modal/AssignPinModal.tsx";
 import "./TabPanel.scss";
 
 interface TabPanelProps {
@@ -56,4 +58,23 @@ export function TabPanel({ tabs }: TabPanelProps) {
       </div>
     </div>
   );
+}
+
+// Ejemplo de cómo podrías definir las pestañas y pasarlas a TabPanel
+const tabs = [
+  { label: "Employees", content: <EmployeesPanel /> },
+  {
+    label: "Assign Pin",
+    content: (
+      <AssignPinModal
+        isOpen={true}
+        onRequestClose={() => {}}
+        onAssign={(id) => {}}
+      />
+    ),
+  }, // Puedes ajustar esto según tu necesidad
+];
+
+export function App() {
+  return <TabPanel tabs={tabs} />;
 }

@@ -1,5 +1,3 @@
-// dateUtils.ts
-
 // Función para convertir fechas en formato dd.mm.yyyy a yyyy-mm-dd
 export const convertDateFormat = (dateString: string): string => {
   const [day, month, year] = dateString.split('.');

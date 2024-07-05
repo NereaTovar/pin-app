@@ -1,8 +1,15 @@
 import { useMemo } from "react";
 
+// Función para convertir fechas en formato dd.MM.yyyy a yyyy-MM-dd
+const convertDateFormat = (dateString: string): string => {
+  const [day, month, year] = dateString.split('.');
+  return `${year}-${month}-${day}`;
+};
+
 const usePinDetails = (startDate: string) => {
   const calculateYears = (startDate: string): number => {
-    const start = new Date(startDate);
+    const formattedDate = convertDateFormat(startDate);
+    const start = new Date(formattedDate);
     const now = new Date();
     return now.getFullYear() - start.getFullYear();
   };
