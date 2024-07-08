@@ -5,8 +5,8 @@ interface PinAnniversaryProps {
 
 const PinAnniversary = ({ number, color }: PinAnniversaryProps) => (
   <svg
-    width="50" 
-    height="50" 
+    width="57.5" 
+    height="57.5" 
     viewBox="0 0 100 100"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -23,7 +23,7 @@ const PinAnniversary = ({ number, color }: PinAnniversaryProps) => (
       y="50%"
       dominantBaseline="middle"
       textAnchor="middle"
-      fontSize="18" 
+      fontSize="21" 
       fill="#ffffff"
       fontFamily="Arial"
       fontWeight="bold"
