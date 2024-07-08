@@ -1,4 +1,5 @@
 // import { useState, useEffect } from "react";
+// import { differenceInYears, parse, isValid } from "date-fns";
 
 // interface Employee {
 //   id: string;
@@ -7,6 +8,8 @@
 //   department: string;
 //   picture: string;
 //   startDate: string;
+//   yearsInCompany: number;
+  
 // }
 
 // const useEmployees = () => {
@@ -39,13 +42,26 @@
 //         const mappedData = activeEmployees.map((emp: any, index: number) => {
 //           const slackMember = slackMembers.find((member: any) => member.profile.email === emp.Email);
 
+//           // Parse the hire date
+//           const hireDate = parse(emp["Hire date"], 'dd.MM.yyyy', new Date());
+//           console.log(`Parsed hire date for ${emp["First name (legal)"]} ${emp["Last name (legal)"]}:`, hireDate);
+
+//           // Verify if the parsed date is valid
+//           const yearsInCompany = isValid(hireDate) ? differenceInYears(new Date(), hireDate) : NaN;
+//           console.log(`Years in company for ${emp["First name (legal)"]} ${emp["Last name (legal)"]}:`, yearsInCompany);
+
+//           if (!isValid(hireDate)) {
+//             console.warn(`Invalid hire date for employee: ${emp["First name (legal)"]} ${emp["Last name (legal)"]}`);
+//           }
+
 //           return {
 //             id: index.toString(), // Usar el índice como ID ya que no hay un campo `id` en employees.json
 //             name: `${emp["First name (legal)"]} ${emp["Last name (legal)"]}`,
 //             email: emp.Email,
 //             department: emp.Department,
 //             picture: slackMember ? slackMember.profile.image_512 : '',
-//             startDate: emp["Hire date"]
+//             startDate: emp["Hire date"],
+//             yearsInCompany,
 //           };
 //         });
 
@@ -67,6 +83,15 @@
 
 import { useState, useEffect } from "react";
 import { differenceInYears, parse, isValid } from "date-fns";
+import { collection, getDocs, doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { db } from "@/config/firebaseConfig";
+
+
+interface Pin {
+  type: string;
+  date: string;
+  color: string;
+}
 
 interface Employee {
   id: string;
@@ -76,6 +101,7 @@ interface Employee {
   picture: string;
   startDate: string;
   yearsInCompany: number;
+  pins: Pin[];
 }
 
 const useEmployees = () => {
@@ -104,8 +130,9 @@ const useEmployees = () => {
         }
 
         const activeEmployees = employeesArray.filter((emp: any) => emp.Status === 'Active');
+        console.log('Active employees:', activeEmployees);
 
-        const mappedData = activeEmployees.map((emp: any, index: number) => {
+        const mappedData = await Promise.all(activeEmployees.map(async (emp: any, index: number) => {
           const slackMember = slackMembers.find((member: any) => member.profile.email === emp.Email);
 
           // Parse the hire date
@@ -120,6 +147,11 @@ const useEmployees = () => {
             console.warn(`Invalid hire date for employee: ${emp["First name (legal)"]} ${emp["Last name (legal)"]}`);
           }
 
+          // Fetch pins from Firestore
+          const pinsCollection = collection(db, `employees/${index}/pins`);
+          const pinsDoc = await getDocs(pinsCollection);
+          const pinsData = pinsDoc.docs.map(doc => doc.data() as Pin);
+
           return {
             id: index.toString(), // Usar el índice como ID ya que no hay un campo `id` en employees.json
             name: `${emp["First name (legal)"]} ${emp["Last name (legal)"]}`,
@@ -128,9 +160,11 @@ const useEmployees = () => {
             picture: slackMember ? slackMember.profile.image_512 : '',
             startDate: emp["Hire date"],
             yearsInCompany,
+            pins: pinsData,
           };
-        });
+        }));
 
+        console.log('Mapped data:', mappedData);
         setEmployees(mappedData);
       } catch (error) {
         console.error("Error fetching employees:", error);
@@ -142,7 +176,23 @@ const useEmployees = () => {
     fetchEmployees();
   }, []);
 
-  return { employees, loading };
+  const assignPin = async (employeeId: string, pin: Pin) => {
+    try {
+      const employeeDoc = doc(db, "employees", employeeId);
+      await updateDoc(employeeDoc, {
+        pins: arrayUnion(pin),
+      });
+      setEmployees(prevEmployees => 
+        prevEmployees.map(emp => 
+          emp.id === employeeId ? { ...emp, pins: [...emp.pins, pin] } : emp
+        )
+      );
+    } catch (error) {
+      console.error("Error assigning pin:", error);
+    }
+  };
+
+  return { employees, loading, assignPin };
 };
 
 export default useEmployees;

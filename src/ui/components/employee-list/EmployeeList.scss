@@ -6,6 +6,21 @@
     margin-bottom: 20px;
   }
 
+  &__search {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+
+    input {
+      width: 100%;
+      max-width: 400px;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+  }
+
   &__container {
     display: flex;
     flex-wrap: wrap;
@@ -19,12 +34,12 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     text-align: center;
-    width: 200px; // Puedes ajustar este valor para cambiar el tamaño de las tarjetas
+    width: 200px; 
   }
 
   &__picture {
-    width: 80px; // Tamaño más pequeño para las fotos
-    height: 80px; // Tamaño más pequeño para las fotos
+    width: 80px; 
+    height: 80px; 
     border-radius: 50%;
     margin-bottom: 10px;
   }
@@ -44,9 +59,15 @@
       display: flex;
       justify-content: center;
 
+      .assignedPin {
+        background-color: #4dd699; 
+        padding: 5px 10px;
+        border-radius: 5px;
+        margin-top: 5px;
+      }
+
       svg {
-        width: 20px; // Asegúrate de que el tamaño del SVG esté alineado con el nuevo tamaño
-        height: 20px;
+        width: 20px; 
       }
     }
   }
