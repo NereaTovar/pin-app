@@ -1,3 +1,5 @@
+import './PinAnniversary.scss';
+
 interface PinAnniversaryProps {
   number: number;
   color: string;
@@ -23,10 +25,7 @@ const PinAnniversary = ({ number, color }: PinAnniversaryProps) => (
       y="50%"
       dominantBaseline="middle"
       textAnchor="middle"
-      fontSize="21" 
-      fill="#ffffff"
-      fontFamily="Arial"
-      fontWeight="bold"
+      className="pin-anniversary-text"
     >
       {number}
     </text>
