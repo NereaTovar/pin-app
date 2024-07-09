@@ -4,8 +4,9 @@
 // import "./EmployeeList.scss";
 
 // const EmployeeList = () => {
-//   const { employees, loading } = useEmployees();
+//   const { employees, loading, assignPin } = useEmployees();
 //   const [searchTerm, setSearchTerm] = useState("");
+//   const [newPin, setNewPin] = useState({ type: "", date: "", color: "" });
 
 //   if (loading) {
 //     return <div>Loading...</div>;
@@ -40,9 +41,12 @@
 //             <div className="employeeList__details">
 //               <h2>{employee.name}</h2>
 //               <p>{employee.email}</p>
-//               <p>{employee.department}</p>
 //               <div className="employeeList__pin">
-//                 <EmployeePin startDate={employee.startDate} />
+//                 <EmployeePin
+//                   startDate={employee.startDate}
+//                   department={employee.department}
+//                   pins={employee.pins}
+//                 />
 //               </div>
 //             </div>
 //           </div>
@@ -60,9 +64,8 @@ import EmployeePin from "@/ui/components/employee-pin/EmployeePin";
 import "./EmployeeList.scss";
 
 const EmployeeList = () => {
-  const { employees, loading, assignPin } = useEmployees();
+  const { employees, loading } = useEmployees();
   const [searchTerm, setSearchTerm] = useState("");
-  const [newPin, setNewPin] = useState({ type: "", date: "", color: "" });
 
   if (loading) {
     return <div>Loading...</div>;
@@ -96,14 +99,11 @@ const EmployeeList = () => {
             />
             <div className="employeeList__details">
               <h2>{employee.name}</h2>
-              <p>{employee.email}</p>
-              <p>{employee.department}</p>
+              {/* <p>{employee.email}</p>
+              <p>{employee.department}</p> */}
+              <p>Years in Company: {employee.yearsInCompany}</p>
               <div className="employeeList__pin">
-                <EmployeePin
-                  startDate={employee.startDate}
-                  department={employee.department}
-                  pins={employee.pins}
-                />
+                <EmployeePin startDate={employee.startDate} department={employee.department} pins={employee.pins} />
               </div>
             </div>
           </div>
