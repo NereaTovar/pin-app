@@ -1,43 +1,6 @@
-// import PinAnniversary from "../pin/PinAnniversary";
-// import usePinDetails from "@/hooks/usePinDetail";
-// import PinDepartment from "../pin/PinDepartment";
-
-// interface Pin {
-//   type: string;
-//   date: string;
-//   color: string;
-// }
-
-// interface EmployeePinProps {
-//   startDate: string;
-//   department: string;
-//   pins: Pin[];
-// }
-
-// const EmployeePin = ({ startDate, department, pins }: EmployeePinProps) => {
-//   const { years, color } = usePinDetails(startDate);
-
-//   return (
-//     <div>
-//       <PinAnniversary number={years} color={color} />
-//       {/* <p>Department: {department}</p> */}
-//       <PinDepartment department={department} />
-//       {/* <p>Years at the company: {years}</p> */}
-//       {pins.map((pin, index) => (
-//         <div key={index} style={{ backgroundColor: pin.color }}>
-//           <p>
-//             {pin.type} - {pin.date}
-//           </p>
-//         </div>
-//       ))}
-//     </div>
-//   );
-// };
-
-// export default EmployeePin;
 import PinAnniversary from "../pin/pin-anniversary/PinAnniversary";
-import usePinDetails from "@/hooks/usePinDetail";
 import PinDepartment from "../pin/pin-department/PinDepartment";
+import usePinDetails from "@/hooks/usePinDetail";
 
 interface Pin {
   type: string;
@@ -45,41 +8,34 @@ interface Pin {
   color_hire?: string;
   department?: string;
   color?: string;
+  imagePin?: string;
 }
 
 interface EmployeePinProps {
   startDate: string;
   department: string;
   pins: Pin[];
+  yearsInCompany: number;
 }
 
-const EmployeePin = ({ startDate, department, pins }: EmployeePinProps) => {
-  const { years, color } = usePinDetails(startDate);
+const EmployeePin = (props: EmployeePinProps) => {
+  const { startDate, department, pins, yearsInCompany } = props;
+  const { color } = usePinDetails(yearsInCompany);
 
   return (
-    <div>
-      <PinAnniversary number={years} color={color} />
+    <div className="employeePin">
+      <PinAnniversary number={yearsInCompany} color={color} />
       <PinDepartment department={department} />
-      {pins.map((pin, index) => (
-        <div key={index} style={{ backgroundColor: pin.color || pin.color_hire }}>
-          {pin.type === "Anniversary" && (
-            <>
-              <PinAnniversary number={years} color={pin.color_hire || color} />
-              <p>
-                {pin.type} - {pin.date_hire}
-              </p>
-            </>
-          )}
-          {pin.type === "Department" && (
-            <>
-              <PinDepartment department={pin.department || department} />
-              <p>
-                {pin.type} - {pin.department}
-              </p>
-            </>
-          )}
-        </div>
-      ))}
+      <div className="pins">
+        {pins.map((pin, index) => {
+          // console.log(`Rendering pin:`, pin);
+          return (
+            <div key={index} className="pin">
+              {pin.imagePin && <img src={pin.imagePin} alt={pin.type} />}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

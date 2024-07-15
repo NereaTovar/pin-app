@@ -28,10 +28,7 @@ const syncUsers = async () => {
     const employees = employeesData.Employees;
     const slackMembers = slackData.members;
 
-    console.log("Employees data:", employees);
-    console.log("Slack members:", slackMembers);
-
-    // Filtrar empleados activos y eliminar duplicados por email
+       // Filtrar empleados activos y eliminar duplicados por email
     const activeEmployees = employees.filter(
       (emp: any) => emp.Status === "Active"
     );
@@ -93,7 +90,7 @@ const syncUsers = async () => {
         // Si el usuario ya existe, actualízalo
         const userDoc = doc(db, "users", existingUser.id);
         await setDoc(userDoc, user);
-        console.log(`User updated: ${user.email}`);
+        // console.log(`User updated: ${user.email}`);
       } else {
         // Si el usuario no existe, añádelo
         await addDoc(usersCollection, user);
@@ -107,3 +104,4 @@ const syncUsers = async () => {
 };
 
 export default syncUsers;
+

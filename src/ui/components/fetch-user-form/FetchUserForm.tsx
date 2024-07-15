@@ -5,14 +5,27 @@ const fetchUsers = async () => {
   try {
     const usersCollection = collection(db, "users");
     const userSnapshot = await getDocs(usersCollection);
-    const users = userSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      email: doc.data().email,
-      name: doc.data().name,
-      department: doc.data().department,
-      picture: doc.data().picture,
-      startDate: doc.data().startDate,
-    }));
+    const users = userSnapshot.docs.map((doc) => {
+      const data = doc.data();
+      // console.log(`Fetching data for user: ${data.email}`);
+      // console.log("User data:", data);
+      if (Array.isArray(data.pins)) {
+        data.pins.forEach((pin, index) => {
+          // console.log(`Pin ${index}:`, pin);
+        });
+      } else {
+        console.log("No pins found or pins is not an array");
+      }
+      return {
+        id: doc.id,
+        email: data.email,
+        name: data.name,
+        department: data.department,
+        picture: data.picture,
+        startDate: data.startDate,
+        pins: data.pins,
+      };
+    });
     return users;
   } catch (error) {
     console.error("Error fetching users from Firestore:", error);

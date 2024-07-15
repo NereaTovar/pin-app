@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { StoreContext } from "src/ui/components/store-context/StoreContext.tsx";
 import EmployeesPanel from "src/ui/components/employee-list/EmployeeList.tsx";
@@ -60,7 +60,6 @@ export function TabPanel({ tabs }: TabPanelProps) {
   );
 }
 
-// Ejemplo de cómo podrías definir las pestañas y pasarlas a TabPanel
 const tabs = [
   { label: "Employees", content: <EmployeesPanel /> },
   {
@@ -72,7 +71,7 @@ const tabs = [
         onAssign={(id) => {}}
       />
     ),
-  }, // Puedes ajustar esto según tu necesidad
+  }, 
 ];
 
 export function App() {
