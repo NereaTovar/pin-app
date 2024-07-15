@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useEmployees from "@/ui/hooks/useEmployees";
 import EmployeePin from "@/ui/components/employee-pin/EmployeePin";
 import "./EmployeeList.scss";
@@ -6,6 +6,21 @@ import "./EmployeeList.scss";
 const EmployeeList = () => {
   const { employees, loading } = useEmployees();
   const [searchTerm, setSearchTerm] = useState("");
+
+  // useEffect(() => {
+  //   console.log("Employees updated:", employees);
+  //   employees.forEach((employee) => {
+  //     if (Array.isArray(employee.pins)) {
+  //       employee.pins.forEach((pin, index) => {
+  //         console.log(`Employee ${employee.name} - Pin ${index}:`, pin);
+  //       });
+  //     } else {
+  //       console.log(
+  //         `Employee ${employee.name} has no pins or pins is not an array`
+  //       );
+  //     }
+  //   });
+  // }, [employees]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -39,13 +54,12 @@ const EmployeeList = () => {
             />
             <div className="employeeList__details">
               <h2>{employee.name}</h2>
-              <p>Years in Company: {employee.yearsInCompany}</p>
               <div className="employeeList__pin">
                 <EmployeePin
                   startDate={employee.startDate}
                   department={employee.department}
                   pins={employee.pins}
-                  yearsInCompany={employee.yearsInCompany} // Pasar yearsInCompany aquí
+                  yearsInCompany={employee.yearsInCompany}
                 />
               </div>
             </div>

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import Modal from "react-modal";
 
 import Login from "src/ui/section/login/Login.tsx";
 import Header from "./ui/components/header/Header";
@@ -20,6 +21,8 @@ const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 if (!clientId) {
   throw new Error("Missing Google Client ID");
 }
+
+Modal.setAppElement("#root");
 
 export default function App() {
   // useEffect(() => {
@@ -51,7 +54,6 @@ export default function App() {
                 <Route path="/profile/:userId" element={<Profile />} />
                 <Route path="/pin/:pinId" element={<PinDetail />} />
                 {/* <Route path="/employees" element={<EmployeeList />} />{" "} */}
-
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>

@@ -14,7 +14,7 @@ function GoogleAuth({ onLoginSuccess }: GoogleAuthProps) {
         `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${token}`
       );
       const userProfileData = await userProfileResponse.json();
-      console.log("User Profile Data Auth:", userProfileData);
+      // console.log("User Profile Data Auth:", userProfileData);
 
       const userData: UserProfileData = {
         id: userProfileData.sub,

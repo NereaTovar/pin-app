@@ -6,6 +6,8 @@ import "@/ui/section/pin-detail/PinDetail.scss";
 import NotFound from "@/ui/section/not-found/NotFound";
 import AssignPinModal from "@/ui/modal/AssignPinModal";
 import useEmployees from "@/ui/hooks/useEmployees";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function PinDetail() {
   const { pinId } = useParams<{ pinId: string }>();
@@ -17,13 +19,25 @@ export default function PinDetail() {
     return <NotFound />;
   }
 
-  const handleAssignPin = async (employeeId: string) => {
-    await assignPin(employeeId, {
+  const handleAssignPin = async (employeeIds: string[]) => {
+    const pinData = {
       type: pin.pinTitle,
       date_hire: new Date().toISOString().split("T")[0],
       color: "",
-    });
-    setIsModalOpen(false);
+      imagePin: pin.imagePin, 
+    };
+
+    try {
+      for (const employeeId of employeeIds) {
+        console.log('Assigning pin:', pinData, 'to employee:', employeeId); // Log de depuración
+        await assignPin(employeeId, pinData);
+      }
+      toast.success("Pin assigned successfully");
+    } catch (error) {
+      toast.error("Failed to assign pin");
+    } finally {
+      setIsModalOpen(false);
+    }
   };
 
   return (

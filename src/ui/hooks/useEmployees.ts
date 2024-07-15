@@ -4,9 +4,9 @@ import {
   collection,
   getDocs,
   doc,
+  getDoc,
   updateDoc,
   arrayUnion,
-  setDoc,
 } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
 import { createDepartmentPin } from "@/utils/departmentUtils";
@@ -17,6 +17,7 @@ interface Pin {
   color_hire?: string;
   department?: string;
   color?: string;
+  imagePin?: string;
 }
 
 interface Employee {
@@ -32,7 +33,7 @@ interface Employee {
 
 const useEmployees = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -41,9 +42,6 @@ const useEmployees = () => {
         const employeesData = await employeesResponse.json();
         const slackResponse = await fetch("/src/resources/slack.json");
         const slackData = await slackResponse.json();
-
-        console.log("Fetched employees data:", employeesData);
-        console.log("Fetched slack data:", slackData);
 
         const employeesArray = employeesData.Employees;
         if (!Array.isArray(employeesArray)) {
@@ -58,7 +56,6 @@ const useEmployees = () => {
         const activeEmployees = employeesArray.filter(
           (emp: any) => emp.Status === "Active"
         );
-        console.log("Active employees:", activeEmployees);
 
         const mappedData = await Promise.all(
           activeEmployees.map(async (emp: any) => {
@@ -66,53 +63,24 @@ const useEmployees = () => {
               (member: any) => member.profile.email === emp.Email
             );
 
-            // Parse the hire date
             const hireDate = parse(emp["Hire date"], "dd.MM.yyyy", new Date());
-            console.log(
-              `Parsed hire date for ${emp["First name (legal)"]} ${emp["Last name (legal)"]}:`,
-              hireDate
-            );
 
-            // Verify if the parsed date is valid
             const yearsInCompany = isValid(hireDate)
               ? differenceInYears(new Date(), hireDate)
-              : NaN;
-            console.log(
-              `Years in company for ${emp["First name (legal)"]} ${emp["Last name (legal)"]}:`,
-              yearsInCompany
-            );
+              : 0;
 
-            if (!isValid(hireDate)) {
-              console.warn(
-                `Invalid hire date for employee: ${emp["First name (legal)"]} ${emp["Last name (legal)"]}`
-              );
+            // Obtener el documento del empleado desde Firestore
+            const employeeDocRef = doc(db, "employees", emp.Email);
+            const employeeDoc = await getDoc(employeeDocRef);
+            if (!employeeDoc.exists()) {
+              throw new Error(`No document found for employee ${emp.Email}`);
             }
+            const employeeDataFromFirestore = employeeDoc.data() as Employee;
 
-            // Create anniversary pin
-            const anniversaryPin: Pin = {
-              type: "Anniversary",
-              date_hire: emp["Hire date"],
-              color_hire:
-                yearsInCompany >= 5
-                  ? "#ff4500"
-                  : yearsInCompany >= 3
-                  ? "#ff8c00"
-                  : "#4dd699",
-            };
+            // Obtener los pines desde el documento del empleado
+            const pinsData = employeeDataFromFirestore.pins || [];
 
-            // Create department pin
-            const departmentPin: Pin = createDepartmentPin(emp.Department);
-
-            // Fetch additional pins from Firestore
-            const pinsCollection = collection(
-              db,
-              `employees/${emp.Email}/pins`
-            );
-            const pinsDoc = await getDocs(pinsCollection);
-            const additionalPins = pinsDoc.docs.map((doc) => doc.data() as Pin);
-
-            // Combine all pins
-            const pinsData = [anniversaryPin, departmentPin, ...additionalPins];
+            // console.log(`Pins for ${emp.Email} from Firestore:`, pinsData);
 
             const employeeData: Employee = {
               id: emp.Email,
@@ -125,15 +93,12 @@ const useEmployees = () => {
               pins: pinsData,
             };
 
-            // Store employee data in Firestore
-            await setDoc(doc(db, "employees", emp.Email), employeeData);
-
             return employeeData;
           })
         );
 
-        console.log("Mapped data:", mappedData);
         setEmployees(mappedData);
+        // console.log("Mapped employees data:", mappedData);
       } catch (error) {
         console.error("Error fetching employees:", error);
       } finally {
@@ -146,17 +111,26 @@ const useEmployees = () => {
 
   const assignPin = async (employeeEmail: string, pin: Pin) => {
     try {
-      const employeeDoc = doc(db, "employees", employeeEmail);
-      await updateDoc(employeeDoc, {
+      console.log(
+        "Updating Firestore for employee:",
+        employeeEmail,
+        "with pin:",
+        pin
+      );
+      const employeeDocRef = doc(db, "employees", employeeEmail);
+      await updateDoc(employeeDocRef, {
         pins: arrayUnion(pin),
       });
-      setEmployees((prevEmployees) =>
-        prevEmployees.map((emp) =>
+      console.log("Updating local state for employee:", employeeEmail);
+      setEmployees((prevEmployees) => {
+        const updatedEmployees = prevEmployees.map((emp) =>
           emp.email === employeeEmail
             ? { ...emp, pins: [...emp.pins, pin] }
             : emp
-        )
-      );
+        );
+        console.log("Updated employees:", updatedEmployees);
+        return updatedEmployees;
+      });
     } catch (error) {
       console.error("Error assigning pin:", error);
     }

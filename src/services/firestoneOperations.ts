@@ -8,14 +8,14 @@ interface User {
   department: string;
   picture: string;
   startDate: string;
-  pins: string[]; // Array de IDs de pines asignados
+  pins: string[];
 }
 
 // Función para añadir un usuario
 export const addUser = async (user: User) => {
   try {
     const docRef = await addDoc(collection(db, "users"), user);
-    console.log("Document written with ID: ", docRef.id);
+    // console.log("Document written with ID: ", docRef.id);
   } catch (e) {
     console.error("Error adding document: ", e);
   }

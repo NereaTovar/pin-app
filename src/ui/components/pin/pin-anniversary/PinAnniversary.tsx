@@ -7,8 +7,8 @@ interface PinAnniversaryProps {
 
 const PinAnniversary = ({ number, color }: PinAnniversaryProps) => (
   <svg
-    width="57.5" 
-    height="57.5" 
+    width="57.5"
+    height="57.5"
     viewBox="0 0 100 100"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -27,7 +27,7 @@ const PinAnniversary = ({ number, color }: PinAnniversaryProps) => (
       textAnchor="middle"
       className="pin-anniversary-text"
     >
-      {number}
+      {number || 0} {/* Asegúrate de que no se pase NaN */}
     </text>
   </svg>
 );
