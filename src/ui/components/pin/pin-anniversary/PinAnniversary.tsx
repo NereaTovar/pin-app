@@ -27,7 +27,7 @@ const PinAnniversary = ({ number, color }: PinAnniversaryProps) => (
       textAnchor="middle"
       className="pin-anniversary-text"
     >
-      {number || 0} {/* Asegúrate de que no se pase NaN */}
+      {number || 0} 
     </text>
   </svg>
 );
