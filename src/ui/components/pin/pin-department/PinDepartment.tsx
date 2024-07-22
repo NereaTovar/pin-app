@@ -8,7 +8,6 @@ const PinDepartment = ({ department }: PinDepartmentProps) => {
   const color = departmentColors[department] || "#000000";
   const text = departmentTexts[department] || department;
 
-  // Split the text into two lines if it exceeds a certain length
   const words = text.split(" ");
   const maxLineLength = 8;
   const lines = [""];
@@ -40,7 +39,7 @@ const PinDepartment = ({ department }: PinDepartmentProps) => {
         <text
           key={index}
           x="50%"
-          y={`${50 + (index - (lines.length - 1) / 2) * 14}%`} // Adjusted for separation
+          y={`${50 + (index - (lines.length - 1) / 2) * 14}%`}
           dominantBaseline="middle"
           textAnchor="middle"
           fontSize="14"

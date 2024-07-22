@@ -1,6 +1,7 @@
 import PinAnniversary from "../pin/pin-anniversary/PinAnniversary";
 import PinDepartment from "../pin/pin-department/PinDepartment";
 import usePinDetails from "@/hooks/usePinDetail";
+import "./EmployeePin.scss";
 
 interface Pin {
   type: string;
@@ -19,16 +20,19 @@ interface EmployeePinProps {
 }
 
 const EmployeePin = (props: EmployeePinProps) => {
-  const { startDate, department, pins, yearsInCompany } = props;
+  const { department, pins, yearsInCompany } = props;
   const { color } = usePinDetails(yearsInCompany);
 
   return (
     <div className="employeePin">
-      <PinAnniversary number={yearsInCompany} color={color} />
-      <PinDepartment department={department} />
       <div className="pins">
+        <div className="pin">
+          <PinAnniversary number={yearsInCompany} color={color} />
+        </div>
+        <div className="pin">
+          <PinDepartment department={department} />
+        </div>
         {pins.map((pin, index) => {
-          // console.log(`Rendering pin:`, pin);
           return (
             <div key={index} className="pin">
               {pin.imagePin && <img src={pin.imagePin} alt={pin.type} />}

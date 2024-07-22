@@ -1,11 +1,6 @@
 .employeeList {
   padding: 20px;
 
-  h1 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-
   &__search {
     margin-bottom: 20px;
     display: flex;
@@ -34,12 +29,12 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     text-align: center;
-    width: 200px; 
+    width: 200px;
   }
 
   &__picture {
-    width: 80px; 
-    height: 80px; 
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     margin-bottom: 10px;
   }
@@ -49,26 +44,8 @@
       font-size: 1.2em;
       margin: 10px 0;
     }
-
-    p {
-      margin: 5px 0;
-    }
-
-    &__pin {
-      margin-top: 10px;
-      display: flex;
-      justify-content: center;
-
-      .assignedPin {
-        background-color: #4dd699; 
-        padding: 5px 10px;
-        border-radius: 5px;
-        margin-top: 5px;
-      }
-
-      svg {
-        width: 20px; 
-      }
-    }
+  }
+  &__pin {
+    margin-top: 10px 0;
   }
 }
