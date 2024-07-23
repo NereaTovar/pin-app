@@ -22,7 +22,7 @@
 
   &__sticky {
     position: sticky;
-    top: 50px;
+    top: 50px; /* Altura de la cabecera */
     background: white;
     z-index: 10;
     padding: 10px 0;
@@ -66,7 +66,7 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    margin-right: 20px;
+    margin-right: 20px; /* Incrementar la separación */
   }
 
   &__details {
@@ -110,19 +110,34 @@
     }
   }
 
-  &__success {
+  .assignPinModal__error {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #dff0d8;
-    color: #3c763d;
     padding: 20px 40px;
     border-radius: 4px;
     text-align: center;
     z-index: 1000;
     font-size: 24px;
     font-weight: bold;
+    background-color: #f2dede;
+    color: #a94442;
+  }
+
+  .assignPinModal__success {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 40px;
+    border-radius: 4px;
+    text-align: center;
+    z-index: 1000;
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #dff0d8;
+    color: #3c763d;
   }
 
   .assignPinModal__employee {
@@ -131,7 +146,7 @@
   }
 
   .assignPinModal__employee input[type="checkbox"] {
-    margin-right: 20px;
-    align-self: center;
+    margin-right: 20px; /* Ajustar separación */
+    align-self: center; /* Centrar el checkbox verticalmente */
   }
 }

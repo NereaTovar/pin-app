@@ -3,19 +3,26 @@ import Modal from "react-modal";
 import useEmployees from "@/ui/hooks/useEmployees";
 import "./AssignPinModal.scss";
 
+// Define the Pin type here
+interface Pin {
+  type: string;
+  date_hire?: string;
+  color_hire?: string;
+  department?: string;
+  color?: string;
+  imagePin?: string;
+}
+
 interface AssignPinModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
-  onAssign: (employeeIds: string[]) => void;
 }
 
-const AssignPinModal = ({
-  isOpen,
-  onRequestClose,
-  onAssign,
-}: AssignPinModalProps) => {
-  const { employees, loading } = useEmployees();
+const AssignPinModal = ({ isOpen, onRequestClose }: AssignPinModalProps) => {
+  const { employees, loading, assignPin } = useEmployees();
   const [selectedEmployees, setSelectedEmployees] = useState<string[]>([]);
+  const [pinType, setPinType] = useState<string>(""); // Tipo de pin
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const handleCheckboxChange = (employeeId: string) => {
@@ -26,13 +33,29 @@ const AssignPinModal = ({
     );
   };
 
-  const handleSubmit = () => {
-    onAssign(selectedEmployees);
-    setSuccessMessage("Pin asignado con éxito");
-    setTimeout(() => {
-      setSuccessMessage(null);
-      onRequestClose();
-    }, 2000); // Mensaje visible por 2 segundos
+  const handleSubmit = async () => {
+    const pin: Pin = { type: pinType };
+
+    const employeeWithPin = employees.find(
+      (employee) =>
+        selectedEmployees.includes(employee.id) &&
+        employee.pins.some((p) => p.type === pinType)
+    );
+
+    if (employeeWithPin) {
+      setErrorMessage(
+        `El empleado ${employeeWithPin.name} ya tiene ese pin asignado.`
+      );
+    } else {
+      await Promise.all(
+        selectedEmployees.map((employeeId) => assignPin(employeeId, pin))
+      );
+      setSuccessMessage("Pin asignado con éxito");
+      setTimeout(() => {
+        setSuccessMessage(null);
+        onRequestClose();
+      }, 3000); // Mensaje visible por 3 segundos
+    }
   };
 
   if (loading) {
@@ -49,6 +72,9 @@ const AssignPinModal = ({
       <div className="assignPinModal">
         {successMessage && (
           <div className="assignPinModal__success">{successMessage}</div>
+        )}
+        {errorMessage && (
+          <div className="assignPinModal__error">{errorMessage}</div>
         )}
         <div className="assignPinModal__content">
           {employees.map((employee) => (
@@ -70,6 +96,7 @@ const AssignPinModal = ({
             </div>
           ))}
         </div>
+
         {selectedEmployees.length > 0 && (
           <div className="assignPinModal__buttons">
             <button
