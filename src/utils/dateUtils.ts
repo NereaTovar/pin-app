@@ -1,6 +1,6 @@
 // Función para convertir fechas en formato dd.mm.yyyy a yyyy-mm-dd
 export const convertDateFormat = (dateString: string): string => {
-  const [day, month, year] = dateString.split('.');
+  const [day, month, year] = dateString.split(".");
   return `${year}-${month}-${day}`;
 };
 
@@ -17,7 +17,7 @@ export const calculateYears = (startDate: string): number => {
 
 // Función para determinar el color del pin basado en la antigüedad
 export const determineColor = (years: number): string => {
-  if (years >= 5) return "#ff4500"; // Rojo para 5 años o más
-  if (years >= 3) return "#ff8c00"; // Naranja para 3-5 años
+  if (years >= 5) return "#e8505B"; // Rojo para 5 años o más
+  if (years >= 3) return "#f0ae5d"; // Naranja para 3-5 años
   return "#4dd699"; // Verde para menos de 3 años
 };
