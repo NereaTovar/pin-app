@@ -25,15 +25,8 @@ if (!clientId) {
 Modal.setAppElement("#root");
 
 export default function App() {
-  // useEffect(() => {
-  //   auth.onAuthStateChanged((user) => {
-  //     if (user) {
-  //       syncUsers(); // Sincroniza los usuarios si el usuario está autenticado
-  //     }
-  //   });
-  // }, []);
   useEffect(() => {
-    syncUsers();
+    syncUsers(); // Sincroniza los empleados al montar el componente
   }, []);
 
   const tabs = [
@@ -53,7 +46,6 @@ export default function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/profile/:userId" element={<Profile />} />
                 <Route path="/pin/:pinId" element={<PinDetail />} />
-                {/* <Route path="/employees" element={<EmployeeList />} />{" "} */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>

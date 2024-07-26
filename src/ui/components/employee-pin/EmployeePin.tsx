@@ -45,3 +45,5 @@ const EmployeePin = (props: EmployeePinProps) => {
 };
 
 export default EmployeePin;
+
+
