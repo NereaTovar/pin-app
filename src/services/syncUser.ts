@@ -1,3 +1,4 @@
+
 import { collection, getDocs, setDoc, doc } from "firebase/firestore";
 import employeesData from "src/resources/employees.json";
 import slackData from "src/resources/slack.json";
@@ -15,6 +16,16 @@ interface Employee {
   yearsInCompany: number;
   pins: Pin[];
 }
+
+// Función para obtener la URL de la imagen del pin de aniversario
+const getAnniversaryPinImage = (years: number) => {
+  return `https://example.com/pins/anniversary-${years}.png`;
+};
+
+// Función para obtener la URL de la imagen del pin de departamento
+const getDepartmentPinImage = (department: string) => {
+  return `https://example.com/pins/department-${department.replace(/\s/g, "-").toLowerCase()}.png`;
+};
 
 const syncUsers = async () => {
   try {
@@ -70,6 +81,23 @@ const syncUsers = async () => {
         }
 
         const color = determineColor(years);
+        const departmentColor = "#808080"; // Color específico para el pin de departamento
+
+        // Crear pines de aniversario y departamento con toda la información necesaria
+        const anniversaryPin: Pin = {
+          type: "Anniversary",
+          date_hire: startDate,
+          color_hire: color,
+        };
+
+        const departmentPin: Pin = {
+          type: "Department",
+          department: emp.Department,
+          color: departmentColor,
+        };
+
+        // Comprobar si ya existe un pin de cada tipo para evitar duplicados
+        const pins = [anniversaryPin, departmentPin];
 
         return {
           id: emp.Email, // Usar el email como ID ya que es único
@@ -79,7 +107,7 @@ const syncUsers = async () => {
           picture: slackMember ? slackMember.profile.image_512 : "",
           startDate: emp["Hire date"],
           yearsInCompany: years, // Añadir yearsInCompany
-          pins: [{ number: years, color, type: "Anniversary" }],  // Añadir type a Pin
+          pins: pins,
         };
       })
       .filter((employee): employee is Employee => employee !== null); // Filtrar empleados nulos que tienen fechas no válidas o departamentos no definidos
