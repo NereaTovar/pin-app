@@ -26,7 +26,6 @@ const AssignPinModal = ({
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Define el pin que deseas asignar
   const pinToAssign: Pin = {
     type: "Summer Event 2024",
     date_hire: "2024-07-24",
@@ -51,12 +50,12 @@ const AssignPinModal = ({
       if (result === "Pin already assigned") {
         allSuccess = false;
         setErrorMessage(`El empleado ${employeeId} ya tiene asignado ese pin.`);
-        setTimeout(() => setErrorMessage(null), 5000); // Mensaje visible por 5 segundos
+        setTimeout(() => setErrorMessage(null), 5000);
       } else if (result === "Error") {
         allSuccess = false;
         errorOccurred = true;
         setErrorMessage(`Error al asignar el pin al empleado ${employeeId}.`);
-        setTimeout(() => setErrorMessage(null), 5000); // Mensaje visible por 5 segundos
+        setTimeout(() => setErrorMessage(null), 5000);
       }
     }
 
@@ -65,13 +64,12 @@ const AssignPinModal = ({
       setTimeout(() => {
         setSuccessMessage(null);
         onRequestClose();
-      }, 5000); // Mensaje visible por 5 segundos
+      }, 5000);
     } else if (!errorOccurred) {
       setErrorMessage("Uno o más empleados ya tienen asignado ese pin.");
-      setTimeout(() => setErrorMessage(null), 5000); // Mensaje visible por 5 segundos
+      setTimeout(() => setErrorMessage(null), 5000);
     }
 
-    // Llamar a la función onAssign para notificar el evento de asignación de pines
     selectedEmployees.forEach((employeeId) => {
       onAssign(employeeId);
     });
@@ -96,7 +94,7 @@ const AssignPinModal = ({
           <div className="assignPinModal__error">{errorMessage}</div>
         )}
         <div className="assignPinModal__content">
-          {employees.map((employee) => (
+          {employees.map((employee: any) => (
             <div key={employee.id} className="assignPinModal__employee">
               <input
                 type="checkbox"
