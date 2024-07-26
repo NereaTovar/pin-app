@@ -11,7 +11,7 @@ const AddUserForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newUser = {
-      id: "",
+      id: email, // Utilizamos el correo electrónico como ID
       name,
       email,
       department,

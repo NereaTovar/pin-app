@@ -68,10 +68,12 @@ const tabs = [
       <AssignPinModal
         isOpen={true}
         onRequestClose={() => {}}
-        onAssign={(id) => {}}
+        onAssign={(id) => {
+          console.log(`Pin assigned to employee with ID: ${id}`);
+        }} // Asegúrate de pasar la función onAssign aquí
       />
     ),
-  }, 
+  },
 ];
 
 export function App() {

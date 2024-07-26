@@ -3,27 +3,36 @@ import Modal from "react-modal";
 import useEmployees from "@/ui/hooks/useEmployees";
 import "./AssignPinModal.scss";
 
-// Define the Pin type here
-interface Pin {
-  type: string;
-  date_hire?: string;
-  color_hire?: string;
-  department?: string;
-  color?: string;
-  imagePin?: string;
-}
-
 interface AssignPinModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
+  onAssign: (id: string) => void;
 }
 
-const AssignPinModal = ({ isOpen, onRequestClose }: AssignPinModalProps) => {
+interface Pin {
+  type: string;
+  date_hire: string;
+  color: string;
+  imagePin: string;
+}
+
+const AssignPinModal = ({
+  isOpen,
+  onRequestClose,
+  onAssign,
+}: AssignPinModalProps) => {
   const { employees, loading, assignPin } = useEmployees();
   const [selectedEmployees, setSelectedEmployees] = useState<string[]>([]);
-  const [pinType, setPinType] = useState<string>(""); // Tipo de pin
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Define el pin que deseas asignar
+  const pinToAssign: Pin = {
+    type: "Summer Event 2024",
+    date_hire: "2024-07-24",
+    color: "",
+    imagePin: "/src/assets/pins/Summer_event.svg",
+  };
 
   const handleCheckboxChange = (employeeId: string) => {
     setSelectedEmployees((prev) =>
@@ -34,28 +43,38 @@ const AssignPinModal = ({ isOpen, onRequestClose }: AssignPinModalProps) => {
   };
 
   const handleSubmit = async () => {
-    const pin: Pin = { type: pinType };
+    let allSuccess = true;
+    let errorOccurred = false;
 
-    const employeeWithPin = employees.find(
-      (employee) =>
-        selectedEmployees.includes(employee.id) &&
-        employee.pins.some((p) => p.type === pinType)
-    );
+    for (const employeeId of selectedEmployees) {
+      const result = await assignPin(employeeId, pinToAssign);
+      if (result === "Pin already assigned") {
+        allSuccess = false;
+        setErrorMessage(`El empleado ${employeeId} ya tiene asignado ese pin.`);
+        setTimeout(() => setErrorMessage(null), 5000); // Mensaje visible por 5 segundos
+      } else if (result === "Error") {
+        allSuccess = false;
+        errorOccurred = true;
+        setErrorMessage(`Error al asignar el pin al empleado ${employeeId}.`);
+        setTimeout(() => setErrorMessage(null), 5000); // Mensaje visible por 5 segundos
+      }
+    }
 
-    if (employeeWithPin) {
-      setErrorMessage(
-        `El empleado ${employeeWithPin.name} ya tiene ese pin asignado.`
-      );
-    } else {
-      await Promise.all(
-        selectedEmployees.map((employeeId) => assignPin(employeeId, pin))
-      );
+    if (allSuccess) {
       setSuccessMessage("Pin asignado con éxito");
       setTimeout(() => {
         setSuccessMessage(null);
         onRequestClose();
-      }, 3000); // Mensaje visible por 3 segundos
+      }, 5000); // Mensaje visible por 5 segundos
+    } else if (!errorOccurred) {
+      setErrorMessage("Uno o más empleados ya tienen asignado ese pin.");
+      setTimeout(() => setErrorMessage(null), 5000); // Mensaje visible por 5 segundos
     }
+
+    // Llamar a la función onAssign para notificar el evento de asignación de pines
+    selectedEmployees.forEach((employeeId) => {
+      onAssign(employeeId);
+    });
   };
 
   if (loading) {
@@ -96,20 +115,19 @@ const AssignPinModal = ({ isOpen, onRequestClose }: AssignPinModalProps) => {
             </div>
           ))}
         </div>
-
         {selectedEmployees.length > 0 && (
           <div className="assignPinModal__buttons">
-            <button
-              className="assignPinModal__assignButton"
-              onClick={handleSubmit}
-            >
-              Assign
-            </button>
             <button
               className="assignPinModal__cancelButton"
               onClick={onRequestClose}
             >
               Cancel
+            </button>
+            <button
+              className="assignPinModal__assignButton"
+              onClick={handleSubmit}
+            >
+              Assign
             </button>
           </div>
         )}

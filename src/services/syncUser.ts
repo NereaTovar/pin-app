@@ -1,34 +1,36 @@
-import { collection, getDocs, addDoc, setDoc, doc } from "firebase/firestore";
+import { collection, getDocs, setDoc, doc } from "firebase/firestore";
 import employeesData from "src/resources/employees.json";
 import slackData from "src/resources/slack.json";
 import { db } from "@/config/firebaseConfig";
 import { calculateYears, determineColor } from "@/utils/dateUtils";
+import { Pin } from "../types/Pin";  // Importar la interfaz Pin desde el archivo común
 
-interface User {
+interface Employee {
   id: string;
   name: string;
   email: string;
   department: string;
   picture: string;
   startDate: string;
-  pins: { number: number; color: string }[];
+  yearsInCompany: number;
+  pins: Pin[];
 }
 
 const syncUsers = async () => {
   try {
-    const usersCollection = collection(db, "users");
+    const employeesCollection = collection(db, "employees");
 
-    // Obtener todos los documentos actuales de la colección de usuarios
-    const existingUsersSnapshot = await getDocs(usersCollection);
-    const existingUsers = existingUsersSnapshot.docs.map((doc) => ({
+    // Obtener todos los documentos actuales de la colección de empleados
+    const existingEmployeesSnapshot = await getDocs(employeesCollection);
+    const existingEmployees = existingEmployeesSnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
-    })) as User[];
+    })) as Employee[];
 
     const employees = employeesData.Employees;
     const slackMembers = slackData.members;
 
-       // Filtrar empleados activos y eliminar duplicados por email
+    // Filtrar empleados activos y eliminar duplicados por email
     const activeEmployees = employees.filter(
       (emp: any) => emp.Status === "Active"
     );
@@ -40,8 +42,8 @@ const syncUsers = async () => {
     });
     const uniqueEmployees = Array.from(employeeMap.values());
 
-    const usersToAdd = uniqueEmployees
-      .map((emp: any): User | null => {
+    const employeesToAdd = uniqueEmployees
+      .map((emp: any): Employee | null => {
         const slackMember = slackMembers.find(
           (member: any) => member.profile.email === emp.Email
         );
@@ -76,32 +78,23 @@ const syncUsers = async () => {
           department: emp.Department,
           picture: slackMember ? slackMember.profile.image_512 : "",
           startDate: emp["Hire date"],
-          pins: [{ number: years, color }],
+          yearsInCompany: years, // Añadir yearsInCompany
+          pins: [{ number: years, color, type: "Anniversary" }],  // Añadir type a Pin
         };
       })
-      .filter((user): user is User => user !== null); // Filtrar usuarios nulos que tienen fechas no válidas o departamentos no definidos
+      .filter((employee): employee is Employee => employee !== null); // Filtrar empleados nulos que tienen fechas no válidas o departamentos no definidos
 
-    console.log("Users to add:", usersToAdd);
+    console.log("Employees to add:", employeesToAdd);
 
-    for (const user of usersToAdd) {
-      const existingUser = existingUsers.find((u) => u.email === user.email);
-
-      if (existingUser) {
-        // Si el usuario ya existe, actualízalo
-        const userDoc = doc(db, "users", existingUser.id);
-        await setDoc(userDoc, user);
-        // console.log(`User updated: ${user.email}`);
-      } else {
-        // Si el usuario no existe, añádelo
-        await addDoc(usersCollection, user);
-        console.log(`User added: ${user.email}`);
-      }
+    for (const employee of employeesToAdd) {
+      const employeeDoc = doc(db, "employees", employee.email); // Usar el correo electrónico como ID
+      await setDoc(employeeDoc, employee, { merge: true }); // Utilizar setDoc con merge para evitar sobrescribir completamente el documento
+      console.log(`Employee added or updated: ${employee.email}`);
     }
-    console.log("Users synchronized successfully");
+    console.log("Employees synchronized successfully");
   } catch (error) {
-    console.error("Error synchronizing users:", error);
+    console.error("Error synchronizing employees:", error);
   }
 };
 
 export default syncUsers;
-
