@@ -26,7 +26,7 @@ Modal.setAppElement("#root");
 
 export default function App() {
   useEffect(() => {
-    syncUsers(); // Sincroniza los empleados al montar el componente
+    syncUsers(); 
   }, []);
 
   const tabs = [

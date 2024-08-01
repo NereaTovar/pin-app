@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import {
   collection,
@@ -6,9 +5,10 @@ import {
   doc,
   getDoc,
   updateDoc,
+  setDoc,
 } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
-import { Pin } from "src/types/Pin.ts"; // Asegúrate de importar la interfaz Pin
+import { Pin } from "src/types/Pin.ts";
 
 interface Employee {
   id: string;
@@ -32,7 +32,7 @@ const useEmployees = () => {
       const employeesSnapshot = await getDocs(employeesCollection);
       const employeesList = employeesSnapshot.docs.map((doc) => ({
         id: doc.id,
-        ...(doc.data() as Omit<Employee, "id">), // Map the document data to Employee type
+        ...(doc.data() as Omit<Employee, "id">),
       }));
       setEmployees(employeesList);
       setLoading(false);
@@ -51,7 +51,7 @@ const useEmployees = () => {
         return "Error";
       }
 
-      const employeeData = employeeDoc.data();
+      const employeeData = employeeDoc.data() as Employee;
       if (employeeData && employeeData.pins) {
         const existingPin = employeeData.pins.find(
           (existingPin: Pin) => existingPin.type === pin.type
