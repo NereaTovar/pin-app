@@ -1,6 +1,14 @@
 @import "@/assets/scss/_colors.scss";
 @import "@/assets/fonts/Poppins.scss";
 
+.pinCard__container {
+  width: 330px;
+  height: 256px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
 .pinCard {
   @include font-poppins-regular;
   align-items: center;
@@ -8,10 +16,12 @@
   border-radius: 8px;
   display: flex;
   flex-direction: column;
-  height: auto;
-  padding: 20px;
+  height: 120px;
+  width: 157px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease-in-out;
+  text-align: center; 
+  padding: 12px 8px;
 
   &:hover {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -19,66 +29,20 @@
 
   &__logo {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100px;
-    width: 100px;
+    height: 60px; 
+    width: 60px; 
+    margin-bottom: 10px; 
   }
 
   &__title {
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    width: 100%;
-    margin: 10px 0;
-    font-size: 16px;
+    font-size: 14px;
     color: $rindus-dark-gray;
+    font-weight: bold;
+    margin-bottom: 10px;
   }
 
   &__button {
-    display: flex;
-    justify-content: center;
-    padding: 10px;
-    background-color: $rindus-green;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
-
-    &:hover {
-      background-color: darken($rindus-green, 10%);
-    }
-
-    button {
-      height: 24px;
-      width: 24px;
-
-      g {
-        height: 100%;
-        width: 100%;
-      }
-    }
-  }
-
-  // Media query para pantallas móviles
-  @media (max-width: 600px) {
-    padding: 10px;
-
-    &__logo {
-      height: 60px;
-      width: 60px;
-    }
-
-    &__title {
-      font-size: 14px;
-      margin: 5px 0;
-      text-align: center;
-    }
-
-    &__button {
-      padding: 5px;
-      font-size: 14px;
-    }
+    font-size: 12px;
+    color: $rindus-green;
   }
 }

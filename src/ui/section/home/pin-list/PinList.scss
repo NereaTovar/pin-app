@@ -1,33 +1,49 @@
-@import "@/assets/scss/_colors.scss";
-@import "@/assets/fonts/Poppins.scss";
-
 .pinListContainer {
   margin-top: 20px;
-  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
 
-  &__header {
-    background-color: lighten($rindus-green, 13%);
-    padding: 1px;
-    border-radius: 8px;
-    text-align: center;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 8px $rindus-off-white;
+.pinListContainer__baner {
+  background-color: #ffffff;
+  padding: 12px;
+  border: 2px solid #34a484;
+  border-radius: 8px;
+  text-align: start;
+  margin-bottom: 16px;
+  width: 90%;
+  max-width: 400px;
+  height: auto;
+  box-sizing: border-box;
+  overflow: hidden;
+}
 
-    h1 {
-      font-size: 1.5em;
-      margin-bottom: 5px;
-      color: #333;
-    }
+.pinListContainer__baner__title,
+.pinListContainer__baner__paragraph {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  text-align: left;
+  line-height: 1.4;
+  color: #303140;
+}
 
-    &__description {
-      font-size: 1em;
-      color: #666;
-    }
-  }
+.pinListContainer__baner__title {
+  font-size: 16px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center; 
+  gap: 8px;
+}
+
+.pinListContainer__baner__paragraph {
+  font-size: 14px;
 }
 
 .pinList {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 20px;
+  padding: 0 16px;
+  justify-items: center;
+  grid-template-rows: 150px;
 }
