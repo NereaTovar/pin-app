@@ -1,63 +1,44 @@
-# Employee Pin Management System
+# Project Description
 
-## Description
+Our employee pin assignment application is designed to recognize and celebrate the achievements and tenure of employees in the company. Through this application, administrators can manage and assign various virtual pins to employees, highlighting important milestones such as work anniversaries and affiliation with specific departments.
 
-The Employee Pin Management System is a web application designed to manage and assign recognition pins to employees based on their achievements and tenure within the company. The application allows authenticated users to view a list of available pins, view a list of employees, and assign pins to employees.
+# Instructions on how to start the proyect
 
-## Features
+Application built in 'React' with 'Vite' as the bundler.
 
-- **Google Authentication**: Secure login using Google OAuth.
-- **Employee Management**: View a list of employees with their details and tenure.
-- **Pin Management**: View a list of available pins and their descriptions.
-- **Pin Assignment**: Assign recognition pins to employees based on their achievements and tenure.
-- **Firebase Integration**: Store and retrieve employee and pin data from Firebase.
+## Cloning the repository
 
-## Technologies Used
+```shell
+   $ git clone <URL_DEL_REPOSITORIO>
+   $ cd nombre-del-repositorio
+```
 
-- **React**: Frontend framework for building user interfaces.
-- **TypeScript**: Superset of JavaScript for type safety.
-- **Firebase**: Backend-as-a-Service for authentication and Firestore database.
-- **Google OAuth**: Authentication via Google accounts.
-- **Framer Motion**: Animation library for React.
+## Installing project dependencies
 
-## Getting Started
+```shell
+    npm install
+```
 
-### Prerequisites
+## Running the development server
 
-- Node.js and npm installed on your machine.
-- Firebase project with Firestore and Authentication enabled.
+```shell
+    npm run dev
+```
 
-### Installation
+This will open the application at `http://localhost:5173` in your browser
 
-1. **Clone the repository**:
+# Instructions on how to run the tests
 
-   ```bash
-   git clone https://github.com/your-username/employee-pin-management.git
-   cd employee-pin-management
-   ```
+Tests conducted with 'Vitest'
 
-2. **Install dependencies**:
+## Installing 'vitest' and '@testing-library/react'
 
-   ```bash
-   npm install
-   ```
+```shell
+    npm install --save-dev vitest @testing-library/react @testing-library/jest-dom
+```
 
-3. **Set up environment variables**:
-   - Create a `.env` file in the root of the project with the following variables:
-   ```plaintext
-   VITE_FIREBASE_API_KEY=your-firebase-api-key
-   VITE_FIREBASE_AUTH_DOMAIN=your-firebase-auth-domain
-   VITE_FIREBASE_PROJECT_ID=your-firebase-project-id
-   VITE_FIREBASE_STORAGE_BUCKET=your-firebase-storage-bucket
-   VITE_FIREBASE_MESSAGING_SENDER_ID=your-firebase-messaging-sender-id
-   VITE_FIREBASE_APP_ID=your-firebase-app-id
-   VITE_GOOGLE_CLIENT_ID=your-google-client-id
-   ```
+## Running the tests
 
-### Running the Application
-
-To start the development server, run:
-
-```bash
-npm run dev
+```shell
+    npm run test
 ```
