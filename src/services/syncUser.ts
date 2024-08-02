@@ -1,5 +1,4 @@
-
-import { collection, getDocs, setDoc, doc } from "firebase/firestore";
+import { collection, getDocs, setDoc, doc, getDoc } from "firebase/firestore";
 import employeesData from "src/resources/employees.json";
 import slackData from "src/resources/slack.json";
 import { db } from "@/config/firebaseConfig";
@@ -88,12 +87,14 @@ const syncUsers = async () => {
           type: "Anniversary",
           date_hire: startDate,
           color_hire: color,
+          imagePin: getAnniversaryPinImage(years),
         };
 
         const departmentPin: Pin = {
           type: "Department",
           department: emp.Department,
           color: departmentColor,
+          imagePin: getDepartmentPinImage(emp.Department),
         };
 
         // Comprobar si ya existe un pin de cada tipo para evitar duplicados
@@ -115,8 +116,23 @@ const syncUsers = async () => {
     console.log("Employees to add:", employeesToAdd);
 
     for (const employee of employeesToAdd) {
-      const employeeDoc = doc(db, "employees", employee.email); // Usar el correo electrónico como ID
-      await setDoc(employeeDoc, employee, { merge: true }); // Utilizar setDoc con merge para evitar sobrescribir completamente el documento
+      const employeeDocRef = doc(db, "employees", employee.email);
+      const employeeDocSnap = await getDoc(employeeDocRef);
+
+      if (employeeDocSnap.exists()) {
+        const existingEmployeeData = employeeDocSnap.data() as Employee;
+        const mergedPins = [
+          ...existingEmployeeData.pins,
+          ...employee.pins.filter(
+            newPin => !existingEmployeeData.pins.some(
+              existingPin => existingPin.type === newPin.type && existingPin.date_hire === newPin.date_hire
+            )
+          )
+        ];
+        employee.pins = mergedPins;
+      }
+
+      await setDoc(employeeDocRef, employee, { merge: true });
       console.log(`Employee added or updated: ${employee.email}`);
     }
     console.log("Employees synchronized successfully");

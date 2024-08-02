@@ -3,7 +3,7 @@ import { db } from "@/config/firebaseConfig";
 
 const fetchUsers = async () => {
   try {
-    const usersCollection = collection(db, "users");
+    const usersCollection = collection(db, "employees");
     const userSnapshot = await getDocs(usersCollection);
     const users = userSnapshot.docs.map((doc) => {
       const data = doc.data();

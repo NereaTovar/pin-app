@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
-import {
-  collection,
-  getDocs,
-  doc,
-  getDoc,
-  updateDoc,
-  setDoc,
-} from "firebase/firestore";
+import { collection, getDocs, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
-import { Pin } from "src/types/Pin.ts";
+
+interface Pin {
+  type: string;
+  date_hire: string;
+  color: string;
+  imagePin: string;
+}
 
 interface Employee {
   id: string;
@@ -41,7 +40,7 @@ const useEmployees = () => {
     fetchEmployees();
   }, []);
 
-  const assignPin = async (employeeId: string, pin: Pin) => {
+  const assignPin = async (employeeId: string, pin: Pin): Promise<string> => {
     try {
       const employeeDocRef = doc(db, "employees", employeeId);
       const employeeDoc = await getDoc(employeeDocRef);
@@ -52,22 +51,16 @@ const useEmployees = () => {
       }
 
       const employeeData = employeeDoc.data() as Employee;
-      if (employeeData && employeeData.pins) {
-        const existingPin = employeeData.pins.find(
-          (existingPin: Pin) => existingPin.type === pin.type
-        );
+      const updatedPins = employeeData.pins ? [...employeeData.pins, pin] : [pin];
+      await updateDoc(employeeDocRef, { pins: updatedPins });
 
-        if (existingPin) {
-          return "Pin already assigned";
-        }
+      setEmployees((prev) =>
+        prev.map((employee) =>
+          employee.id === employeeId ? { ...employee, pins: updatedPins } : employee
+        )
+      );
 
-        const updatedPins = [...employeeData.pins, pin];
-        await updateDoc(employeeDocRef, { pins: updatedPins });
-        return "Success";
-      } else {
-        await updateDoc(employeeDocRef, { pins: [pin] });
-        return "Success";
-      }
+      return "Success";
     } catch (error) {
       console.error("Error assigning pin:", error);
       return "Error";

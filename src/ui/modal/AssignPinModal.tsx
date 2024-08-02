@@ -6,32 +6,15 @@ import "./AssignPinModal.scss";
 interface AssignPinModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
-  onAssign: (id: string) => void;
+  onAssign: (employeeIds: string[]) => void;
 }
 
-interface Pin {
-  type: string;
-  date_hire: string;
-  color: string;
-  imagePin: string;
-}
 
-const AssignPinModal = ({
-  isOpen,
-  onRequestClose,
-  onAssign,
-}: AssignPinModalProps) => {
-  const { employees, loading, assignPin } = useEmployees();
+
+const AssignPinModal = ({ isOpen, onRequestClose, onAssign }: AssignPinModalProps) => {
+  const { employees, loading } = useEmployees();
+ 
   const [selectedEmployees, setSelectedEmployees] = useState<string[]>([]);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const pinToAssign: Pin = {
-    type: "Summer Event 2024",
-    date_hire: "2024-07-24",
-    color: "",
-    imagePin: "/src/assets/pins/Summer_event.svg",
-  };
 
   const handleCheckboxChange = (employeeId: string) => {
     setSelectedEmployees((prev) =>
@@ -41,95 +24,40 @@ const AssignPinModal = ({
     );
   };
 
-  const handleSubmit = async () => {
-    let allSuccess = true;
-    let errorOccurred = false;
-
-    for (const employeeId of selectedEmployees) {
-      const result = await assignPin(employeeId, pinToAssign);
-      if (result === "Pin already assigned") {
-        allSuccess = false;
-        setErrorMessage(`El empleado ${employeeId} ya tiene asignado ese pin.`);
-        setTimeout(() => setErrorMessage(null), 5000);
-      } else if (result === "Error") {
-        allSuccess = false;
-        errorOccurred = true;
-        setErrorMessage(`Error al asignar el pin al empleado ${employeeId}.`);
-        setTimeout(() => setErrorMessage(null), 5000);
-      }
-    }
-
-    if (allSuccess) {
-      setSuccessMessage("Pin asignado con éxito");
-      setTimeout(() => {
-        setSuccessMessage(null);
-        onRequestClose();
-      }, 5000);
-    } else if (!errorOccurred) {
-      setErrorMessage("Uno o más empleados ya tienen asignado ese pin.");
-      setTimeout(() => setErrorMessage(null), 5000);
-    }
-
-    selectedEmployees.forEach((employeeId) => {
-      onAssign(employeeId);
-    });
+  const handleSubmit = () => {
+    onAssign(selectedEmployees);
   };
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
+  
+
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
+    
+    <Modal 
+      isOpen={isOpen} 
+      onRequestClose={onRequestClose} 
       contentLabel="Assign Pin"
     >
+      
       <h2>Assign Pin</h2>
       <div className="assignPinModal">
-        {successMessage && (
-          <div className="assignPinModal__success">{successMessage}</div>
-        )}
-        {errorMessage && (
-          <div className="assignPinModal__error">{errorMessage}</div>
-        )}
-        <div className="assignPinModal__content">
-          {employees.map((employee: any) => (
-            <div key={employee.id} className="assignPinModal__employee">
-              <input
-                type="checkbox"
-                id={employee.id}
-                value={employee.id}
-                onChange={() => handleCheckboxChange(employee.id)}
-              />
-              <label htmlFor={employee.id}>
-                <img
-                  src={employee.picture}
-                  alt={employee.name}
-                  className="assignPinModal__picture"
-                />
-                {employee.name}
-              </label>
-            </div>
-          ))}
-        </div>
-        {selectedEmployees.length > 0 && (
-          <div className="assignPinModal__buttons">
-            <button
-              className="assignPinModal__cancelButton"
-              onClick={onRequestClose}
-            >
-              Cancel
-            </button>
-            <button
-              className="assignPinModal__assignButton"
-              onClick={handleSubmit}
-            >
-              Assign
-            </button>
+        {employees.map((employee) => (
+          <div key={employee.id} className="assignPinModal__employee">
+            <input
+              type="checkbox"
+              id={employee.id}
+              value={employee.id}
+              onChange={() => handleCheckboxChange(employee.id)}
+            />
+            <label htmlFor={employee.id}>{employee.name}</label>
           </div>
-        )}
+        ))}
       </div>
+      <button onClick={handleSubmit}>Assign</button>
+      <button onClick={onRequestClose}>Cancel</button>
     </Modal>
   );
 };
