@@ -12,7 +12,17 @@ export const calculateYears = (startDate: string): number => {
     throw new Error(`Fecha no válida: ${startDate}`);
   }
   const now = new Date();
-  return now.getFullYear() - start.getFullYear();
+  const yearDifference = now.getFullYear() - start.getFullYear();
+  
+  // Ajuste para considerar el mes y el día
+  const monthDifference = now.getMonth() - start.getMonth();
+  const dayDifference = now.getDate() - start.getDate();
+
+  if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
+    return yearDifference - 1;
+  }
+
+  return yearDifference;
 };
 
 // Función para determinar el color del pin basado en la antigüedad
