@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useState } from "react";
 import useEmployees from "@/ui/hooks/useEmployees";
 import EmployeePin from "@/ui/components/employee-pin/EmployeePin";
 import "./EmployeeList.scss";
@@ -20,7 +20,8 @@ const EmployeeList = () => {
   );
 
   return (
-    <div className="employeeList">
+    <div className="main-container">
+    <div className="employeeListContainer">
       <div className="employeeList__search">
         <input
           type="text"
@@ -28,8 +29,11 @@ const EmployeeList = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+        <button onClick={() => setSearchTerm("")} className="employeeList__search-clear">
+          X
+        </button>
       </div>
-      <div className="employeeList__container">
+      <div className="employeeList">
         {filteredEmployees.map((employee) => (
           <div key={employee.id} className="employeeList__item">
             <img
@@ -52,7 +56,8 @@ const EmployeeList = () => {
         ))}
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default EmployeeList;
