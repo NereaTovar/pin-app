@@ -15,6 +15,7 @@ import PinList from "./ui/section/home/pin-list/PinList";
 import { StoreProvider } from "./ui/components/store-context/StoreContext";
 import PinDetailPage from "./ui/components/pin-detail-page/PinDetailPage";
 import { ToastContainer } from "react-toastify";
+import "tippy.js/dist/tippy.css";
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 

@@ -1,6 +1,8 @@
 import PinAnniversary from "../pin/pin-anniversary/PinAnniversary";
 import PinDepartment from "../pin/pin-department/PinDepartment";
 import usePinDetails from "@/hooks/usePinDetail";
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 import "./EmployeePin.scss";
 
 interface Pin {
@@ -26,17 +28,23 @@ const EmployeePin = (props: EmployeePinProps) => {
   return (
     <div className="employeePin">
       <div className="pins">
-        <div className="pin">
-          <PinAnniversary number={yearsInCompany} color={color} />
-        </div>
-        <div className="pin">
-          <PinDepartment department={department} />
-        </div>
+        <Tippy content="Anniversary" placement="top">
+          <div className="pin">
+            <PinAnniversary number={yearsInCompany} color={color} type="Anniversary" />
+          </div>
+        </Tippy>
+        <Tippy content="Department" placement="top">
+          <div className="pin">
+            <PinDepartment department={department} type="Department" />
+          </div>
+        </Tippy>
         {pins.map((pin, index) => {
           return (
-            <div key={index} className="pin">
-              {pin.imagePin && <img src={pin.imagePin} alt={pin.type} />}
-            </div>
+            <Tippy key={index} content={pin.type} placement="top">
+              <div className="pin">
+                {pin.imagePin && <img src={pin.imagePin} alt={pin.type} />}
+              </div>
+            </Tippy>
           );
         })}
       </div>
@@ -45,5 +53,3 @@ const EmployeePin = (props: EmployeePinProps) => {
 };
 
 export default EmployeePin;
-
-

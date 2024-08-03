@@ -1,7 +1,10 @@
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css'; 
 import { departmentColors, departmentTexts } from "@/utils/departmentUtils";
 
 interface PinDepartmentProps {
   department: string;
+  type: string;
 }
 
 const PinDepartment = ({ department }: PinDepartmentProps) => {
@@ -21,37 +24,40 @@ const PinDepartment = ({ department }: PinDepartmentProps) => {
   });
 
   return (
-    <svg
-      width="57.5"
-      height="57.5"
-      viewBox="0 0 100 100"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <circle
-        cx="50"
-        cy="50"
-        r="45"
-        fill={color}
-        stroke="#303140"
-        strokeWidth="5"
-      />
-      {lines.map((line, index) => (
-        <text
-          key={index}
-          x="50%"
-          y={`${50 + (index - (lines.length - 1) / 2) * 14}%`}
-          dominantBaseline="middle"
-          textAnchor="middle"
-          fontSize="14"
-          fill="#ffffff"
-          fontFamily="Arial"
-          fontWeight="bold"
-        >
-          {line}
-        </text>
-      ))}
-    </svg>
+    <Tippy content={`Department: ${text}`} placement="top">
+      <svg
+        width="57.5"
+        height="57.5"
+        viewBox="0 0 100 100"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx="50"
+          cy="50"
+          r="45"
+          fill={color}
+          stroke="#303140"
+          strokeWidth="5"
+        />
+        {lines.map((line, index) => (
+          <text
+            key={index}
+            x="50%"
+            y={`${50 + (index - (lines.length - 1) / 2) * 14}%`}
+            dominantBaseline="middle"
+            textAnchor="middle"
+            fontSize="14"
+            fill="#ffffff"
+            fontFamily="Arial"
+            fontWeight="bold"
+          >
+            {line}
+          </text>
+        ))}
+      </svg>
+    </Tippy>
   );
 };
 
 export default PinDepartment;
+
