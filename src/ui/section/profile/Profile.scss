@@ -16,12 +16,20 @@
     align-items: center;
   }
 
-  &__image {
+  &__image,
+  &__initial {
     width: 150px;
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 75px; // Tamaño de la inicial
+    font-weight: bold;
+    color: white;
+    background-color: $rindus-medium-gray;
   }
 
   &__name {
@@ -30,6 +38,7 @@
     color: $rindus-dark-gray;
   }
 }
+
 .profileDetail {
   padding: 16px;
   display: flex;
@@ -52,7 +61,6 @@
   }
   &__email {
     margin-right: 5px;
-
     font-size: 14px;
     font-style: normal;
     font-weight: 400;

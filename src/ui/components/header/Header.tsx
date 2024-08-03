@@ -9,6 +9,10 @@ import "./Header.scss";
 
 const defaultProfilePicture = "/path/to/default/profile/picture.jpg";
 
+const getInitial = (name: string) => {
+  return name ? name.charAt(0).toUpperCase() : "";
+};
+
 export default function Header() {
   const navigate = useNavigate();
   const { userProfileData } = useAuth();
@@ -50,10 +54,16 @@ export default function Header() {
       ) : (
         <div className="profile">
           <button onClick={handleProfileNavigate} className="profile__button">
-            <img
-              src={userProfileData?.profilePictureUrl ?? defaultProfilePicture}
-              alt="Profile"
-            />
+            {userProfileData?.profilePictureUrl ? (
+              <img
+                src={userProfileData.profilePictureUrl}
+                alt="Profile"
+              />
+            ) : (
+              <div className="profile__initial">
+                {getInitial(userProfileData?.name ?? '')}
+              </div>
+            )}
           </button>
         </div>
       )}
