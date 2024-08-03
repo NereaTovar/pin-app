@@ -14,6 +14,7 @@ import syncUsers from "./services/syncUser";
 import PinList from "./ui/section/home/pin-list/PinList";
 import { StoreProvider } from "./ui/components/store-context/StoreContext";
 import PinDetailPage from "./ui/components/pin-detail-page/PinDetailPage";
+import { ToastContainer } from "react-toastify";
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -47,6 +48,7 @@ export default function App() {
                 <Route path="/pin/:pinId" element={<PinDetailPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
+              <ToastContainer />
             </BrowserRouter>
           </StoreProvider>
         </GoogleOAuthProvider>
