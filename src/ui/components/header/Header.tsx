@@ -1,6 +1,6 @@
 import BackButton from "../buttons/back-button/BackButton";
 import LogoutButton from "../buttons/logout-button/LogoutButton";
-import RindusLogo from "../buttons/rindus-logo/RindusLogo";
+import CompanyLogo from "../buttons/company-logo/CompanyLogo";
 // import SearchButton from "../buttons/search-button/SearchButton";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/ui/context/auth/Auth";
@@ -29,7 +29,7 @@ export default function Header() {
   if (isLoginPage)
     return (
       <header className="header__container--login">
-        <RindusLogo />
+        <CompanyLogo />
       </header>
     );
 
@@ -43,8 +43,8 @@ export default function Header() {
         </div>
       )}
 
-      <div className="rindusLogo">
-        <RindusLogo />
+      <div className="companyLogo">
+        <CompanyLogo />
       </div>
 
       {isProfilePage ? (
@@ -55,13 +55,10 @@ export default function Header() {
         <div className="profile">
           <button onClick={handleProfileNavigate} className="profile__button">
             {userProfileData?.profilePictureUrl ? (
-              <img
-                src={userProfileData.profilePictureUrl}
-                alt="Profile"
-              />
+              <img src={userProfileData.profilePictureUrl} alt="Profile" />
             ) : (
               <div className="profile__initial">
-                {getInitial(userProfileData?.name ?? '')}
+                {getInitial(userProfileData?.name ?? "")}
               </div>
             )}
           </button>
