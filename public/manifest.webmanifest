@@ -1,8 +1,8 @@
 {
-  "name": "Rindus Pin Project",
-  "short_name": "Rindus Pin",
+  "name": "Company Pin Project",
+  "short_name": "Company Pin",
   "background_color": "#4dd699",
-  "description": "Rindus app for pins.",
+  "description": "Company app for pins.",
   "icons": [
     {
       "src": "/LOGO_Size_192px_square.png",

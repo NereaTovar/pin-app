@@ -13,8 +13,8 @@ vi.mock("../buttons/back-button/BackButton", () => ({
   default: () => <button>BackButton</button>,
 }));
 
-vi.mock("../buttons/rindus-logo/RindusLogo", () => ({
-  default: () => <div>RindusLogo</div>,
+vi.mock("../buttons/company-logo/CompanyLogo", () => ({
+  default: () => <div>CompanyLogo</div>,
 }));
 
 // Mock useNavigate
@@ -60,9 +60,9 @@ describe("Header", () => {
     );
   };
 
-  it("renders RindusLogo on the login page", () => {
+  it("renders CompanyLogo on the login page", () => {
     renderWithRouter(<Header />, { route: "/login" });
-    expect(screen.getByText("RindusLogo")).toBeInTheDocument();
+    expect(screen.getByText("CompanyLogo")).toBeInTheDocument();
   });
 
   it("does not render BackButton on the home page", () => {
