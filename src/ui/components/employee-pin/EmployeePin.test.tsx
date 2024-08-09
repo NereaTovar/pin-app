@@ -43,7 +43,9 @@ describe("EmployeePin", () => {
         yearsInCompany={2}
       />
     );
-    expect(screen.getByText("Anniversary Pin: 2 years, Color: blue")).toBeInTheDocument();
+    expect(
+      screen.getByText("Anniversary Pin: 2 years, Color: blue")
+    ).toBeInTheDocument();
   });
 
   it("displays the department pin with the correct department", () => {
@@ -73,7 +75,13 @@ describe("EmployeePin", () => {
       />
     );
 
-    expect(screen.getByAltText("Award")).toHaveAttribute("src", "path/to/award.jpg");
-    expect(screen.getByAltText("Achievement")).toHaveAttribute("src", "path/to/achievement.jpg");
+    expect(screen.getByAltText("Award")).toHaveAttribute(
+      "src",
+      "path/to/award.jpg"
+    );
+    expect(screen.getByAltText("Achievement")).toHaveAttribute(
+      "src",
+      "path/to/achievement.jpg"
+    );
   });
 });

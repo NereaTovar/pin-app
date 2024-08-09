@@ -9,7 +9,6 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogin = (userData: UserProfileData) => {
-    console.log("Login Component userData:", userData);
     login(userData);
     navigate("/");
   };
