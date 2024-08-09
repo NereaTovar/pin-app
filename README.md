@@ -40,5 +40,5 @@ Tests conducted with 'Vitest'
 ## Running the tests
 
 ```shell
-    npm vitest run
+    npx vitest run
 ```
