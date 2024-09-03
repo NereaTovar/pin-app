@@ -1,4 +1,4 @@
-import diversity from "@/assets/icons/diversity_24.svg";
+import company from "@/assets/icons/Anchor_40.svg";
 import "@/ui/components/buttons/company-logo/CompanyLogo.scss";
 import { useNavigate } from "react-router-dom";
 
@@ -14,7 +14,7 @@ export default function CompanyLogo() {
       onClick={handleLogoClick}
       style={{ cursor: "pointer" }}
     >
-      <img alt="SVG company logo" src={diversity} />
+      <img alt="SVG company logo" src={company} />
     </button>
   );
 }

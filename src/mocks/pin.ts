@@ -15,7 +15,7 @@ export const pinMock: DetailedPin[] = [
     imagePin: SummerEvent,
     pinTitle: "Summer Event 2024",
     pinDescription:
-      "The 'Event Summer 2024' pin is awarded for attending the Event organized by Company in September 2024. Congratulations!",
+      "The 'Event Summer 2024' pin is awarded for attending the Event organized by Rindus in September 2024. Congratulations!",
   },
   {
     id: "2",
@@ -29,6 +29,6 @@ export const pinMock: DetailedPin[] = [
     imagePin: TopPicker,
     pinTitle: "Top Picker",
     pinDescription:
-      "It is a special recognition given to those employees who have participated in a Picker session. Thank you for sharing with the entire Company family.",
+      "It is a special recognition given to those employees who have participated in a Picker session. Thank you for sharing with the entire Rindus family.",
   },
 ];
