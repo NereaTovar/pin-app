@@ -10,6 +10,7 @@ const fetchUsers = async () => {
       // console.log(`Fetching data for user: ${data.email}`);
       // console.log("User data:", data);
       if (Array.isArray(data.pins)) {
+        //@ts-ignore
         data.pins.forEach((pin, index) => {
           // console.log(`Pin ${index}:`, pin);
         });

@@ -6,7 +6,7 @@ import Modal from "react-modal";
 import Login from "src/ui/section/login/Login.tsx";
 import Header from "./ui/components/header/Header";
 import Home from "@/ui/section/home/Home";
-import { AuthProvider } from "./ui/context/auth/Auth";
+import { AuthProvider} from "./ui/context/auth/Auth";
 import Profile from "./ui/section/profile/Profile";
 import NotFound from "./ui/section/not-found/NotFound";
 import EmployeeList from "./ui/components/employee-list/EmployeeList";
@@ -26,10 +26,12 @@ if (!clientId) {
 Modal.setAppElement("#root");
 
 export default function App() {
+ 
   useEffect(() => {
     syncUsers();
   }, []);
 
+  //@ts-ignore
   const tabs = [
     { label: "List of Pins", content: <PinList /> },
     { label: "Employees", content: <EmployeeList /> },
@@ -42,6 +44,7 @@ export default function App() {
           <StoreProvider>
             <BrowserRouter>
               <Header />
+
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
@@ -49,6 +52,7 @@ export default function App() {
                 <Route path="/pin/:pinId" element={<PinDetailPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
+
               <ToastContainer />
             </BrowserRouter>
           </StoreProvider>

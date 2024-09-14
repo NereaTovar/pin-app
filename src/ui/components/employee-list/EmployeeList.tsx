@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useEmployees from "@/ui/hooks/useEmployees";
-import EmployeePin from "@/ui/components/employee-pin/EmployeePin";
 import "./EmployeeList.scss";
+import EmployeePin from "../employee-pin/EmployeePin";
 
 const EmployeeList = () => {
   const { employees, loading } = useEmployees();
@@ -21,43 +21,47 @@ const EmployeeList = () => {
 
   return (
     <div className="main-container">
-    <div className="employeeListContainer">
-      <div className="employeeList__search">
-        <input
-          type="text"
-          placeholder="Search employee"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <button onClick={() => setSearchTerm("")} className="employeeList__search-clear">
-          X
-        </button>
-      </div>
-      <div className="employeeList">
-        {filteredEmployees.map((employee) => (
-          <div key={employee.id} className="employeeList__item">
-            <img
-              src={employee.picture}
-              alt={employee.name}
-              className="employeeList__picture"
-            />
-            <div className="employeeList__details">
-              <h2>{employee.name}</h2>
-              <div className="employeeList__pin">
-                <EmployeePin
-                  startDate={employee.startDate}
-                  department={employee.department}
-                  pins={employee.pins}
-                  yearsInCompany={employee.yearsInCompany}
-                />
+      <div className="employeeListContainer">
+        <div className="employeeList__search">
+          <input
+            type="text"
+            placeholder="Search employee"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button
+            onClick={() => setSearchTerm("")}
+            className="employeeList__search-clear"
+          >
+            X
+          </button>
+        </div>
+        <div className="employeeList">
+          {filteredEmployees.map((employee) => (
+            <div key={employee.id} className="employeeList__item">
+              <img
+                src={employee.picture}
+                alt={employee.name}
+                className="employeeList__picture"
+              />
+              <div className="employeeList__details">
+                <h2>{employee.name}</h2>
+                <div className="employeeList__pin">
+                  <EmployeePin
+                    startDate={employee.startDate}
+                    department={employee.department}
+                    pins={employee.pins}
+                    yearsInCompany={employee.yearsInCompany}
+                    eventDate={"2024-09-04"}  // O cualquier otra fecha dinámica o fija
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
 };
 
 export default EmployeeList;

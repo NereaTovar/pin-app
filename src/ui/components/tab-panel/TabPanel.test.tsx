@@ -1,7 +1,9 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+      //@ts-ignore
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { TabPanel } from './TabPanel';
+      //@ts-ignore
 import { StoreContext, StoreProvider } from 'src/ui/components/store-context/StoreContext.tsx';
 import '@testing-library/jest-dom';
 

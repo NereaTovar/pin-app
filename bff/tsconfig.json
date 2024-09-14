@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist", // Directorio de salida para el backend
+    "rootDir": "./src", // Directorio raíz del backend
+    "target": "ES6",
+    "module": "CommonJS",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "baseUrl": "./", // Define el directorio base de las rutas
+    "paths": {
+      "@/*": ["src/*"], // Alias @/ para apuntar a la carpeta 'src'
+      "src/*": ["src/*"] // Alias adicional para rutas que empiezan con 'src'
+    },
+    "resolveJsonModule": true, // Para poder importar archivos JSON
+    "moduleResolution": "node" // Para que TypeScript resuelva los módulos correctamente
+  },
+  "include": ["./src/**/*", "types.d.ts"], // Incluir todo lo que está dentro de la carpeta 'src'
+  "exclude": ["node_modules"]
+}

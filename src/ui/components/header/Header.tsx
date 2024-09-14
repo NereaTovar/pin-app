@@ -7,6 +7,7 @@ import { useAuth } from "@/ui/context/auth/Auth";
 
 import "./Header.scss";
 
+      //@ts-ignore
 const defaultProfilePicture = "/path/to/default/profile/picture.jpg";
 
 const getInitial = (name: string) => {
