@@ -39,7 +39,12 @@ const EmployeePin = (props: EmployeePinProps) => {
     const fetchAttendees = async () => {
       try {
         if (eventDate) {
-          const response = await fetch(`/api/google/events?date=${eventDate}`);
+          const token = localStorage.getItem("authToken"); // Obtén el token de autenticación
+          const response = await fetch(`/api/google/events?date=${eventDate}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
           const events = await response.json();
           console.log("Eventos obtenidos:", events);
 
@@ -49,11 +54,25 @@ const EmployeePin = (props: EmployeePinProps) => {
 
             if (event.id) {
               const attendeeResponse = await fetch(
-                `/api/google/events/${event.id}/attendees`
+                `/api/google/events/${event.id}/attendees`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
               );
-              const attendees: Attendee[] = await attendeeResponse.json(); // Asegúrate de que el formato coincide con la respuesta
+              const attendees = await attendeeResponse.json();
               console.log("Asistentes que respondieron sí:", attendees);
-              setAttendees(attendees.map((att) => att.email));
+
+              // Verificar si la respuesta es un array antes de usar .map()
+              if (Array.isArray(attendees)) {
+                setAttendees(attendees.map((att: Attendee) => att.email));
+              } else {
+                console.warn(
+                  "La respuesta de asistentes no es un array:",
+                  attendees
+                );
+              }
             } else {
               console.warn("El evento no tiene ID:", event);
             }

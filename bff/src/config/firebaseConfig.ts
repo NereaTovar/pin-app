@@ -29,13 +29,32 @@ const provider = new GoogleAuthProvider();
 export { db, auth, provider };
 
 
-// import * as admin from "firebase-admin";
-// import serviceAccount from "./path-to-your-service-account.json"; // Asegúrate de reemplazar esto con el camino correcto a tu archivo JSON
+import admin from 'firebase-admin';
 
-// // Inicializa Firebase Admin SDK
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount),
-//   databaseURL: "https://your-project-id.firebaseio.com", // Reemplaza con tu URL de la base de datos
-// });
+admin.initializeApp({
+  credential: admin.credential.applicationDefault(),
+});
 
-// export { admin };
+const verifyToken = async (req: any, res: any, next: any) => {
+  const token = req.headers.authorization?.split('Bearer ')[1];
+
+  if (!token) {
+    return res.status(403).json({ message: 'No token provided' });
+  }
+
+  try {
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    
+    // Verificar si el dominio es correcto, si es necesario
+    if (decodedToken.hd !== 'rindus.de') {
+      return res.status(403).json({ message: 'Invalid domain' });
+    }
+
+    req.user = decodedToken;
+    next();
+  } catch (error) {
+    console.error('Error verifying token:', error);
+    return res.status(401).json({ message: 'Invalid token' });
+  }
+};
+

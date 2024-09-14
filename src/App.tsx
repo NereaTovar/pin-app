@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -6,7 +6,7 @@ import Modal from "react-modal";
 import Login from "src/ui/section/login/Login.tsx";
 import Header from "./ui/components/header/Header";
 import Home from "@/ui/section/home/Home";
-import { AuthProvider} from "./ui/context/auth/Auth";
+import { AuthProvider } from "./ui/context/auth/Auth";
 import Profile from "./ui/section/profile/Profile";
 import NotFound from "./ui/section/not-found/NotFound";
 import EmployeeList from "./ui/components/employee-list/EmployeeList";
@@ -26,7 +26,15 @@ if (!clientId) {
 Modal.setAppElement("#root");
 
 export default function App() {
- 
+  const [token, setToken] = useState<string | null>(null);
+
+  // Función para manejar el éxito de la autenticación de Google
+  const handleLoginSuccess = (userData: any, token: string) => {
+    setToken(token);
+    localStorage.setItem("token", token); // Guardamos el token en localStorage
+    console.log("Token almacenado:", token);
+  };
+
   useEffect(() => {
     syncUsers();
   }, []);
