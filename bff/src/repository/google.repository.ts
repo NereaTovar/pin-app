@@ -118,28 +118,28 @@ export class GoogleRepository implements GoogleRepositoryInterface {
   }
 
   public async getEventByDate(
-        eventDate: string
-      ): Promise<calendar_v3.Schema$Event[]> {
-        try {
-          const startOfDay = new Date(eventDate);
-          const endOfDay = new Date(eventDate);
-          endOfDay.setHours(23, 59, 59, 999);
-    
-          const response = await google.calendar("v3").events.list({
-            auth: this.auth,
-            calendarId: "info@rindus.de", // Cambia por el ID de tu calendario
-            timeMin: startOfDay.toISOString(),
-            timeMax: endOfDay.toISOString(),
-            singleEvents: true,
-            orderBy: "startTime",
-          });
-    
-          const events = response.data.items || [];
-          return events;
-        } catch (error) {
-          throw new Error(`Error fetching event by date`);
-        }
-      }
+    eventDate: string
+  ): Promise<calendar_v3.Schema$Event[]> {
+    try {
+      const startOfDay = new Date(eventDate);
+      const endOfDay = new Date(eventDate);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      const response = await google.calendar("v3").events.list({
+        auth: this.auth,
+        calendarId: "info@rindus.de", // Cambia por el correo corporativo genérico
+        timeMin: startOfDay.toISOString(),
+        timeMax: endOfDay.toISOString(),
+        singleEvents: true,
+        orderBy: "startTime",
+      });
+
+      const events = response.data.items || [];
+      return events;
+    } catch (error) {
+      throw new Error(`Error fetching event by date: ${error}`);
+    }
+  }
 
   private async getFormId(startDate: string, name: string): Promise<string> {
     const firstPartOfName = name.split(" ")[0];
@@ -190,7 +190,6 @@ export class GoogleRepository implements GoogleRepositoryInterface {
   ): Promise<Omit<AttendeesEventResponse, "surveyUrl">> {
     const usersPromises = [];
     const employees: EmployeeEventAttendee[] = [];
-    let totalNewRinders = 0;
 
     const emails = [];
 
@@ -209,32 +208,10 @@ export class GoogleRepository implements GoogleRepositoryInterface {
 
           if (isYesResponse) {
             const user = await this.userRepository.findUserByEmail(email);
-
-            if (user) {
-              usersPromises.push(user);
-            } else {
-              totalNewRinders++;
-            }
           }
         }
       }
     }
-
-    const usersData = await Promise.allSettled(usersPromises);
-
-    usersData.forEach((user) => {
-      if (user.status === "fulfilled") {
-        const userValue = user.value;
-
-        if (userValue) {
-          employees.push({
-            id: userValue.id.toString(),
-
-            firstName: userValue.firstName,
-          });
-        }
-      }
-    });
 
     const isSurveyFilled = await this.isCurrentUserSurveyFilled(userId, emails);
 
@@ -246,7 +223,9 @@ export class GoogleRepository implements GoogleRepositoryInterface {
   }
 
   private async isCurrentUserSurveyFilled(userId: number, emails: string[]) {
-    const userLogged = await this.userRepository.findUserWithInfo(userId);
+    const userLogged = await this.userRepository.findUserWithInfo(
+      String(userId)
+    );
 
     if (!userLogged) {
       return false;
