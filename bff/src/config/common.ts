@@ -35,10 +35,12 @@ export const getCommonConfig = (
       processVariables.BFF_CORS_ORIGIN || /http:\/\/localhost:(5173|8888|3080)/,
   },
   // Google API credentials are in base64 format and should be decoded before using
-  googleAuthCredentials: Buffer.from(
-    process.env.BFF_GOOGLE_AUTH_CREDENTIALS ?? "",
-    "base64"
-  ).toString("utf-8"),
+  googleAuthCredentials: JSON.parse(
+    Buffer.from(
+      process.env.BFF_GOOGLE_AUTH_CREDENTIALS ?? "",
+      "base64"
+    ).toString("utf-8")
+  ),
   personio: {
     password: process.env.BFF_PERSONIO_PASSWORD ?? "",
   },
