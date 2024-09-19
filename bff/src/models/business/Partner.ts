@@ -3,8 +3,8 @@ import { User } from "./User";
 export interface Partner {
   id: number;
   name: string;
-  logoUrl: string;
-  description: string;
+  logoUrl?: string;
+  description?: string;
 }
 
 export interface PartnerMembers {

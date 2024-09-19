@@ -1,5 +1,5 @@
 import express from "express";
-import googleRoutes from "./api/googleRoutes";
+import router from "./http/routes/google.routes";
 import cors from "cors";
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -7,7 +7,7 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use("/api/google", googleRoutes);
+app.use("/api/google", router);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

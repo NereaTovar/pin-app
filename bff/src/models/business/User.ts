@@ -3,7 +3,7 @@ import { Partner } from "./Partner";
 
 export interface LoggedInUser {
   id: string;
-  pictureUrl: string;
+  pictureUrl?: string;
 }
 
 export interface UserAttendee extends LoggedInUser {

@@ -2,7 +2,7 @@ import { User, LoggedInUser, UserAttendee } from '../models/business/User';
 import { db } from '../config/firebaseConfig'; // Asegúrate de que tu Firebase esté configurado aquí
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { UserRepository } from './user.repository';
-import { Page } from '@/models/business/Pagination';
+
 
 export class FirebaseUserRepository implements UserRepository {
   async all(): Promise<User[]> {

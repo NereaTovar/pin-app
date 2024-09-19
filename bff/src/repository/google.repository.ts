@@ -164,30 +164,31 @@ export class GoogleRepository {
 
   // Obtener ID de un formulario
   private async getFormId(startDate: string, name: string): Promise<string> {
-    // Espera a que la autenticación esté lista
     await this.authPromise;
-
+  
     if (!this.authClient) {
       throw new Error("Auth client is not initialized");
     }
-
+  
     const firstPartOfName = name.split(" ")[0]; // Separa el nombre del evento
-
+  
     const forms = await google.drive("v3").files.list({
-      auth: this.authClient, // Asegúrate de que 'this.authClient' esté inicializado
+      auth: this.authClient,
       supportsAllDrives: true,
       includeItemsFromAllDrives: true,
       q: `name contains '${convertISOToDDMMYYYY(
         startDate
       )}' and mimeType='application/vnd.google-apps.form' and trashed=false`,
     });
-
+  
+    console.log("Forms found:", forms?.data?.files); // Log para verificar los formularios encontrados
     const form = forms?.data?.files?.find(
       (form) =>
-        form.name?.includes(firstPartOfName) && // Verifica que el nombre del formulario coincida
+        form.name?.includes(firstPartOfName) &&
         !form.name?.toLowerCase().includes("copy")
     );
-
+  
+    console.log("Form ID found:", form?.id); // Log para verificar el ID del formulario
     return form?.id ?? "";
   }
 
@@ -204,6 +205,7 @@ export class GoogleRepository {
       formId: formId,
     });
 
+    console.log("Form Responses:", formResponsesList?.data?.responses);
     return formResponsesList?.data?.responses || [];
   }
 
@@ -212,10 +214,11 @@ export class GoogleRepository {
     if (!this.authClient) {
       throw new Error("Auth client is not initialized");
     }
-
+  
     const forms = google.forms({ version: "v1", auth: this.authClient });
     const formData = await forms.forms.get({ formId: formId });
-
+  
+    console.log("Form data:", formData?.data); // Log para verificar los datos del formulario
     return formData?.data?.items?.[0]?.questionItem?.question?.questionId ?? "";
   }
 
@@ -234,6 +237,7 @@ export class GoogleRepository {
 
     for (const responseItem of responses) {
       const email = responseItem?.respondentEmail;
+      console.log("Processing response for email:", email);
       if (email) {
         emails.push(email);
         const answers = responseItem?.answers;
@@ -244,6 +248,7 @@ export class GoogleRepository {
 
         if (isYesResponse) {
           const user = await this.userRepository.findUserByEmail(email);
+          console.log("User found:", user);
           if (user) {
             employees.push(user);
           }
@@ -254,6 +259,7 @@ export class GoogleRepository {
     const isSurveyFilled = emails.includes(
       (await this.userRepository.findUserWithInfo(String(userId)))?.email ?? ""
     );
+    console.log("Survey filled:", isSurveyFilled);
     return { employees, isSurveyFilled };
   }
 }
