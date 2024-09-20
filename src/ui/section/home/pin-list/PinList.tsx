@@ -20,7 +20,10 @@ export default function PinList() {
             Employee Recognition Pins
           </h2>
           <p className="pinListContainer__baner__paragraph">
-            At our company, we value and recognize the hard work, dedication, and achievements of our employees. The pins below represent various milestones and accomplishments. Click on a pin to learn more about its significance and to assign it to a deserving team member.
+            At our company, we value and recognize the hard work, dedication,
+            and achievements of our employees. The pins below represent various
+            milestones and accomplishments. Click on a pin to learn more about
+            its significance and to assign it to a deserving team member.
           </p>
         </div>
       </div>

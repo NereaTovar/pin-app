@@ -1,18 +1,21 @@
-import SummerEvent from "@/assets/pins/Summer_event.svg";
+import SummerEvent24 from "@/assets/pins/Summer_event24.svg";
 import SuperReferral from "@/assets/pins/Super_referral.svg";
 import TopPicker from "@/assets/pins/Top_picker.svg";
+import Halloween24 from "@/assets/pins/Halloween_event24.svg";
+import ChristmasEvent24 from "@/assets/pins/Christmas_event24.svg";
 
 export interface DetailedPin {
   id: string;
   imagePin: string;
   pinTitle: string;
   pinDescription: string;
+  
 }
 
 export const pinMock: DetailedPin[] = [
   {
     id: "1",
-    imagePin: SummerEvent,
+    imagePin: SummerEvent24,
     pinTitle: "Summer Event 2024",
     pinDescription:
       "The 'Event Summer 2024' pin is awarded for attending the Event organized by Rindus in September 2024. Congratulations!",
@@ -30,5 +33,19 @@ export const pinMock: DetailedPin[] = [
     pinTitle: "Top Picker",
     pinDescription:
       "It is a special recognition given to those employees who have participated in a Picker session. Thank you for sharing with the entire Rindus family.",
+  },
+  {
+    id: "4",
+    imagePin: Halloween24,
+    pinTitle: "Halloween Event 2024",
+    pinDescription:
+      "The 'Event Halloween 2024' pin is awarded for attending the Event organized by Rindus in October 2024. Congratulations!",
+  },
+  {
+    id: "5",
+    imagePin: ChristmasEvent24,
+    pinTitle: "Chrismast Event 2024 ",
+    pinDescription:
+      "The 'Event Christmas 2024' pin is awarded for attending the Event organized by Rindus in November 2024. Congratulations!",
   },
 ];

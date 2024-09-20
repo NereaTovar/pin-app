@@ -3,19 +3,18 @@ import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Modal from "react-modal";
-import Login from "src/ui/section/login/Login.tsx";
+import Login from "src/ui/section/login/Login";
 import Header from "./ui/components/header/Header";
 import Home from "@/ui/section/home/Home";
 import { AuthProvider } from "./ui/context/auth/Auth";
 import Profile from "./ui/section/profile/Profile";
 import NotFound from "./ui/section/not-found/NotFound";
-import EmployeeList from "./ui/components/employee-list/EmployeeList";
-import syncUsers from "./services/syncUser";
-import PinList from "./ui/section/home/pin-list/PinList";
 import { StoreProvider } from "./ui/components/store-context/StoreContext";
 import PinDetailPage from "./ui/components/pin-detail-page/PinDetailPage";
 import { ToastContainer } from "react-toastify";
 import "tippy.js/dist/tippy.css";
+import syncUsers from "./services/syncUser"; 
+
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -30,11 +29,6 @@ export default function App() {
     syncUsers();
   }, []);
 
-  const tabs = [
-    { label: "List of Pins", content: <PinList /> },
-    { label: "Employees", content: <EmployeeList /> },
-  ];
-
   return (
     <AuthProvider>
       <HelmetProvider>
@@ -42,6 +36,7 @@ export default function App() {
           <StoreProvider>
             <BrowserRouter>
               <Header />
+
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
@@ -49,6 +44,7 @@ export default function App() {
                 <Route path="/pin/:pinId" element={<PinDetailPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
+
               <ToastContainer />
             </BrowserRouter>
           </StoreProvider>

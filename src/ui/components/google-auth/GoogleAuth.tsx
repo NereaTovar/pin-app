@@ -9,6 +9,8 @@ function GoogleAuth({ onLoginSuccess }: GoogleAuthProps) {
   const handleLoginSuccess = async (response: CredentialResponse) => {
     try {
       const token = response.credential;
+      console.log("Token:", token); // Este es el token que se usará para autenticación
+
 
       const userProfileResponse = await fetch(
         `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${token}`

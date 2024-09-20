@@ -1,5 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
+//@ts-ignore
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import Login from "./Login";
 import { AuthProvider } from "@/ui/context/auth/Auth";
@@ -8,7 +9,11 @@ import "@testing-library/jest-dom";
 
 // Mock GoogleAuth component
 vi.mock("../../components/google-auth/GoogleAuth", () => ({
-  default: ({ onLoginSuccess }: { onLoginSuccess: (userData: any) => void }) => {
+  default: ({
+    onLoginSuccess,
+  }: {
+    onLoginSuccess: (userData: any) => void;
+  }) => {
     const mockUserData = {
       id: "123",
       profilePictureUrl: "path/to/profile/picture.jpg",

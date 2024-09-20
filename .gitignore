@@ -14,6 +14,7 @@ vite-env.d.ts
 dist
 dist-ssr
 *.local
+decoKey.js
 
 # Editor directories and files
 .vscode/*
