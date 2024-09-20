@@ -25,12 +25,12 @@ import express from "express";
 import { GoogleController } from "../controllers/google.controller";
 import { GooglePrograms } from "../controllers/google.programs";
 import { GoogleRepository } from "../../repository/google.repository";
-import { SimulatedUserRepository } from "../../repository/simulatedUser.repository"; // Asegúrate de importar aquí
+import { EmployeeJsonRepository } from "../../repository/employeeJson.repository";
 import NodeCache from "node-cache";
 
 // Inicializa las dependencias
 const router = express.Router();
-const userRepository = new SimulatedUserRepository(); // Usar SimulatedUserRepository
+const userRepository = new EmployeeJsonRepository(); // Usar SimulatedUserRepository
 const googleRepository = new GoogleRepository(userRepository);
 const googlePrograms = new GooglePrograms(googleRepository);
 const googleController = new GoogleController(googlePrograms, new NodeCache());
@@ -43,5 +43,3 @@ router.get("/events/:eventId/attendees", (req, res) =>
 );
 
 export default router;
-
-

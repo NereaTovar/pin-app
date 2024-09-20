@@ -27,7 +27,7 @@ import dotenv from "dotenv";
 // Cargar las variables de entorno
 dotenv.config();
 
-console.log("BFF_GOOGLE_AUTH_CREDENTIALS:", process.env.BFF_GOOGLE_AUTH_CREDENTIALS); // <-- Agrega esto
+console.log("BFF_GOOGLE_AUTH_CREDENTIALS:", process.env.BFF_GOOGLE_AUTH_CREDENTIALS); 
 
 const app = express();
 
@@ -40,3 +40,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+

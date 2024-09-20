@@ -9,6 +9,7 @@ export interface LoggedInUser {
 export interface UserAttendee extends LoggedInUser {
   firstName: string;
   lastName?: string;
+  email?: string;
 }
 
 export interface User extends LoggedInUser {
@@ -16,7 +17,7 @@ export interface User extends LoggedInUser {
   asciiFirstName: string;
   lastName?: string;
   asciiLastName?: string;
-  email: string;
+  email?: string;
   position: string;
   birthday?: string;
   isBirthday: boolean;

@@ -16,6 +16,6 @@ export interface UserRepository {
     id: string
   ): Promise<(User & WithInfo & WithLanguages) | undefined>;
   allPositions(): Promise<string[]>;
-  allByLanguage(languageId: number): Promise<User[]>;
+ 
 }
 

@@ -210,17 +210,17 @@ export class GoogleRepository {
   }
 
   // Obtener el ID de la primera pregunta del formulario
-  private async getFirstQuestionId(formId: string): Promise<string> {
-    if (!this.authClient) {
-      throw new Error("Auth client is not initialized");
-    }
-  
-    const forms = google.forms({ version: "v1", auth: this.authClient });
-    const formData = await forms.forms.get({ formId: formId });
-  
-    console.log("Form data:", formData?.data); // Log para verificar los datos del formulario
-    return formData?.data?.items?.[0]?.questionItem?.question?.questionId ?? "";
+private async getFirstQuestionId(formId: string): Promise<string> {
+  if (!this.authClient) {
+    throw new Error("Auth client is not initialized");
   }
+
+  const forms = google.forms({ version: "v1", auth: this.authClient });
+  const formData = await forms.forms.get({ formId: formId });
+
+  console.log("Form data:", formData?.data); // Log para verificar los datos del formulario
+  return formData?.data?.items?.[0]?.questionItem?.question?.questionId ?? "";
+}
 
   // Extraer datos de los asistentes
   private async extractData(

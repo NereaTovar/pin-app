@@ -12,10 +12,10 @@ export class SimulatedUserRepository implements UserRepository {
     {
       id: "1",
       email: "nerea.tovar-intern@rindus.de",
-      firstName: "John",
-      asciiFirstName: "John",
-      lastName: "Doe",
-      asciiLastName: "Doe",
+      firstName: "Nerea",
+      asciiFirstName: "Nerea",
+      lastName: "T",
+      asciiLastName: "T",
       position: "Developer",
 
       isBirthday: false,
@@ -23,11 +23,47 @@ export class SimulatedUserRepository implements UserRepository {
     },
     {
       id: "2",
-      email: "nerea.tovar-intern@rindus.de",
-      firstName: "Jane",
-      asciiFirstName: "Jane",
-      lastName: "Doe",
-      asciiLastName: "Doe",
+      email: "sergio.boatella@rindus.de",
+      firstName: "Sergio",
+      asciiFirstName: "Sergio",
+      lastName: "B",
+      asciiLastName: "B",
+      position: "Designer",
+
+      isBirthday: false,
+      isTeamCaptain: false,
+    },
+    {
+      id: "3",
+      email: "tiziana.bonanomi@rindus.de",
+      firstName: "Tiziana",
+      asciiFirstName: "Tiziana",
+      lastName: "B",
+      asciiLastName: "B",
+      position: "Designer",
+
+      isBirthday: false,
+      isTeamCaptain: false,
+    },
+    {
+      id: "4",
+      email: "anastasiia.kovalenko@rindus.de",
+      firstName: "Anastasiia",
+      asciiFirstName: "Anastasiia",
+      lastName: "K",
+      asciiLastName: "K",
+      position: "Designer",
+
+      isBirthday: false,
+      isTeamCaptain: false,
+    },
+    {
+      id: "5",
+      email: "agata.wesolowska@rindus.de",
+      firstName: "Agata",
+      asciiFirstName: "Agata",
+      lastName: "W",
+      asciiLastName: "W",
       position: "Designer",
 
       isBirthday: false,
@@ -44,6 +80,7 @@ export class SimulatedUserRepository implements UserRepository {
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
+      email: user.email
     };
   }
 
