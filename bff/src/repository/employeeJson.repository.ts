@@ -34,13 +34,13 @@ export class EmployeeJsonRepository implements UserRepository {
 
   async findUserByEmail(email: string): Promise<UserAttendee | undefined> {
     const employee = this.employees.find((emp) => emp.Email === email);
-    if (!employee) return undefined;
+    if (!employee || !employee.Email) return undefined; // Verifica que email no sea undefined
 
     return {
       id: employee.Email, // Asigna el email como ID
       firstName: employee["First name (legal)"] || "",
       lastName: employee["Last name (legal)"] || "",
-      email: employee.Email,
+      email: employee.Email, // Aquí email ya está garantizado como string
     };
   }
 
@@ -89,5 +89,88 @@ export class EmployeeJsonRepository implements UserRepository {
       return this.employees.map(transformEmployeeToUser);
     }
     return [];
+  }
+
+  // // Método para asignar automáticamente pines a los empleados que asistieron al summer event
+  // async assignPinToAttendees(attendeeEmails: string[]): Promise<void> {
+  //   // Encuentra el pin del Summer Event
+  //   const summerPin = {
+  //     id: "summer_event_2024",
+  //     imagePin: "../../assets/pins/Summer_event24.svg",
+  //     pinTitle: "Summer Event 2024",
+  //     pinDescription:
+  //       "The 'Event Summer 2024' pin is awarded for attending the Event...",
+  //     eventDate: "2024-09-20",
+  //     autoAssigned: true,
+  //   };
+
+  //   attendeeEmails.forEach((email) => {
+  //     // Encuentra al empleado que asistió usando su email
+  //     const employee = this.employees.find((emp) => emp.Email === email);
+
+  //     if (employee) {
+  //       // Inicializar el array de pines si no existe
+  //       if (!employee.pins) {
+  //         employee.pins = [];
+  //       }
+
+  //       // Verificar si el pin ya está asignado
+  //       const pinExists = employee.pins.some((pin) => pin.id === summerPin.id);
+
+  //       // Si el pin no existe, se asigna
+  //       if (!pinExists) {
+  //         employee.pins.push(summerPin);
+  //         console.log(`Pin asignado a ${employee.Email}`);
+  //       } else {
+  //         console.log(
+  //           `El empleado ${employee.Email} ya tiene asignado el pin.`
+  //         );
+  //       }
+  //     } else {
+  //       console.warn(`Empleado con email ${email} no encontrado.`);
+  //     }
+  //   });
+
+  // Método para asignar automáticamente pines a los empleados que asistieron
+  async assignPinToAttendees(attendeeEmails: string[]): Promise<void> {
+    // Encuentra el pin del Summer Event
+    const summerPin = {
+      id: "summer_event_2024",
+      imagePin: "../../assets/pins/Summer_event24.svg",
+      pinTitle: "Summer Event 2024",
+      pinDescription:
+        "The 'Event Summer 2024' pin is awarded for attending the Event...",
+      eventDate: "2024-09-20",
+      autoAssigned: true,
+    };
+
+    attendeeEmails.forEach((email) => {
+      // Encuentra al empleado que asistió usando su email
+      const employee = this.employees.find((emp) => emp.Email === email);
+
+      if (employee) {
+        // Inicializar el array de pines si no existe
+        if (!employee.pins) {
+          employee.pins = [];
+        }
+
+        // Verificar si el pin ya está asignado
+        const pinExists = employee.pins.some((pin) => pin.id === summerPin.id);
+
+        // Si el pin no existe, se asigna
+        if (!pinExists) {
+          employee.pins.push(summerPin);
+          console.log(`Pin asignado a ${employee.Email}`);
+        } else {
+          console.log(
+            `El empleado ${employee.Email} ya tiene asignado el pin.`
+          );
+        }
+      } else {
+        console.warn(`Empleado con email ${email} no encontrado.`);
+      }
+    });
+
+    // Aquí puedes agregar lógica para guardar los cambios si estás usando una base de datos.
   }
 }

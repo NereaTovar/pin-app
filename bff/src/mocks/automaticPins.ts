@@ -1,8 +1,10 @@
-import Halloween24 from "../../bff/assets/pins/Halloween_event24.svg";
-import ChristmasEvent24 from "../../bff/assets/pins/Christmas_event24.svg";
-import SummerEvent24 from "../../bff/assets/pins/Summer_event24.svg";
+import Halloween24 from "@/assets/pins/Halloween_event24.svg";
+import ChristmasEvent24 from "@/assets/pins/Christmas_event24.svg";
+import SummerEvent24 from "@/assets/pins/Summer_event24.svg";
+
 
 export const automaticPins = [
+
   {
     id: "summer_event_2024",
     imagePin: SummerEvent24,

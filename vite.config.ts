@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { VitePWA } from "vite-plugin-pwa";
 // import { viteStaticCopy } from "vite-plugin-static-copy";
-import { configDefaults } from 'vitest/config';
+
 
 export default defineConfig({
   plugins: [
@@ -30,18 +30,6 @@ export default defineConfig({
         ],
       },
     }),
-    // viteStaticCopy({
-    //   targets: [
-    //     {
-    //       src: 'src/resources/employees.json',
-    //       dest: 'resources'
-    //     },
-    //     {
-    //       src: 'src/resources/slack.json',
-    //       dest: 'resources'
-    //     }
-    //   ]
-    // })
   ],
   test: {
     environment: 'jsdom',

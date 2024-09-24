@@ -9,7 +9,7 @@ import {
 import { db } from "../config/firebaseConfig";
 
 interface Pin {
-  type: string;
+  id: string;
   date_hire: string;
   color: string;
   imagePin: string;
@@ -58,7 +58,10 @@ export const fetchUsers = async (): Promise<User[]> => {
 };
 
 // Función para verificar si un pin ya está asignado a un empleado específico
-export const isPinAssignedToEmployee = async (employeeId: string, pin: Pin): Promise<boolean> => {
+export const isPinAssignedToEmployee = async (
+  employeeId: string,
+  pin: Pin
+): Promise<boolean> => {
   const docRef = doc(db, "employees", employeeId);
   const docSnap = await getDoc(docRef);
 
@@ -66,7 +69,7 @@ export const isPinAssignedToEmployee = async (employeeId: string, pin: Pin): Pro
     const userData = docSnap.data() as User;
     return userData.pins.some(
       (assignedPin) =>
-        assignedPin.type === pin.type &&
+        assignedPin.id === pin.id &&
         assignedPin.date_hire === pin.date_hire &&
         assignedPin.color === pin.color &&
         assignedPin.imagePin === pin.imagePin
@@ -78,7 +81,10 @@ export const isPinAssignedToEmployee = async (employeeId: string, pin: Pin): Pro
 };
 
 // Función para asignar un pin a un empleado
-export const assignPin = async (employeeId: string, pin: Pin): Promise<string> => {
+export const assignPin = async (
+  employeeId: string,
+  pin: Pin
+): Promise<string> => {
   try {
     const employeeDocRef = doc(db, "employees", employeeId);
     const employeeDoc = await getDoc(employeeDocRef);

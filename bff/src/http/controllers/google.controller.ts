@@ -1,16 +1,19 @@
 import { Request, Response } from "express";
-import NodeCache from "node-cache";
+// import { EmployeeEventAttendee } from "@/api/google/Google";
 import { GooglePrograms } from './google.programs';
+import { EmployeeJsonRepository } from "../../repository/employeeJson.repository";
+
 
 type CacheKey = string;
 
 export class GoogleController {
   private readonly googlePrograms: GooglePrograms;
-  private readonly eventsCache: NodeCache;
 
-  constructor(googlePrograms: GooglePrograms, eventsCache: NodeCache) {
+  private employeeRepository: EmployeeJsonRepository;
+
+  constructor(googlePrograms: GooglePrograms, employeeRepository: EmployeeJsonRepository) {
     this.googlePrograms = googlePrograms;
-    this.eventsCache = eventsCache;
+    this.employeeRepository = employeeRepository;
   }
 
   public async events(_req: Request, res: Response) {
@@ -40,35 +43,61 @@ export class GoogleController {
   }
 
   public async attendees(req: Request, res: Response) {
-    const eventId = req.params.eventId;
-    const userId = 1; // Ajusta según sea necesario
-
+    const { eventId } = req.params;
+    const userId = 1; // Reemplaza con el userId real o sácalo del request
+  
     try {
-      if (!eventId) {
-        return res.status(400).json({ error: "Event ID is required" });
+      // Pasar userId y eventId a la función attendees
+      const attendeesResponse = await this.googlePrograms.attendees(userId, eventId);
+      if (!attendeesResponse) {
+        return res.status(404).json({ error: "No attendees found" });
       }
-
-      const cacheKey = this.calculateCacheKey(eventId);
-      let attendees = this.eventsCache.get(cacheKey);
-
-      if (!attendees) {
-        attendees = await this.googlePrograms.attendees(userId, eventId);
-        this.eventsCache.set(cacheKey, attendees);
+      console.log("Attendees from Google API:", attendeesResponse);
+  
+      // Si attendeesResponse es un objeto y tiene una propiedad `attendees`
+      const attendees = Array.isArray(attendeesResponse)
+        ? attendeesResponse
+        : attendeesResponse.employees; // Ajusta según la estructura real
+  
+      if (!Array.isArray(attendees)) {
+        return res.status(500).json({ error: "Invalid attendees format" });
       }
+  
+      // // Asigna el pin de Summer Event a los asistentes utilizando su id para obtener el email
+      // const attendeeEmails = await Promise.all(
+      //   attendees.map(async (attendee: EmployeeEventAttendee) => {
+      //     // Busca el email en el repositorio de empleados usando la id
+      //     const employee = await this.employeeRepository.findUserById(attendee.id);
+      //     return employee?.email || ''; // Devuelve el email si existe
+      //   })
+      // );
+  
+      // // Filtra emails vacíos
+      // const validEmails = attendeeEmails.filter(email => email !== '');
+  
+      // // Asigna el pin a los correos válidos
+      // await this.employeeRepository.assignPinToAttendees(validEmails);
+  
+      // res.json(attendees);
+       // Asigna el pin de Summer Event a los asistentes si el ID coincide
+    if (eventId === '1518kfg0ull3ea2pce5dq8242p') {
+      console.log("Asignando pin para Summer Event...");
+      await this.employeeRepository.assignPinToAttendees(
+        attendees.map((attendee: { email: string }) => attendee.email)
+      );
+    }
 
-      if (attendees) {
-        return res.json(attendees);
-      }
-
-      return res.status(404).json({ error: "Attendees not found" });
+    res.json(attendees);
     } catch (error) {
-      return res.status(500).json({
-        error: "Error fetching attendees",
-        message: error instanceof Error ? error.message : undefined,
-        stack: error instanceof Error ? error.stack : undefined,
-      });
+      console.error("Error fetching attendees:", error);
+      res.status(500).send({ message: "Error fetching attendees" });
     }
   }
+  
+  
+  
+  
+
 
   private calculateCacheKey(eventId: string): CacheKey {
     return `attendees-${eventId}`;

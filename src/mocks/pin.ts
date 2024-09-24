@@ -9,40 +9,39 @@ export interface DetailedPin {
   imagePin: string;
   pinTitle: string;
   pinDescription: string;
-  
 }
 
 export const pinMock: DetailedPin[] = [
   {
-    id: "1",
+    id: "summer_event_2024",
     imagePin: SummerEvent24,
     pinTitle: "Summer Event 2024",
     pinDescription:
       "The 'Event Summer 2024' pin is awarded for attending the Event organized by Rindus in September 2024. Congratulations!",
   },
   {
-    id: "2",
+    id: "super_referral",
     imagePin: SuperReferral,
     pinTitle: "Super Referral",
     pinDescription:
       "It is a special recognition awarded to those employees who have demonstrated exceptional commitment to Company' growth and development by consistently referring high quality candidates. This pin symbolizes their dedication, insight in identifying talent and their crucial role in building a strong and dynamic team. You get this pin with 3 excellent referrals.",
   },
   {
-    id: "3",
+    id: "top_picker",
     imagePin: TopPicker,
     pinTitle: "Top Picker",
     pinDescription:
       "It is a special recognition given to those employees who have participated in a Picker session. Thank you for sharing with the entire Rindus family.",
   },
   {
-    id: "4",
+    id: "halloween_2024",
     imagePin: Halloween24,
     pinTitle: "Halloween Event 2024",
     pinDescription:
       "The 'Event Halloween 2024' pin is awarded for attending the Event organized by Rindus in October 2024. Congratulations!",
   },
   {
-    id: "5",
+    id: "christams_event_2024",
     imagePin: ChristmasEvent24,
     pinTitle: "Chrismast Event 2024 ",
     pinDescription:

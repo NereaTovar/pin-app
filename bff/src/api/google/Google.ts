@@ -7,6 +7,7 @@ export interface AttendeesEventResponse {
 export interface EmployeeEventAttendee {
   id: string;
   firstName: string;
+  email: string;
 }
 
 export interface MinimalEvent {
