@@ -1,0 +1,138 @@
+import { collection, getDocs, setDoc, doc, getDoc } from "firebase/firestore";
+import employeesData from '../resources/employees.json'
+import slackData from "../resources/slack.json";
+import { db } from "../config/firebaseConfig";
+import { calculateYears, determineColor } from "../utils/dateUtils";
+import { Pin } from "../types/Pin";  
+
+
+interface Employee {
+  id: string;
+  name: string;
+  email: string;
+  department: string;
+  picture: string;
+  startDate: string;
+  yearsInCompany: number;
+  pins: Pin[];
+}
+
+const getAnniversaryPinImage = (years: number) => {
+  return `https://example.com/pins/anniversary-${years}.png`;
+};
+
+const getDepartmentPinImage = (department: string) => {
+  return `https://example.com/pins/department-${department.replace(/\s/g, "-").toLowerCase()}.png`;
+};
+
+const syncUsers = async () => {
+  try {
+    const employeesCollection = collection(db, "employees");
+
+    const existingEmployeesSnapshot = await getDocs(employeesCollection);
+    //@ts-ignore
+    const existingEmployees = existingEmployeesSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as Employee[];
+
+    const employees = employeesData.Employees;
+    const slackMembers = slackData.members;
+
+    const activeEmployees = employees.filter(
+      (emp: any) => emp.Status === "Active"
+    );
+
+    const employeeMap = new Map();
+    activeEmployees.forEach((emp: any) => {
+      employeeMap.set(emp.Email, emp);
+    });
+    const uniqueEmployees = Array.from(employeeMap.values());
+
+    const employeesToAdd = uniqueEmployees
+      .map((emp: any): Employee | null => {
+        const slackMember = slackMembers.find(
+          (member: any) => member.profile.email === emp.Email
+        );
+        const startDate = emp["Hire date"];
+        let years;
+
+        try {
+          console.log(
+            `Processing employee: ${emp.Email}, Hire date: ${startDate}`
+          );
+          years = calculateYears(startDate);
+        } catch (error) {
+          console.error(`Error calculando años para ${emp.Email}:`);
+        
+          return null;
+        }
+
+        if (!emp.Department) {
+          console.error(
+            `Departamento no definido para el empleado: ${emp.Email}`
+          );
+          return null;
+        }
+
+        const color = determineColor(years);
+        const departmentColor = "#808080"; 
+
+        const anniversaryPin: Pin = {
+          type: "Anniversary",
+          date_hire: startDate,
+          color_hire: color,
+          imagePin: getAnniversaryPinImage(years),
+        };
+
+        const departmentPin: Pin = {
+          type: "Department",
+          department: emp.Department,
+          color: departmentColor,
+          imagePin: getDepartmentPinImage(emp.Department),
+        };
+
+        const pins = [anniversaryPin, departmentPin];
+
+        return {
+          id: emp.Email, 
+          name: `${emp["First name (legal)"]} ${emp["Last name (legal)"]}`,
+          email: emp.Email,
+          department: emp.Department,
+          picture: slackMember ? slackMember.profile.image_512 : "",
+          startDate: emp["Hire date"],
+          yearsInCompany: years, 
+          pins: pins,
+        };
+      })
+      .filter((employee): employee is Employee => employee !== null); 
+
+    console.log("Employees to add:", employeesToAdd);
+
+    for (const employee of employeesToAdd) {
+      const employeeDocRef = doc(db, "employees", employee.email);
+      const employeeDocSnap = await getDoc(employeeDocRef);
+
+      if (employeeDocSnap.exists()) {
+        const existingEmployeeData = employeeDocSnap.data() as Employee;
+        const mergedPins = [
+          ...existingEmployeeData.pins,
+          ...employee.pins.filter(
+            newPin => !existingEmployeeData.pins.some(
+              existingPin => existingPin.type === newPin.type && existingPin.date_hire === newPin.date_hire
+            )
+          )
+        ];
+        employee.pins = mergedPins;
+      }
+
+      await setDoc(employeeDocRef, employee, { merge: true });
+      console.log(`Employee added or updated: ${employee.email}`);
+    }
+    console.log("Employees synchronized successfully");
+  } catch (error) {
+    console.error("Error synchronizing employees:", error);
+  }
+};
+
+export default syncUsers;
