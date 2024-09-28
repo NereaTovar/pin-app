@@ -98,7 +98,7 @@
     cursor: pointer;
 
     &:hover {
-      background-color: darken(#4dd699, 10%);
+      background-color: scale-color(#4dd699, $lightness: -10%);
     }
   }
 
@@ -106,8 +106,8 @@
     background-color: #d9534f;
 
     &:hover {
-      background-color: darken(#d9534f, 10%);
-    }
+      background-color: scale-color(#d9534f, $lightness: -10%); 
+   }
   }
 
   .assignPinModal__error {

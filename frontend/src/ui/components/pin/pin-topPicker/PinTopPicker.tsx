@@ -1,0 +1,57 @@
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
+
+interface TopPickerPinProps {
+  type: string; 
+}
+
+const TopPickerPin = ({ type }: TopPickerPinProps) => {
+  return (
+    <Tippy content={type} placement="top">
+      <svg
+        width="57.5"
+        height="57.5"
+        viewBox="0 0 100 100"
+        xmlns="http://www.w3.org/2000/svg"
+        style={{ cursor: 'pointer' }} 
+      >
+        <defs>
+          <linearGradient id="grad1" x1="0%" y1="0%" x2="100%">
+            <stop offset="0%" style={{ stopColor: "#34A484", stopOpacity: 1 }} />
+            <stop offset="100%" style={{ stopColor: "#34A484", stopOpacity: 1 }} />
+          </linearGradient>
+        </defs>
+        <circle cx="50" cy="50" r="45" fill="url(#grad1)" stroke="#ffffff" strokeWidth="24" />
+        <g transform="translate(25, 15) scale(0.5)">
+          <path d="M5 9v6h4l5 5V4l-5 5H5zm13.5 3c0-1.77-.77-3.29-2-4.3v8.6c1.23-1.01 2-2.53 2-4.3z" />
+        </g>
+        <text
+          x="50%"
+          y="48%"
+          dominantBaseline="middle"
+          textAnchor="middle"
+          fontSize="16"
+          fill="#ffffff"
+          fontFamily="Arial"
+          fontWeight="bold"
+        >
+          Top
+        </text>
+        <text
+          x="50%"
+          y="66%"
+          dominantBaseline="middle"
+          textAnchor="middle"
+          fontSize="16"
+          fill="#ffffff"
+          fontFamily="Arial"
+          fontWeight="bold"
+        >
+          Picker
+        </text>
+      </svg>
+    </Tippy>
+  );
+};
+
+export default TopPickerPin;

@@ -34,6 +34,7 @@ export default function PinDetailPage() {
       toast.success("Pin assigned successfully");
       setSelectedEmployees([]);
     } catch (error) {
+      console.error("Failed to assign pin:", error); 
       toast.error("Failed to assign pin");
     }
   };

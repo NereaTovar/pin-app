@@ -10,7 +10,7 @@ import { db } from "../config/firebaseConfig";
 
 interface Pin {
   type: string;
-  date_hire: string;
+  date_hire?: string;
   color: string;
   imagePin: string;
 }
@@ -89,7 +89,19 @@ export const assignPin = async (employeeId: string, pin: Pin): Promise<string> =
     }
 
     const employeeData = employeeDoc.data() as User;
-    const updatedPins = employeeData.pins ? [...employeeData.pins, pin] : [pin];
+
+    // Verificar si el pin ya está asignado al empleado
+    const isPinAlreadyAssigned = employeeData.pins.some(
+      (assignedPin) => assignedPin.type === pin.type
+    );
+
+    if (isPinAlreadyAssigned) {
+      console.log(`Pin "${pin.type}" ya está asignado al empleado: ${employeeId}`);
+      return "Pin already assigned";
+    }
+
+    // Agregar el pin si no está asignado
+    const updatedPins = [...employeeData.pins, pin];
     await updateDoc(employeeDocRef, { pins: updatedPins });
 
     return "Success";
@@ -98,3 +110,4 @@ export const assignPin = async (employeeId: string, pin: Pin): Promise<string> =
     return "Error";
   }
 };
+
