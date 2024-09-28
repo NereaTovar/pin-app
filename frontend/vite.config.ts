@@ -4,7 +4,6 @@
 // import { VitePWA } from "vite-plugin-pwa";
 // // import { viteStaticCopy } from "vite-plugin-static-copy";
 
-
 // export default defineConfig({
 //   plugins: [
 //     react(),
@@ -42,18 +41,20 @@
 //       "@": "/frontend/src",
 //     },
 //   },
-  
+
 // });
 
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { VitePWA } from "vite-plugin-pwa";
+import vitePluginJson from "@rollup/plugin-json"; // Plugin para manejar JSON
 
 export default defineConfig({
   plugins: [
     react(),
     tsconfigPaths(),
+    vitePluginJson(),
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
@@ -78,18 +79,18 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      '/api': {
-        target: 'http://localhost:3000', // URL de tu backend Express
+      "/api": {
+        target: "http://localhost:3000", // URL de tu backend Express
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, '') 
-      }
-    }
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
   },
   resolve: {
     alias: {
-      "@": "/src", 
+      "@": "/src",
+      "bff": "/bff/src", 
     },
   },
 });
-

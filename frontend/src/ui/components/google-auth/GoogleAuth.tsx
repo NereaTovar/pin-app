@@ -1,5 +1,7 @@
 import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
-import { UserProfileData } from "@/ui/context/auth/Auth";
+import { UserProfileData } from "../../context/auth/Auth";
+import { auth } from "../../../config/firebaseConfig"; // Asegúrate de importar `auth` correctamente
+import { signInWithCredential, GoogleAuthProvider } from "firebase/auth";
 
 interface GoogleAuthProps {
   onLoginSuccess: (userData: UserProfileData) => void;
@@ -8,26 +10,28 @@ interface GoogleAuthProps {
 function GoogleAuth({ onLoginSuccess }: GoogleAuthProps) {
   const handleLoginSuccess = async (response: CredentialResponse) => {
     try {
-      const token = response.credential;
-      console.log("Token:", token); // Este es el token que se usará para autenticación
+      const googleIdToken = response.credential;
+      console.log("Token Front GoogleAuth:", googleIdToken);
 
+      // Crear una credencial de Firebase con el token de Google
+      const credential = GoogleAuthProvider.credential(googleIdToken);
+      
+      // Iniciar sesión en Firebase con esta credencial
+      const firebaseUser = await signInWithCredential(auth, credential);
+      console.log("Firebase user:", firebaseUser);
 
-      const userProfileResponse = await fetch(
-        `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${token}`
-      );
-      const userProfileData = await userProfileResponse.json();
-      // console.log("User Profile Data Auth:", userProfileData);
-
+      // Extraer datos del perfil del usuario
       const userData: UserProfileData = {
-        id: userProfileData.sub,
-        profilePictureUrl: userProfileData.picture,
-        email: userProfileData.email,
-        name: userProfileData.name,
+        id: firebaseUser.user.uid,
+        profilePictureUrl: firebaseUser.user.photoURL || "",
+        email: firebaseUser.user.email || "",
+        name: firebaseUser.user.displayName || "",
       };
 
+      // Pasar los datos del usuario a la función de login en tu contexto
       onLoginSuccess(userData);
     } catch (error) {
-      console.log("Failed to fetch user profile data:", error);
+      console.log("Failed to authenticate with Firebase:", error);
     }
   };
 

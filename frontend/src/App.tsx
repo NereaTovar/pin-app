@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Modal from "react-modal";
 import Login from "./ui/section/login/Login";
 import Header from "./ui/components/header/Header";
-import Home from './ui/section/home/Home';
+import Home from "./ui/section/home/Home";
 import { AuthProvider } from "./ui/context/auth/Auth";
 import Profile from "./ui/section/profile/Profile";
 import NotFound from "./ui/section/not-found/NotFound";
@@ -13,8 +12,7 @@ import { StoreProvider } from "./ui/components/store-context/StoreContext";
 import PinDetailPage from "./ui/components/pin-detail-page/PinDetailPage";
 import { ToastContainer } from "react-toastify";
 import "tippy.js/dist/tippy.css";
-import syncUsers from "./services/syncUser"; 
-
+import AppInitializer from "./ui/components/app-initializer/AppInitializer";
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -25,10 +23,6 @@ if (!clientId) {
 Modal.setAppElement("#root");
 
 export default function App() {
-  useEffect(() => {
-    syncUsers();
-  }, []);
-
   return (
     <AuthProvider>
       <HelmetProvider>
@@ -37,6 +31,7 @@ export default function App() {
             <BrowserRouter>
               <Header />
 
+              <AppInitializer />
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />

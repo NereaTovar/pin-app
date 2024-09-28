@@ -14,10 +14,11 @@
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "baseUrl": "./",
+    "types": ["vite/client"],
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "vite-env.d.ts"],
   "exclude": ["node_modules", "dist"]
 }
