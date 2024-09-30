@@ -4,12 +4,13 @@ import { Partner } from "./Partner";
 export interface LoggedInUser {
   id: string;
   pictureUrl?: string;
+  email?: string;
 }
 
 export interface UserAttendee extends LoggedInUser {
   firstName: string;
   lastName?: string;
-  email?: string;
+  email: string;
 }
 
 export interface User extends LoggedInUser {

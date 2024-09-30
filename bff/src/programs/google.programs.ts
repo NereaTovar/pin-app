@@ -1,5 +1,3 @@
-// GooglePrograms sin authenticate
-
 import { GoogleRepository } from "../repository/google.repository";
 import {
   AttendeesEventResponse,

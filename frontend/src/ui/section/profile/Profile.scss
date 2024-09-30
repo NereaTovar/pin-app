@@ -1,0 +1,81 @@
+@import '../../../assets/scss/colors';
+
+.profileContainer {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__image,
+  &__initial {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 75px; // Tamaño de la inicial
+    font-weight: bold;
+    color: white;
+    background-color: $rindus-medium-gray;
+  }
+
+  &__name {
+    margin-top: 10px;
+    font-size: 24px;
+    color: $rindus-dark-gray;
+  }
+}
+
+.profileDetail {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  gap: 16px;
+  color: $rindus-medium-gray;
+  margin-top: 15px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: $rindus-off-white;
+
+  &__logo {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  &__email {
+    margin-right: 5px;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    a {
+      text-decoration: none;
+      color: $rindus-medium-gray;
+    }
+  }
+  &__link {
+    text-decoration: none;
+    color: $rindus-medium-gray;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+  }
+}

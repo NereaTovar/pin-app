@@ -3,7 +3,7 @@ module.exports = {
   env: { 
     browser: true, 
     es2020: true,
-    node: true // Agregar el entorno de Node.js para que ESLint reconozca 'process'
+    node: true 
   },
   extends: [
     'eslint:recommended',

@@ -30,11 +30,10 @@ export const getCommonConfig = (
     },
   },
   cors: {
-    // Frontend app | swagger-editor | swagger-ui
     origin:
       processVariables.BFF_CORS_ORIGIN || /http:\/\/localhost:(5173|8888|3080)/,
   },
-  // Google API credentials are in base64 format and should be decoded before using
+
   googleAuthCredentials: JSON.parse(
     Buffer.from(
       process.env.BFF_GOOGLE_AUTH_CREDENTIALS ?? "",

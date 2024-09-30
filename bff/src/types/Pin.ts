@@ -1,4 +1,5 @@
 export interface Pin {
+  id: string;
   type: string;
   date_hire?: string;
   color?: string;

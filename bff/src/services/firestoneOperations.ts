@@ -1,16 +1,11 @@
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
-import { db } from "../config/firebaseConfig";
+import { getFirestore, CollectionReference, DocumentReference } from 'firebase-admin/firestore';
+
+// Obtén la instancia de Firestore desde firebase-admin
+const firestore = getFirestore();
 
 interface Pin {
-  type: string;
-  date_hire: string;
+  id: string;
+  date_hire?: string;
   color: string;
   imagePin: string;
 }
@@ -28,15 +23,16 @@ interface User {
 // Función para añadir o actualizar un usuario usando el correo electrónico como ID
 export const addUser = async (user: User): Promise<void> => {
   try {
-    const userRef = doc(db, "employees", user.email); // Usamos el correo electrónico como ID
-    const docSnap = await getDoc(userRef);
+    // Referencia al documento del usuario
+    const userRef: DocumentReference = firestore.collection("employees").doc(user.email); 
+    const docSnap = await userRef.get();
 
-    if (docSnap.exists()) {
+    if (docSnap.exists) {
       // Si el documento existe, lo actualizamos
-      await setDoc(userRef, user, { merge: true });
+      await userRef.set(user, { merge: true });
     } else {
       // Si el documento no existe, lo creamos
-      await setDoc(userRef, user);
+      await userRef.set(user);
     }
     console.log("Usuario añadido o actualizado con éxito:", user.email);
   } catch (e) {
@@ -46,7 +42,9 @@ export const addUser = async (user: User): Promise<void> => {
 
 // Función para obtener todos los usuarios
 export const fetchUsers = async (): Promise<User[]> => {
-  const querySnapshot = await getDocs(collection(db, "employees"));
+  // Referencia a la colección de empleados
+  const employeesCollection: CollectionReference = firestore.collection("employees");
+  const querySnapshot = await employeesCollection.get(); // Usamos .get() en lugar de getDocs()
   const users = querySnapshot.docs.map((doc) => {
     const data = doc.data() as Omit<User, "id">; // Excluir 'id' de la data
     return {
@@ -58,15 +56,18 @@ export const fetchUsers = async (): Promise<User[]> => {
 };
 
 // Función para verificar si un pin ya está asignado a un empleado específico
-export const isPinAssignedToEmployee = async (employeeId: string, pin: Pin): Promise<boolean> => {
-  const docRef = doc(db, "employees", employeeId);
-  const docSnap = await getDoc(docRef);
+export const isPinAssignedToEmployee = async (
+  employeeId: string,
+  pin: Pin
+): Promise<boolean> => {
+  const docRef: DocumentReference = firestore.collection("employees").doc(employeeId);
+  const docSnap = await docRef.get();
 
-  if (docSnap.exists()) {
+  if (docSnap.exists) {
     const userData = docSnap.data() as User;
     return userData.pins.some(
       (assignedPin) =>
-        assignedPin.type === pin.type &&
+        assignedPin.id === pin.id &&
         assignedPin.date_hire === pin.date_hire &&
         assignedPin.color === pin.color &&
         assignedPin.imagePin === pin.imagePin
@@ -78,19 +79,22 @@ export const isPinAssignedToEmployee = async (employeeId: string, pin: Pin): Pro
 };
 
 // Función para asignar un pin a un empleado
-export const assignPin = async (employeeId: string, pin: Pin): Promise<string> => {
+export const assignPin = async (
+  employeeId: string,
+  pin: Pin
+): Promise<string> => {
   try {
-    const employeeDocRef = doc(db, "employees", employeeId);
-    const employeeDoc = await getDoc(employeeDocRef);
+    const employeeDocRef: DocumentReference = firestore.collection("employees").doc(employeeId);
+    const employeeDoc = await employeeDocRef.get();
 
-    if (!employeeDoc.exists()) {
+    if (!employeeDoc.exists) {
       console.error(`No document to update: ${employeeDocRef.path}`);
       return "Error";
     }
 
     const employeeData = employeeDoc.data() as User;
     const updatedPins = employeeData.pins ? [...employeeData.pins, pin] : [pin];
-    await updateDoc(employeeDocRef, { pins: updatedPins });
+    await employeeDocRef.update({ pins: updatedPins });
 
     return "Success";
   } catch (error) {

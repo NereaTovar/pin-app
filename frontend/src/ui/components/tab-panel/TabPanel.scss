@@ -1,0 +1,50 @@
+@import "../../../assets/scss/colors";
+// @import "@/assets/fonts/Poppins.scss";
+
+.tabPanel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &__button-container {
+    display: flex;
+    gap: 24px;
+    padding: 20px 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid $rindus-light-gray;
+  }
+
+  &__button {
+    position: relative;
+    background: transparent;
+    color: black;
+    padding: 8px 16px;
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    border: none;
+    &--active {
+      color: white;
+      font-weight: 700;
+    }
+  }
+
+  &__button-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    background: $rindus-green;
+    mix-blend-mode: multiply;
+  }
+
+  &__content {
+    flex: 1 1 auto;
+
+    .content {
+      height: 100%;
+    }
+  }
+}

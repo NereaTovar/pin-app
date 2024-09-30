@@ -1,0 +1,58 @@
+@import "../../../assets/scss/colors";
+
+header {
+  height: 56px;
+  width: 100%;
+  background-color: $rindus-green;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .search,
+  .back {
+    display: flex;
+    align-items: center;
+    margin-left: 16px;
+    flex-grow: 1;
+    width: 40px;
+    height: 40px;
+  }
+
+  .companyLogo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .profile {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin-right: 16px;
+    flex-grow: 1;
+
+    .profile__button {
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      img {
+        object-fit: fill;
+        height: 100%;
+        clip-path: circle(50% at 50% 50%);
+      }
+    }
+  }
+
+  .logout {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    margin-right: 16px;
+  }
+}

@@ -1,0 +1,40 @@
+@import "../../../assets/scss/colors";
+// @import "../../../assets/fonts/Poppins.scss";
+
+.pinCard {
+  // @include font-poppins-regular;
+  align-items: center;
+  background-color: $rindus-off-white;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  height: 120px;
+  width: 157px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+  text-align: center;
+  padding: 12px 8px;
+
+  &:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  &__logo {
+    display: flex;
+    height: 60px;
+    width: 60px;
+    margin-bottom: 10px;
+  }
+
+  &__title {
+    font-size: 14px;
+    color: $rindus-dark-gray;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  &__button {
+    font-size: 12px;
+    color: $rindus-green;
+  }
+}

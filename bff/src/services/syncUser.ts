@@ -1,9 +1,29 @@
-import { collection, getDocs, setDoc, doc, getDoc } from "firebase/firestore";
-import employeesData from "src/resources/employees.json";
-import slackData from "src/resources/slack.json";
-import { db } from "@/config/firebaseConfig";
+import { getFirestore, DocumentReference } from "firebase-admin/firestore";
+import employeesData from "../resources/employees.json";
+import slackData from "../resources/slack.json";
 import { calculateYears, determineColor } from "@/utils/dateUtils";
-import { Pin } from "../types/Pin";  
+import { Pin } from "../types/Pin";
+
+// Obtén la instancia de Firestore desde firebase-admin
+const firestore = getFirestore();
+
+// Definir la interfaz para los datos de empleado en employees.json
+interface EmployeeData {
+  Email: string;
+  Status: string;
+  "Hire date": string;
+  Department?: string;
+  "First name (legal)": string;
+  "Last name (legal)": string;
+}
+
+// Definir la interfaz para los datos de Slack
+interface SlackMember {
+  profile: {
+    email: string;
+    image_512: string;
+  };
+}
 
 interface Employee {
   id: string;
@@ -16,45 +36,44 @@ interface Employee {
   pins: Pin[];
 }
 
-const getAnniversaryPinImage = (years: number) => {
+// Función para obtener la URL de la imagen del pin de aniversario
+const getAnniversaryPinImage = (years: number): string => {
   return `https://example.com/pins/anniversary-${years}.png`;
 };
 
-const getDepartmentPinImage = (department: string) => {
-  return `https://example.com/pins/department-${department.replace(/\s/g, "-").toLowerCase()}.png`;
+// Función para obtener la URL de la imagen del pin de departamento
+const getDepartmentPinImage = (department: string): string => {
+  return `https://example.com/pins/department-${department
+    .replace(/\s/g, "-")
+    .toLowerCase()}.png`;
 };
 
 const syncUsers = async () => {
   try {
-    const employeesCollection = collection(db, "employees");
+    // Se asegura que los datos cumplen con la interfaz definida
+    const employees: EmployeeData[] = employeesData.Employees as EmployeeData[];
+    const slackMembers: SlackMember[] = slackData.members as SlackMember[];
 
-    const existingEmployeesSnapshot = await getDocs(employeesCollection);
-    //@ts-ignore
-    const existingEmployees = existingEmployeesSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Employee[];
-
-    const employees = employeesData.Employees;
-    const slackMembers = slackData.members;
-
+    // Filtra solo empleados activos
     const activeEmployees = employees.filter(
-      (emp: any) => emp.Status === "Active"
+      (emp: EmployeeData) => emp.Status === "Active"
     );
 
-    const employeeMap = new Map();
-    activeEmployees.forEach((emp: any) => {
+    // Eliminar duplicados usando un Map
+    const employeeMap = new Map<string, EmployeeData>();
+    activeEmployees.forEach((emp: EmployeeData) => {
       employeeMap.set(emp.Email, emp);
     });
     const uniqueEmployees = Array.from(employeeMap.values());
 
-    const employeesToAdd = uniqueEmployees
-      .map((emp: any): Employee | null => {
+    const employeesToAdd: Employee[] = uniqueEmployees
+      .map((emp: EmployeeData): Employee | null => {
         const slackMember = slackMembers.find(
-          (member: any) => member.profile.email === emp.Email
+          (member: SlackMember) => member.profile.email === emp.Email
         );
-        const startDate = emp["Hire date"];
-        let years;
+
+        const startDate: string = emp["Hire date"];
+        let years: number;
 
         try {
           console.log(
@@ -63,7 +82,7 @@ const syncUsers = async () => {
           years = calculateYears(startDate);
         } catch (error) {
           console.error(`Error calculando años para ${emp.Email}:`);
-        
+          // Excluir al empleado si hay error en la fecha
           return null;
         }
 
@@ -71,61 +90,68 @@ const syncUsers = async () => {
           console.error(
             `Departamento no definido para el empleado: ${emp.Email}`
           );
+          // Excluir al empleado si no tiene departamento
           return null;
         }
 
         const color = determineColor(years);
-        const departmentColor = "#808080"; 
+        const departmentColor = "#808080"; // Color específico para el pin de departamento
 
+        // Crear pines de aniversario y departamento con toda la información necesaria
         const anniversaryPin: Pin = {
+          id: 'anniversary-' + years, // Se agrega un ID único al pin de aniversario
           type: "Anniversary",
           date_hire: startDate,
-          color_hire: color,
+          color: color,
           imagePin: getAnniversaryPinImage(years),
         };
 
         const departmentPin: Pin = {
+          id: 'department-' + emp.Department, // Se agrega un ID único al pin de departamento
           type: "Department",
           department: emp.Department,
           color: departmentColor,
           imagePin: getDepartmentPinImage(emp.Department),
         };
 
-        const pins = [anniversaryPin, departmentPin];
-
+        // Retornar el objeto Employee completo
         return {
-          id: emp.Email, 
+          id: emp.Email,
           name: `${emp["First name (legal)"]} ${emp["Last name (legal)"]}`,
           email: emp.Email,
           department: emp.Department,
           picture: slackMember ? slackMember.profile.image_512 : "",
           startDate: emp["Hire date"],
-          yearsInCompany: years, 
-          pins: pins,
+          yearsInCompany: years,
+          pins: [anniversaryPin, departmentPin],
         };
       })
-      .filter((employee): employee is Employee => employee !== null); 
+      .filter((employee): employee is Employee => employee !== null);
 
     console.log("Employees to add:", employeesToAdd);
 
+    // Actualizar la base de datos con los empleados procesados
     for (const employee of employeesToAdd) {
-      const employeeDocRef = doc(db, "employees", employee.email);
-      const employeeDocSnap = await getDoc(employeeDocRef);
+      const employeeDocRef: DocumentReference = firestore.collection("employees").doc(employee.email);
+      const employeeDocSnap = await employeeDocRef.get();
 
-      if (employeeDocSnap.exists()) {
+      if (employeeDocSnap.exists) {
         const existingEmployeeData = employeeDocSnap.data() as Employee;
         const mergedPins = [
           ...existingEmployeeData.pins,
           ...employee.pins.filter(
-            newPin => !existingEmployeeData.pins.some(
-              existingPin => existingPin.type === newPin.type && existingPin.date_hire === newPin.date_hire
-            )
-          )
+            (newPin) =>
+              !existingEmployeeData.pins.some(
+                (existingPin) =>
+                  existingPin.type === newPin.type &&
+                  existingPin.date_hire === newPin.date_hire
+              )
+          ),
         ];
         employee.pins = mergedPins;
       }
 
-      await setDoc(employeeDocRef, employee, { merge: true });
+      await employeeDocRef.set(employee, { merge: true });
       console.log(`Employee added or updated: ${employee.email}`);
     }
     console.log("Employees synchronized successfully");

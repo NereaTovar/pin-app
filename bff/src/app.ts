@@ -1,43 +1,37 @@
-// import dotenv from "dotenv";
-// import express from "express";
-// import googleRoutes from "./api/googleRoutes";
-// import cors from "cors";
-
-// // Cargar las variables de entorno
-// dotenv.config();
-
-// const app = express();
-// app.use(cors());
-// app.use(express.json());
-// app.use("/api/google", googleRoutes);
-
-// // Ejemplo de cómo usar las credenciales de Google API en algún punto
-// console.log("Google Auth Credentials:", process.env.BFF_GOOGLE_AUTH_CREDENTIALS);
-
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => {
-//   console.log(`Server running on port ${PORT}`);
-// });
-
 import express from "express";
-import router from "./http/routes/google.routes";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
+import googleRoutes from "./http/routes/google.routes";
 
 // Cargar las variables de entorno
 dotenv.config();
 
-console.log("BFF_GOOGLE_AUTH_CREDENTIALS:", process.env.BFF_GOOGLE_AUTH_CREDENTIALS); 
-
 const app = express();
 
+// Middleware para CORS (habilitar solicitudes desde otros dominios)
 app.use(cors());
+
+// Middleware para parsear JSON
+
 app.use(express.json());
 
-app.use("/api/google", router);
+// Middleware para servir archivos estáticos (si tienes un frontend o assets)
+app.use("/assets", express.static(path.join(__dirname, "assets")));
 
+// Rutas de la API (estas rutas son procesadas primero)
+app.use("/api/google", googleRoutes);
+
+// Opcional: Manejar rutas no encontradas (404)
+// Asegúrate de que esto está después de todas las rutas de la API
+app.use("*", (req, res) => {
+  res.status(404).json({ error: "Ruta no encontrada" });
+});
+
+// Obtener el puerto de las variables de entorno o usar el puerto 3000 por defecto
 const PORT = process.env.PORT || 3000;
+
+// Iniciar el servidor
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
