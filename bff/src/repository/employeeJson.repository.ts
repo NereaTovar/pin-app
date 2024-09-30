@@ -37,10 +37,10 @@ export class EmployeeJsonRepository implements UserRepository {
     if (!employee || !employee.Email) return undefined; // Verifica que email no sea undefined
 
     return {
-      id: employee.Email, // Asigna el email como ID
+      id: employee.Email, 
       firstName: employee["First name (legal)"] || "",
       lastName: employee["Last name (legal)"] || "",
-      email: employee.Email, // Aquí email ya está garantizado como string
+      email: employee.Email,
     };
   }
 
@@ -49,7 +49,7 @@ export class EmployeeJsonRepository implements UserRepository {
     if (!employee) return undefined;
 
     return {
-      id: employee.Email, // Usar el email como ID
+      id: employee.Email,
     };
   }
 

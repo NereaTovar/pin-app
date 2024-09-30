@@ -14,7 +14,7 @@ export interface EmployeeJson {
   "First name (legal)": string;
   "Last name (legal)": string;
   Gender: string;
-  Email: string; // Cambiar a string opcional si crees que puede faltar
+  Email: string; 
   Office: string;
   Department: string;
   Position: string;
@@ -31,16 +31,16 @@ export interface EmployeeJson {
 // Función para transformar un empleado del JSON a un objeto User
 export const transformEmployeeToUser = (employee: EmployeeJson): User => {
   return {
-    id: employee.Email, // Usar el email como ID, asegúrate de que siempre esté presente
+    id: employee.Email, 
     firstName: employee["First name (legal)"] || "",
-    asciiFirstName: "", // Aquí puedes agregar lógica para obtener la versión ASCII del nombre si es necesario
+    asciiFirstName: "", 
     lastName: employee["Last name (legal)"] || "",
-    asciiLastName: "", // Aquí puedes agregar lógica para obtener la versión ASCII del apellido si es necesario
-    email: employee.Email || "", // Valor por defecto si falta el email
+    asciiLastName: "", 
+    email: employee.Email || "", 
     position: employee.Position || "",
     birthday: employee.Birthday || "",
-    isBirthday: false, // Puedes calcular esto según la lógica de tu aplicación
-    isTeamCaptain: !!employee["Assigned Team Captain"], // True si tiene un capitán asignado
+    isBirthday: false, 
+    isTeamCaptain: !!employee["Assigned Team Captain"], 
   };
 };
 
@@ -48,8 +48,7 @@ export interface RawEmployee {
   "First name (legal)"?: string;
   "Last name (legal)"?: string;
   Gender?: string;
-  Email?: string; // Puede ser opcional en este momento
-  Office?: string;
+  Email?: string; 
   Department?: string;
   Position?: string;
   "Legal Entity"?: string;

@@ -1,6 +1,5 @@
 import { User, LoggedInUser, UserAttendee } from '../models/business/User';
-// Elimina esta línea ya que 'db' no se está utilizando.
-// import { db } from '../config/firebaseConfig'; 
+
 import { getFirestore, QuerySnapshot } from 'firebase-admin/firestore';
 import { UserRepository } from './user.repository';
 

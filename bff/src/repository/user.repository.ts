@@ -9,7 +9,6 @@ import {
 
 export interface UserRepository {
   all(): Promise<User[]>;
-  // page(page: number, pageSize: number): Promise<Page<User>>;
   findUserByEmail(email: string): Promise<UserAttendee | undefined>;
   findUserById(id: string): Promise<LoggedInUser | undefined>;
   findUserWithInfo(
