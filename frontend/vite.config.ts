@@ -2,11 +2,14 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { VitePWA } from "vite-plugin-pwa";
-import vitePluginJson from "@rollup/plugin-json"; 
+import vitePluginJson from "@rollup/plugin-json";
+import svgr from 'vite-plugin-svgr';
+
 
 export default defineConfig({
   plugins: [
     react(),
+    svgr(),
     tsconfigPaths(),
     vitePluginJson(),
     VitePWA({
@@ -34,7 +37,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:3000", 
+        target: "http://localhost:3000",
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, ""),
@@ -44,7 +47,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": "/src",
-      "bff": "/bff/src", 
+      bff: "/bff/src",
     },
   },
 });
