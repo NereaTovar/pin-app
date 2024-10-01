@@ -7,13 +7,13 @@ interface Attendee {
   firstName: string;
   lastName: string;
   email: string;
-  pins?: Pin[]; 
+  pins?: Pin[];
 }
 
 interface PinSummerEventProps {
-  eventId: string; 
-  employees: Employee[]; 
-  onAssignPins: (email: string, newPin: Pin) => void; 
+  eventId: string;
+  employees: Employee[];
+  onAssignPins: (email: string, newPin: Pin) => void;
 }
 
 const PinSummerEvent = ({
@@ -28,8 +28,8 @@ const PinSummerEvent = ({
     type: "summer_event_2024",
     pinTitle: "Summer Event 2024",
     pinDescription: "Pin for attending the Summer Event 2024.",
-    imagePin: "../../../../assets/pins/Summer_event24.svg", 
-    eventDate: "2024-09-10", 
+    imagePin: "/frontend/src/assets/pins/Summer_event24.svg",
+    eventDate: "2024-09-21",
   };
 
   // Llamada para obtener asistentes del SummerEvent
@@ -43,7 +43,7 @@ const PinSummerEvent = ({
 
       const url = `/api/google/events/${eventId}/attendees`;
 
-      console.log("URL de fetch (SummerEvent):", url); 
+      console.log("URL de fetch (SummerEvent):", url);
 
       const response = await fetch(url, {
         headers: {
@@ -52,7 +52,11 @@ const PinSummerEvent = ({
       });
 
       if (!response.ok) {
-        console.error("Error en la respuesta del servidor:", response.status, response.statusText);
+        console.error(
+          "Error en la respuesta del servidor:",
+          response.status,
+          response.statusText
+        );
         return;
       }
 
@@ -63,12 +67,18 @@ const PinSummerEvent = ({
       }
 
       const attendeesData = await response.json();
-      console.log("Asistentes que respondieron sí (SummerEvent):", attendeesData);
+      console.log(
+        "Asistentes que respondieron sí (SummerEvent):",
+        attendeesData
+      );
 
       if (Array.isArray(attendeesData)) {
         setAttendees(attendeesData);
       } else {
-        console.warn("La respuesta de asistentes no es un array:", attendeesData);
+        console.warn(
+          "La respuesta de asistentes no es un array:",
+          attendeesData
+        );
       }
     } catch (error) {
       console.error("Error al obtener el SummerEvent o los asistentes:", error);

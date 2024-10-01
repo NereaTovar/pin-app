@@ -1,8 +1,8 @@
 export interface Pin {
-  type: string; 
+  type: string;
   pinTitle?: string;
   pinDescription?: string;
-  imagePin?: string;
+  imagePin?: string | JSX.Element;
   eventDate?: string;
   color?: string;
   department?: string;
