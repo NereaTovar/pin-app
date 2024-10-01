@@ -41,6 +41,7 @@ const syncUsers = async () => {
 
     const employees = employeesData.Employees;
     const slackMembers = slackData.members;
+    
 
     // Filtrar empleados activos y eliminar duplicados por email
     const activeEmployees = employees.filter(
