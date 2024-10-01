@@ -15,7 +15,6 @@ function Profile() {
 
   useEffect(() => {
     if (!userProfileData || userProfileData.id !== userId) {
-      // Redirigir si no está autenticado o si el ID no coincide
       navigate("/login");
     }
   }, [userProfileData, userId, navigate]);
