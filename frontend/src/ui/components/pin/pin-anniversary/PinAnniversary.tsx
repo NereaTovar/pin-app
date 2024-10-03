@@ -1,21 +1,21 @@
-import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
 
 interface PinAnniversaryProps {
   number: number;
   color: string;
-  type: string; 
+  type?: string;
 }
 
-const PinAnniversary = ({ number, color, type }: PinAnniversaryProps) => {
+const PinAnniversary = ({ number, color }: PinAnniversaryProps) => {
   return (
-    <Tippy content={type} placement="top">
+    <Tippy content={`Anniversary: ${number}`} placement="top">
       <svg
         width="57.5"
         height="57.5"
         viewBox="0 0 100 100"
         xmlns="http://www.w3.org/2000/svg"
-        style={{ cursor: 'pointer' }} 
+        style={{ cursor: "pointer" }}
       >
         <circle
           cx="50"

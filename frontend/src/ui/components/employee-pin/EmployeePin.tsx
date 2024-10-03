@@ -23,7 +23,7 @@ const EmployeePin = (props: EmployeePinProps) => {
     <div className="employeePin">
       <div className="pins">
         {/* Pines fijos como Anniversary y Department */}
-        <Tippy content="Anniversary" placement="top">
+        <Tippy content="Aniversary" placement="top">
           <div className="pin">
             <PinAnniversary
               number={yearsInCompany}
@@ -32,6 +32,7 @@ const EmployeePin = (props: EmployeePinProps) => {
             />
           </div>
         </Tippy>
+
         <Tippy content="Department" placement="top">
           <div className="pin">
             <PinDepartment department={department} type="Department" />
@@ -55,7 +56,9 @@ const EmployeePin = (props: EmployeePinProps) => {
             return (
               <Tippy key={index} content={pin.pinTitle} placement="top">
                 <div className="pin">
-                  {pin.imagePin && <img src={pin.imagePin} alt={pin.pinTitle} />}
+                  {pin.imagePin && (
+                    <img src={pin.imagePin} alt={pin.pinTitle} />
+                  )}
                 </div>
               </Tippy>
             );
@@ -67,4 +70,3 @@ const EmployeePin = (props: EmployeePinProps) => {
 };
 
 export default EmployeePin;
-
