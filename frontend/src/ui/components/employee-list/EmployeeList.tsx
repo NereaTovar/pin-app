@@ -71,52 +71,55 @@ const EmployeeList = () => {
   return (
     <div className="main-container">
       <div className="employeeListContainer">
-        {/* Barra de búsqueda */}
         <div className="employeeList__search">
           <input
             type="text"
             placeholder="Search employee"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)} // Actualiza el término de búsqueda
+            onChange={(e) => setSearchTerm(e.target.value)} 
           />
           <button
-            onClick={() => setSearchTerm("")} // Limpia el término de búsqueda
+            onClick={() => setSearchTerm("")}
             className="employeeList__search-clear"
           >
             X
           </button>
         </div>
-        {/* Lista de empleados filtrados */}
         <div className="employeeList">
           {filteredEmployees.map((employee) => {
             return (
-              <div key={employee.id} className="employeeList__item">
-                <img
-                  src={employee.picture} // Imagen del empleado
-                  alt={`${employee.firstName} ${employee.lastName}`}
-                  className="employeeList__picture"
-                />
-                <div className="employeeList__details">
-                  <h2>
-                    <span>{employee.firstName}</span>
-                    <span>{employee.lastName}</span>{" "}
-                    {/* Forzamos que el apellido esté en una nueva línea */}
-                  </h2>
-                  <div className="employeeList__pin">
-                    <EmployeePin
-                      startDate={employee.startDate}
-                      department={employee.department}
-                      pins={employee.pins}
-                      yearsInCompany={employee.yearsInCompany}
-                    />
-                    <PinSummerEvent
-                      eventId="1518kfg0ull3ea2pce5dq8242p"
-                      employees={filteredEmployees}
-                      onAssignPins={handleAssignPin}
-                    />
-                  </div>
-                </div>
-              </div>
+              <div className="employeeList__item">
+  {employee.picture ? (
+    <img
+      src={employee.picture}
+      alt={`${employee.firstName} ${employee.lastName}`}
+      className="employeeList__picture"
+    />
+  ) : (
+    <div className="employeeList__picture--placeholder">
+    </div>
+  )}
+  <div className="employeeList__details">
+    <h2>
+      <span>{employee.firstName}</span>
+      <span>{employee.lastName}</span>
+    </h2>
+    <div className="employeeList__pin">
+      <EmployeePin
+        startDate={employee.startDate}
+        department={employee.department}
+        pins={employee.pins}
+        yearsInCompany={employee.yearsInCompany}
+      />
+      <PinSummerEvent
+        eventId="1518kfg0ull3ea2pce5dq8242p"
+        employees={filteredEmployees}
+        onAssignPins={handleAssignPin}
+      />
+    </div>
+  </div>
+</div>
+
             );
           })}
         </div>
