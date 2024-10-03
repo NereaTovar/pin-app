@@ -1,16 +1,24 @@
 import BackButton from "../buttons/back-button/BackButton";
 import LogoutButton from "../buttons/logout-button/LogoutButton";
 import CompanyLogo from "../buttons/company-logo/CompanyLogo";
-// import SearchButton from "../buttons/search-button/SearchButton";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth/Auth";
+import slackData from '../../../resources/slack.json'
 import "./Header.scss";
 
-      //@ts-ignore
-const defaultProfilePicture = "/path/to/default/profile/picture.jpg";
+const defaultProfilePicture = "/path/to/default/profile/picture.jpg"; // Imagen predeterminada si no hay foto
 
+// Función para obtener la inicial del nombre
 const getInitial = (name: string) => {
   return name ? name.charAt(0).toUpperCase() : "";
+};
+
+// Función para buscar la imagen de Slack en slack.json
+const getSlackProfileImage = (email: string) => {
+  const slackUser = slackData.members.find((user: any) => user.profile.email === email);
+  return slackUser && slackUser.profile && slackUser.profile.image_192 
+    ? slackUser.profile.image_192 
+    : null;
 };
 
 export default function Header() {
@@ -22,9 +30,14 @@ export default function Header() {
   const isLoginPage = location.pathname === "/login";
   const isProfilePage = location.pathname === `/profile/${userProfileData?.id}`;
 
+  // Navega al perfil del usuario
   const handleProfileNavigate = () => {
     navigate(`/profile/${userProfileData?.id}`);
   };
+
+  // Obtener la imagen de Slack o la imagen de perfil
+  const slackProfileImage = getSlackProfileImage(userProfileData?.email || "");
+  const profileImage = slackProfileImage || userProfileData?.profilePictureUrl || defaultProfilePicture;
 
   if (isLoginPage)
     return (
@@ -54,8 +67,8 @@ export default function Header() {
       ) : (
         <div className="profile">
           <button onClick={handleProfileNavigate} className="profile__button">
-            {userProfileData?.profilePictureUrl ? (
-              <img src={userProfileData.profilePictureUrl} alt="Profile" />
+            {profileImage ? (
+              <img src={profileImage} alt="Profile" />
             ) : (
               <div className="profile__initial">
                 {getInitial(userProfileData?.name ?? "")}
@@ -67,4 +80,5 @@ export default function Header() {
     </header>
   );
 }
+
 
