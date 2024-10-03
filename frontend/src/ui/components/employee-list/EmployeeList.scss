@@ -1,3 +1,76 @@
+// .employeeListContainer {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+// }
+
+// .employeeList__search {
+//   display: flex;
+//   justify-content: center;
+//   width: 100%;
+//   max-width: 600px;
+//   margin-bottom: 20px;
+//   position: relative;
+
+//   input {
+//     width: 100%;
+//     padding: 10px 40px 10px 10px; // Espacio para el botón de limpieza
+//     border-radius: 4px;
+//     border: 1px solid #ccc;
+//     font-size: 16px;
+//   }
+
+//   .employeeList__search-clear {
+//     position: absolute;
+//     right: 10px;
+//     top: 50%;
+//     transform: translateY(-50%);
+//     background: none;
+//     border: none;
+//     font-size: 16px;
+//     cursor: pointer;
+//     color: #333;
+//   }
+// }
+
+// .employeeList {
+//   display: grid;
+//   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); // Ajustar automáticamente las columnas
+//   gap: 20px;
+//   width: 100%;
+//   justify-items: center;
+// }
+
+// .employeeList__item {
+//   background: #fff;
+//   border-radius: 8px;
+//   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+//   padding: 10px 0px;
+//   text-align: center;
+//  width: 160px;
+//  height: 350px;
+// }
+
+// .employeeList__picture {
+//   width: 80px;
+//   height: 80px;
+//   border-radius: 50%;
+//   margin-bottom: 10px;
+// }
+
+// .employeeList__details {
+//   h2 {
+//     font-size: 1.2em;
+//     margin: 10px 0;
+//   }
+// }
+
+// .employeeList__pin {
+//   display: flex;
+//   justify-content: center;
+//   margin-top: 10px;
+// }
+
 .employeeListContainer {
   display: flex;
   flex-direction: column;
@@ -14,7 +87,7 @@
 
   input {
     width: 100%;
-    padding: 10px 40px 10px 10px; // Espacio para el botón de limpieza
+    padding: 10px 40px 10px 10px;
     border-radius: 4px;
     border: 1px solid #ccc;
     font-size: 16px;
@@ -35,7 +108,7 @@
 
 .employeeList {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); // Ajustar automáticamente las columnas
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 20px;
   width: 100%;
   justify-items: center;
@@ -47,8 +120,8 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 10px 0px;
   text-align: center;
- width: 160px;
- height: 350px;
+  width: 160px;
+  height: 350px;
 }
 
 .employeeList__picture {
@@ -62,6 +135,10 @@
   h2 {
     font-size: 1.2em;
     margin: 10px 0;
+
+    span {
+      display: block; /* Forzamos que el nombre y el apellido estén en líneas separadas */
+    }
   }
 }
 

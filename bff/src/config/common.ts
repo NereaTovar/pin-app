@@ -30,10 +30,15 @@ export const getCommonConfig = (
     },
   },
   cors: {
-    origin:
-      processVariables.BFF_CORS_ORIGIN || /http:\/\/localhost:(5173|8888|3080)/,
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:8888",
+      "http://localhost:3080",
+      "https://pin-app-phi.vercel.app",  
+    ],
   },
-
+  
+  
   googleAuthCredentials: JSON.parse(
     Buffer.from(
       process.env.BFF_GOOGLE_AUTH_CREDENTIALS ?? "",

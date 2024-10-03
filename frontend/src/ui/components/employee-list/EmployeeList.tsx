@@ -1,21 +1,51 @@
 import { useState } from "react";
-import useEmployees from "../../hooks/useEmployees"; // Hook personalizado para obtener empleados
-import "./EmployeeList.scss"; // Importa los estilos necesarios
-import EmployeePin from "../employee-pin/EmployeePin"; // Importa el componente EmployeePin
-import { Pin } from "@/types/Pin"; // Importa el tipo de Pin
-import PinSummerEvent from "../pin/pin-summerEvent/PinSummerEvent"; // Importar el componente de asignación de pines
+import useEmployees from "../../hooks/useEmployees";
+import "./EmployeeList.scss";
+import EmployeePin from "../employee-pin/EmployeePin";
+import { Pin } from "@/types/Pin";
+import PinSummerEvent from "../pin/pin-summerEvent/PinSummerEvent";
+import { getLastNameHelper } from "../../helpers/getLastNameHelper"; // Importa el helper para apellidos
 
 const EmployeeList = () => {
-  const { employees, loading, assignPin } = useEmployees(); // Obtiene empleados, estado de carga y función para asignar pines
-  const [searchTerm, setSearchTerm] = useState(""); // Estado para el término de búsqueda
+  const { employees: originalEmployees, loading, assignPin } = useEmployees();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Transforma los empleados originales para separar firstName y lastName
+  const transformedEmployees = originalEmployees.map((employee) => {
+    // Separamos el nombre en partes
+    const nameParts = employee.name.split(" ");
+
+    // Caso especial: si solo tiene dos palabras, usamos el primero como firstName y el segundo como lastName sin aplicar el helper
+    if (nameParts.length === 2) {
+      const [firstName, lastName] = nameParts;
+      return {
+        ...employee,
+        firstName,
+        lastName,
+      };
+    }
+
+    // Capturamos todo el nombre hasta el último apellido
+    const firstName = nameParts.slice(0, nameParts.length - 2).join(" ");
+    // El apellido completo (últimas dos partes del nombre)
+    const fullLastName = nameParts.slice(-2).join(" ");
+    // Aplicamos el helper al apellido completo para obtener solo el primer apellido
+    const lastName = getLastNameHelper(fullLastName);
+
+    return {
+      ...employee, // Copia los demás campos del empleado
+      firstName, // Primer nombre completo
+      lastName, // Primer apellido procesado
+    };
+  });
 
   // Función para asignar un nuevo pin a un empleado
   const handleAssignPin = (email: string, newPin: Pin) => {
-    const employee = employees.find((emp) => emp.email === email);
+    const employee = transformedEmployees.find((emp) => emp.email === email);
     if (employee) {
       // Comprueba si el pin ya está asignado
       if (!employee.pins.some((pin) => pin.type === newPin.type)) {
-        assignPin(employee.id, newPin); // Llama a la función assignPin
+        assignPin(employee.id, newPin);
         console.log(`Pin "${newPin.pinTitle}" asignado a ${email}`);
       }
     }
@@ -27,13 +57,15 @@ const EmployeeList = () => {
   }
 
   // Muestra un mensaje si no se encuentran empleados
-  if (employees.length === 0) {
+  if (transformedEmployees.length === 0) {
     return <div>No employees found</div>;
   }
 
   // Filtra los empleados basados en el término de búsqueda
-  const filteredEmployees = employees.filter((employee) =>
-    employee.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredEmployees = transformedEmployees.filter((employee) =>
+    `${employee.firstName} ${employee.lastName}`
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -61,29 +93,30 @@ const EmployeeList = () => {
               <div key={employee.id} className="employeeList__item">
                 <img
                   src={employee.picture} // Imagen del empleado
-                  alt={employee.name}
+                  alt={`${employee.firstName} ${employee.lastName}`}
                   className="employeeList__picture"
-                 />
-              <div className="employeeList__details">
-                <h2>{employee.name}</h2>
-                <div className="employeeList__pin">
-                  {/* Pines asignados */}
-                  <EmployeePin
-                    startDate={employee.startDate}
-                    department={employee.department}
-                    pins={employee.pins}
-                    yearsInCompany={employee.yearsInCompany}
-                  />
-                  {/* Pin del Summer Event */}
-                  <PinSummerEvent
-                    eventId="1518kfg0ull3ea2pce5dq8242p"
-                    employees={employees}
-                    onAssignPins={handleAssignPin}
-                  />
+                />
+                <div className="employeeList__details">
+                  <h2>
+                    <span>{employee.firstName}</span>
+                    <span>{employee.lastName}</span>{" "}
+                    {/* Forzamos que el apellido esté en una nueva línea */}
+                  </h2>
+                  <div className="employeeList__pin">
+                    <EmployeePin
+                      startDate={employee.startDate}
+                      department={employee.department}
+                      pins={employee.pins}
+                      yearsInCompany={employee.yearsInCompany}
+                    />
+                    <PinSummerEvent
+                      eventId="1518kfg0ull3ea2pce5dq8242p"
+                      employees={filteredEmployees}
+                      onAssignPins={handleAssignPin}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            
             );
           })}
         </div>
