@@ -1,6 +1,9 @@
-import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css'; 
-import { departmentColors, departmentTexts } from "../../../../utils/departmentUtils";
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+import {
+  departmentColors,
+  departmentTexts,
+} from "../../../../utils/departmentUtils";
 
 interface PinDepartmentProps {
   department: string;
@@ -60,4 +63,3 @@ const PinDepartment = ({ department }: PinDepartmentProps) => {
 };
 
 export default PinDepartment;
-
