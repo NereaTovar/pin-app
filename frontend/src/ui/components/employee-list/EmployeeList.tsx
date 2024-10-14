@@ -33,9 +33,9 @@ const EmployeeList = () => {
     const lastName = getLastNameHelper(fullLastName);
 
     return {
-      ...employee, // Copia los demás campos del empleado
-      firstName, // Primer nombre completo
-      lastName, // Primer apellido procesado
+      ...employee, 
+      firstName, 
+      lastName, 
     };
   });
 
