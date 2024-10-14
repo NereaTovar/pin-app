@@ -9,7 +9,7 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "dev:backend": "nodemon bff/src/index.ts",
+    "dev:backend": "ts-node-dev bff/src/index.ts",
     "build:backend": "tsc --project bff/tsconfig.json",
     "start:backend": "node bff/dist/index.js"
   },
