@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/index.ts",
     "dev": "ts-node-dev src/index.ts",
-    "build": "tsc && vite build",
+    "build": "tsc --project bff/tsconfig.json",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "dev:backend": "ts-node-dev bff/src/index.ts",

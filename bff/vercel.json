@@ -1,16 +1,18 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "bff/src/index.ts", 
-        "use": "@vercel/node"
+  "version": 2,
+  "builds": [
+    {
+      "src": "bff/src/index.ts", 
+      "use": "@vercel/node",
+      "config": {
+        "distDir": "bff/dist"
       }
-    ],
-    "routes": [
-      {
-        "src": "/api/(.*)",
-        "dest": "bff/src/index.ts" 
-      }
-    ]
-  }
-  
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "bff/src/index.ts"
+    }
+  ]
+}
