@@ -33,9 +33,9 @@ const EmployeeList = () => {
     const lastName = getLastNameHelper(fullLastName);
 
     return {
-      ...employee, 
-      firstName, 
-      lastName, 
+      ...employee,
+      firstName,
+      lastName,
     };
   });
 
@@ -76,7 +76,7 @@ const EmployeeList = () => {
             type="text"
             placeholder="Search employee"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)} 
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button
             onClick={() => setSearchTerm("")}
@@ -89,37 +89,35 @@ const EmployeeList = () => {
           {filteredEmployees.map((employee) => {
             return (
               <div className="employeeList__item">
-  {employee.picture ? (
-    <img
-      src={employee.picture}
-      alt={`${employee.firstName} ${employee.lastName}`}
-      className="employeeList__picture"
-    />
-  ) : (
-    <div className="employeeList__picture--placeholder">
-    </div>
-  )}
-  <div className="employeeList__details">
-    <h2>
-      <span>{employee.firstName}</span>
-      <span>{employee.lastName}</span>
-    </h2>
-    <div className="employeeList__pin">
-      <EmployeePin
-        startDate={employee.startDate}
-        department={employee.department}
-        pins={employee.pins}
-        yearsInCompany={employee.yearsInCompany}
-      />
-      <PinSummerEvent
-        eventId="1518kfg0ull3ea2pce5dq8242p"
-        employees={filteredEmployees}
-        onAssignPins={handleAssignPin}
-      />
-    </div>
-  </div>
-</div>
-
+                {employee.picture ? (
+                  <img
+                    src={employee.picture}
+                    alt={`${employee.firstName} ${employee.lastName}`}
+                    className="employeeList__picture"
+                  />
+                ) : (
+                  <div className="employeeList__picture--placeholder"></div>
+                )}
+                <div className="employeeList__details">
+                  <h2>
+                    <span>{employee.firstName}</span>
+                    <span>{employee.lastName}</span>
+                  </h2>
+                  <div className="employeeList__pin">
+                    <EmployeePin
+                      startDate={employee.startDate ?? "Fecha no disponible"}
+                      department={employee.department}
+                      pins={employee.pins}
+                      yearsInCompany={employee.yearsInCompany}
+                    />
+                    <PinSummerEvent
+                      eventId="1518kfg0ull3ea2pce5dq8242p"
+                      employees={filteredEmployees}
+                      onAssignPins={handleAssignPin}
+                    />
+                  </div>
+                </div>
+              </div>
             );
           })}
         </div>

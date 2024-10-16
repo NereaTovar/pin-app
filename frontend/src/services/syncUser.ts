@@ -5,6 +5,25 @@ import { db } from "../config/firebaseConfig";
 import { calculateYears, determineColor } from "../utils/dateUtils";
 import { Pin } from "../types/Pin"; // Importar la interfaz Pin desde el archivo común
 
+// Definir la interfaz para los datos de empleado en employees.json
+interface EmployeeData {
+  Email: string;
+  Status: string;
+  "Hire date": string;
+  Department: string;
+  "First name (legal)": string;
+  "Last name (legal)": string;
+}
+
+// Definir la interfaz para los datos de Slack
+interface SlackMember {
+  profile: {
+    email: string;
+    image_512: string;
+  };
+}
+
+// Definir la interfaz para el empleado final que se añadirá a Firestore
 interface Employee {
   id: string;
   name: string;
@@ -33,40 +52,31 @@ const syncUsers = async () => {
     const employeesCollection = collection(db, "employees");
 
     // Obtener todos los documentos actuales de la colección de empleados
-    const existingEmployeesSnapshot = await getDocs(employeesCollection);
-    const existingEmployees = existingEmployeesSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Employee[];
+    await getDocs(employeesCollection); // No se necesita almacenar estos documentos si no se usan
 
-    const employees = employeesData.Employees;
-    const slackMembers = slackData.members;
-    
+    const employees: EmployeeData[] = employeesData.Employees as EmployeeData[];
+    const slackMembers: SlackMember[] = slackData.members as SlackMember[];
 
     // Filtrar empleados activos y eliminar duplicados por email
-    const activeEmployees = employees.filter(
-      (emp: any) => emp.Status === "Active"
-    );
+    const activeEmployees = employees.filter((emp: EmployeeData) => emp.Status === "Active");
 
     // Crear un Map para eliminar duplicados
-    const employeeMap = new Map();
-    activeEmployees.forEach((emp: any) => {
+    const employeeMap = new Map<string, EmployeeData>();
+    activeEmployees.forEach((emp: EmployeeData) => {
       employeeMap.set(emp.Email, emp);
     });
     const uniqueEmployees = Array.from(employeeMap.values());
 
     const employeesToAdd = uniqueEmployees
-      .map((emp: any): Employee | null => {
+      .map((emp: EmployeeData): Employee | null => {
         const slackMember = slackMembers.find(
-          (member: any) => member.profile.email === emp.Email
+          (member: SlackMember) => member.profile.email === emp.Email
         );
-        const startDate = emp["Hire date"];
-        let years;
+        const startDate: string = emp["Hire date"] || "N/A";  // Asignar valor por defecto si está undefined
+        let years: number;
 
         try {
-          console.log(
-            `Processing employee: ${emp.Email}, Hire date: ${startDate}`
-          );
+          console.log(`Processing employee: ${emp.Email}, Hire date: ${startDate}`);
           years = calculateYears(startDate);
         } catch (error) {
           console.error(`Error calculando años para ${emp.Email}:`);
@@ -75,9 +85,7 @@ const syncUsers = async () => {
         }
 
         if (!emp.Department) {
-          console.error(
-            `Departamento no definido para el empleado: ${emp.Email}`
-          );
+          console.error(`Departamento no definido para el empleado: ${emp.Email}`);
           // Excluir al empleado de la lista si no tiene departamento
           return null;
         }
@@ -103,11 +111,11 @@ const syncUsers = async () => {
         // Retornar el objeto Employee completo
         return {
           id: emp.Email,
-          name: `${emp["First name (legal)"]} ${emp["Last name (legal)"]}`,
+          name: `${emp["First name (legal)"] || "N/A"} ${emp["Last name (legal)"] || "N/A"}`,  // Asignar valores por defecto
           email: emp.Email,
-          department: emp.Department,
+          department: emp.Department || "Unknown",  // Asignar valor por defecto si está undefined
           picture: slackMember ? slackMember.profile.image_512 : "",
-          startDate: emp["Hire date"],
+          startDate: startDate,
           yearsInCompany: years,
           pins: [anniversaryPin, departmentPin],
         };
@@ -147,4 +155,3 @@ const syncUsers = async () => {
 };
 
 export default syncUsers;
-

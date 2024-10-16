@@ -1,4 +1,5 @@
 import { UserRepository } from "./user.repository 2";
+import { fetchEmployeesData } from "../services/mongoService";  // Importa la función de MongoDB
 import {
   User,
   UserAttendee,
@@ -6,45 +7,54 @@ import {
   WithInfo,
   WithLanguages,
 } from "../models/business/User";
-import employeesData from "../resources/employees.json";
-import {
-  EmployeeJson,
-  RawEmployee,
-  transformEmployeeToUser,
-} from "../utils/EmployeeTransformer";
+import { EmployeeJson, transformEmployeeToUser, RawEmployee } from "../utils/EmployeeTransformer";
+
 
 export class EmployeeJsonRepository implements UserRepository {
-  private employees: EmployeeJson[];
+  private employees: EmployeeJson[] = [];  // Inicializa con un array vacío
 
   constructor() {
-    this.employees = this.normalizeEmployees(employeesData.Employees);
+    this.loadEmployees();  // Carga los empleados de MongoDB
   }
 
-  // Normaliza los datos de los empleados
+  // Cargar los empleados desde MongoDB
+  private async loadEmployees() {
+    try {
+      const employeesFromDb = await fetchEmployeesData();
+      this.employees = this.normalizeEmployees(employeesFromDb);
+    } catch (error) {
+      console.error("Error al cargar empleados desde MongoDB:", error);
+      this.employees = [];  // Si hay error, mantener un array vacío
+    }
+  }
+
+  // Normaliza los datos de los empleados desde MongoDB
   private normalizeEmployees(employees: RawEmployee[]): EmployeeJson[] {
     return employees.filter((emp): emp is EmployeeJson => {
-      // Filtra empleados que no tienen email definido y que no está vacío
       if (typeof emp.Email === "string" && emp.Email.trim() !== "") {
-        // Puedes hacer más normalizaciones aquí si es necesario
         return true;
       }
       return false;
     });
   }
 
+  // Encuentra al usuario por email
   async findUserByEmail(email: string): Promise<UserAttendee | undefined> {
+    await this.loadEmployees();  // Asegúrate de que los empleados están cargados
     const employee = this.employees.find((emp) => emp.Email === email);
-    if (!employee || !employee.Email) return undefined; // Verifica que email no sea undefined
+    if (!employee || !employee.Email) return undefined;
 
     return {
-      id: employee.Email, 
+      id: employee.Email,
       firstName: employee["First name (legal)"] || "",
       lastName: employee["Last name (legal)"] || "",
       email: employee.Email,
     };
   }
 
+  // Encuentra al usuario por ID
   async findUserById(id: string): Promise<LoggedInUser | undefined> {
+    await this.loadEmployees();  // Asegúrate de que los empleados están cargados
     const employee = this.employees.find((emp) => emp.Email === id);
     if (!employee) return undefined;
 
@@ -53,9 +63,11 @@ export class EmployeeJsonRepository implements UserRepository {
     };
   }
 
+  // Encuentra al usuario con información adicional
   async findUserWithInfo(
     id: string
   ): Promise<(User & WithInfo & WithLanguages) | undefined> {
+    await this.loadEmployees();  // Asegúrate de que los empleados están cargados
     const employee = this.employees.find((emp) => emp.Email === id);
     if (!employee) return undefined;
 
@@ -73,67 +85,63 @@ export class EmployeeJsonRepository implements UserRepository {
     };
   }
 
+  // Obtiene todos los usuarios
   async all(): Promise<User[]> {
+    await this.loadEmployees();  // Asegúrate de que los empleados están cargados
     return this.employees.map(transformEmployeeToUser);
   }
 
+  // Obtiene todas las posiciones únicas
   async allPositions(): Promise<string[]> {
+    await this.loadEmployees();  // Asegúrate de que los empleados están cargados
     return this.employees
       .map((emp) => emp.Position || "")
       .filter((pos, index, self) => pos && self.indexOf(pos) === index);
   }
 
+  // Obtiene usuarios por idioma
   async allByLanguage(languageId: number): Promise<User[]> {
-    // Simulamos que solo devolvemos usuarios que tienen un lenguaje asignado con el ID dado
+    await this.loadEmployees();  // Asegúrate de que los empleados están cargados
     if (languageId === 1) {
       return this.employees.map(transformEmployeeToUser);
     }
     return [];
   }
 
-  // // Método para asignar automáticamente pines a los empleados que asistieron al summer event
-
-
-  // Método para asignar automáticamente pines a los empleados que asistieron
+  // Método para asignar pines automáticamente a los asistentes
   async assignPinToAttendees(attendeeEmails: string[]): Promise<void> {
-    // Encuentra el pin del Summer Event
+    await this.loadEmployees();  // Asegúrate de que los empleados están cargados
+
     const summerPin = {
       id: "summer_event_2024",
       imagePin: "../../assets/pins/Summer_event24.svg",
       pinTitle: "Summer Event 2024",
-      pinDescription:
-        "The 'Event Summer 2024' pin is awarded for attending the Event...",
+      pinDescription: "The 'Event Summer 2024' pin is awarded for attending the Event...",
       eventDate: "2024-09-20",
       autoAssigned: true,
     };
 
     attendeeEmails.forEach((email) => {
-      // Encuentra al empleado que asistió usando su email
       const employee = this.employees.find((emp) => emp.Email === email);
 
       if (employee) {
-        // Inicializar el array de pines si no existe
         if (!employee.pins) {
           employee.pins = [];
         }
 
-        // Verificar si el pin ya está asignado
         const pinExists = employee.pins.some((pin) => pin.id === summerPin.id);
 
-        // Si el pin no existe, se asigna
         if (!pinExists) {
           employee.pins.push(summerPin);
           console.log(`Pin asignado a ${employee.Email}`);
         } else {
-          console.log(
-            `El empleado ${employee.Email} ya tiene asignado el pin.`
-          );
+          console.log(`El empleado ${employee.Email} ya tiene asignado el pin.`);
         }
       } else {
         console.warn(`Empleado con email ${email} no encontrado.`);
       }
     });
 
-    // Aquí puedes agregar lógica para guardar los cambios si estás usando una base de datos.
+    // Si estás usando una base de datos, aquí puedes guardar los cambios.
   }
 }
