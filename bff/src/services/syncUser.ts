@@ -1,8 +1,8 @@
 import { getFirestore, DocumentReference } from "firebase-admin/firestore";
-import employeesData from "../resources/employees.json";
-import slackData from "../resources/slack.json";
+import { fetchEmployeesData, fetchSlackData } from "../services/mongoService";  // Importar funciones desde MongoDB
 import { calculateYears, determineColor } from "@/utils/dateUtils";
 import { Pin } from "../types/Pin";
+import { SlackMember } from "../models/business/User";  // Importar SlackMember
 
 // Obtén la instancia de Firestore desde firebase-admin
 const firestore = getFirestore();
@@ -10,20 +10,13 @@ const firestore = getFirestore();
 // Definir la interfaz para los datos de empleado en employees.json
 interface EmployeeData {
   Email: string;
-  Status: string;
-  "Hire date": string;
+  Status?: string;
+  "Hire date"?: string;
   Department?: string;
-  "First name (legal)": string;
-  "Last name (legal)": string;
+  "First name (legal)"?: string;
+  "Last name (legal)"?: string;
 }
 
-// Definir la interfaz para los datos de Slack
-interface SlackMember {
-  profile: {
-    email: string;
-    image_512: string;
-  };
-}
 
 interface Employee {
   id: string;
@@ -36,97 +29,91 @@ interface Employee {
   pins: Pin[];
 }
 
-// Función para obtener la URL de la imagen del pin de aniversario
-const getAnniversaryPinImage = (years: number): string => {
-  return `https://example.com/pins/anniversary-${years}.png`;
-};
-
-// Función para obtener la URL de la imagen del pin de departamento
-const getDepartmentPinImage = (department: string): string => {
-  return `https://example.com/pins/department-${department
-    .replace(/\s/g, "-")
-    .toLowerCase()}.png`;
-};
-
 const syncUsers = async () => {
   try {
-    // Se asegura que los datos cumplen con la interfaz definida
-    const employees: EmployeeData[] = employeesData.Employees as EmployeeData[];
-    const slackMembers: SlackMember[] = slackData.members as SlackMember[];
+    // Obtén los datos desde MongoDB usando las funciones fetchEmployeesData y fetchSlackData
+    const rawEmployees = await fetchEmployeesData();  // Empleados desde MongoDB
+    const slackMembers: SlackMember[] = await fetchSlackData();  // Miembros de Slack desde MongoDB
 
-    // Filtra solo empleados activos
-    const activeEmployees = employees.filter(
-      (emp: EmployeeData) => emp.Status === "Active"
-    );
+    // Filtrar empleados que tengan un email válido y estén activos
+    const employees: EmployeeData[] = rawEmployees
+      .filter((emp) => emp.Email !== undefined && emp.Status === "Active")
+      .map((emp) => ({
+        Email: emp.Email as string,  // Garantizar que Email es string
+        Status: emp.Status,
+        "Hire date": emp["Hire date"],
+        Department: emp.Department,
+        "First name (legal)": emp["First name (legal)"],
+        "Last name (legal)": emp["Last name (legal)"],
+      }));
 
     // Eliminar duplicados usando un Map
     const employeeMap = new Map<string, EmployeeData>();
-    activeEmployees.forEach((emp: EmployeeData) => {
+    employees.forEach((emp: EmployeeData) => {
       employeeMap.set(emp.Email, emp);
     });
     const uniqueEmployees = Array.from(employeeMap.values());
 
     const employeesToAdd: Employee[] = uniqueEmployees
-      .map((emp: EmployeeData): Employee | null => {
-        const slackMember = slackMembers.find(
-          (member: SlackMember) => member.profile.email === emp.Email
-        );
+  .map((emp: EmployeeData): Employee | null => {
+    // Buscar al miembro de Slack correspondiente
+    const slackMember = slackMembers.find(
+      (member: SlackMember) => member.profile.email === emp.Email
+    );
 
-        const startDate: string = emp["Hire date"];
-        let years: number;
+    // Asignar un valor por defecto o manejar el caso de undefined
+    const startDate: string = emp["Hire date"] || "N/A";  // O usa una verificación condicional como en la opción 2
 
-        try {
-          console.log(
-            `Processing employee: ${emp.Email}, Hire date: ${startDate}`
-          );
-          years = calculateYears(startDate);
-        } catch (error) {
-          console.error(`Error calculando años para ${emp.Email}:`);
-          // Excluir al empleado si hay error en la fecha
-          return null;
-        }
+    let years: number;
 
-        if (!emp.Department) {
-          console.error(
-            `Departamento no definido para el empleado: ${emp.Email}`
-          );
-          // Excluir al empleado si no tiene departamento
-          return null;
-        }
+    try {
+      console.log(`Processing employee: ${emp.Email}, Hire date: ${startDate}`);
+      years = calculateYears(startDate);
+    } catch (error) {
+      console.error(`Error calculando años para ${emp.Email}:`);
+      // Excluir al empleado si hay error en la fecha
+      return null;
+    }
 
-        const color = determineColor(years);
-        const departmentColor = "#808080"; // Color específico para el pin de departamento
+    if (!emp.Department) {
+      console.error(`Departamento no definido para el empleado: ${emp.Email}`);
+      // Excluir al empleado si no tiene departamento
+      return null;
+    }
 
-        // Crear pines de aniversario y departamento con toda la información necesaria
-        const anniversaryPin: Pin = {
-          id: 'anniversary-' + years, // Se agrega un ID único al pin de aniversario
-          type: "Anniversary",
-          date_hire: startDate,
-          color: color,
-          imagePin: getAnniversaryPinImage(years),
-        };
+    const color = determineColor(years);
+    const departmentColor = "#808080"; // Color específico para el pin de departamento
 
-        const departmentPin: Pin = {
-          id: 'department-' + emp.Department, // Se agrega un ID único al pin de departamento
-          type: "Department",
-          department: emp.Department,
-          color: departmentColor,
-          imagePin: getDepartmentPinImage(emp.Department),
-        };
+    // Crear pines de aniversario y departamento con toda la información necesaria
+    const anniversaryPin: Pin = {
+      id: 'anniversary-' + years,  // Se agrega un ID único al pin de aniversario
+      type: "Anniversary",
+      date_hire: startDate,
+      color: color,
+      imagePin: `https://example.com/pins/anniversary-${years}.png`,  // URL ficticia
+    };
 
-        // Retornar el objeto Employee completo
-        return {
-          id: emp.Email,
-          name: `${emp["First name (legal)"]} ${emp["Last name (legal)"]}`,
-          email: emp.Email,
-          department: emp.Department,
-          picture: slackMember ? slackMember.profile.image_512 : "",
-          startDate: emp["Hire date"],
-          yearsInCompany: years,
-          pins: [anniversaryPin, departmentPin],
-        };
-      })
-      .filter((employee): employee is Employee => employee !== null);
+    const departmentPin: Pin = {
+      id: 'department-' + emp.Department,  // Se agrega un ID único al pin de departamento
+      type: "Department",
+      department: emp.Department,
+      color: departmentColor,
+      imagePin: `https://example.com/pins/department-${emp.Department.replace(/\s/g, "-").toLowerCase()}.png`,  // URL ficticia
+    };
+
+    // Retornar el objeto Employee completo
+    return {
+      id: emp.Email,
+      name: `${emp["First name (legal)"]} ${emp["Last name (legal)"]}`,
+      email: emp.Email,
+      department: emp.Department,
+      picture: slackMember ? slackMember.profile.image_512 : "",  // Usar la imagen de Slack si existe
+      startDate: startDate,
+      yearsInCompany: years,
+      pins: [anniversaryPin, departmentPin],
+    };
+  })
+  .filter((employee): employee is Employee => employee !== null);
 
     console.log("Employees to add:", employeesToAdd);
 

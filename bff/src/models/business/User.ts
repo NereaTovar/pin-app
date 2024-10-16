@@ -36,6 +36,13 @@ export interface Slack {
   profileUrl?: string;
 }
 
+export interface SlackMember {
+  profile: {
+    email: string;
+    image_512: string;
+  };
+}
+
 export interface WithLanguages {
   languages: Language[];
 }
